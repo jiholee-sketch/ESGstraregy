@@ -1,0 +1,16 @@
+{
+  "strategyId": "s-seah-america-qual",
+  "period": "2026-Q3",
+  "progress": 70,
+  "achievement": "'26 3분기 추진 실적. 대상 범위 및 기준 정의 / 데이터 수집 체계 구축 / 1차 진단·산정 시행 / 미흡 항목 개선 지원",
+  "kpiActual": null,
+  "delayReason": "",
+  "catchupPlan": "",
+  "author": "Sarah Kim",
+  "team": "품질경영팀",
+  "site": "세아스틸America",
+  "planTotal": 5,
+  "planDone": 3,
+  "planDoing": 1,
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}

@@ -1,0 +1,16 @@
+{
+  "strategyId": "s-donga-prod",
+  "period": "2026-Q3",
+  "progress": 70,
+  "achievement": "'26 3분기 추진 실적. 기준선 측정 및 목표 설정 / 설비·공정 개선 투자계획 수립 / 우선 라인 시범 적용 / 전 라인 확대 적용",
+  "kpiActual": null,
+  "delayReason": "",
+  "catchupPlan": "",
+  "author": "문석현",
+  "team": "생산팀",
+  "site": "동아스틸",
+  "planTotal": 5,
+  "planDone": 3,
+  "planDoing": 1,
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}

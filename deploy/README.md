@@ -76,7 +76,7 @@ cd deploy && npm run deploy
 cd deploy && npm run seed
 ```
 
-`data/` 의 31건(계열사 1 · 사업장 5 · 팀 5 · 과제 7 · 실적 12 · 마감일 1)을 넣는다.
+`data/` 의 97건(계열사 9 · 사업장 5 · 팀 31 · 과제 26 · 실적 25 · 마감일 1)을 넣는다.
 **이미 있는 문서는 건드리지 않는다.** 먼저 `npm run seed:dry` 로 무엇이 들어갈지 볼 수 있다.
 
 > 이 데이터는 예시다. 실제 운영 전에 지워야 한다.
@@ -197,7 +197,7 @@ deploy/
   seed.js                예시 데이터 넣기
   localtest.js           로컬 화면 확인
 
-  data/                  예시 데이터 31건 (폴더 이름 = 컬렉션)
+  data/                  예시 데이터 97건 (폴더 이름 = 컬렉션)
   public/                배포본 (자동 생성)
   node_modules/          Firebase SDK · CLI
 ```

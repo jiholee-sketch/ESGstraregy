@@ -1,0 +1,61 @@
+{
+  "title": "해상풍력 하부구조물 저탄소 공정 전환",
+  "esg": "E",
+  "category": "E-CLM",
+  "scope": "site",
+  "teamId": "t-seahwind-prod",
+  "team": "생산팀",
+  "siteId": null,
+  "companyId": "c-seahwind",
+  "owner": "차민서",
+  "startYear": 2025,
+  "startMonth": 1,
+  "endYear": 2030,
+  "endMonth": 12,
+  "priority": "상",
+  "purpose": "세아윈드의 해상풍력 하부구조물 저탄소 공정 전환 과제. 그룹 ESG 중장기전략에 따라 추진한다.",
+  "plans": [
+    {
+      "text": "기준선 측정 및 목표 설정",
+      "status": "done",
+      "updatedBy": "차민서",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "설비·공정 개선 투자계획 수립",
+      "status": "done",
+      "updatedBy": "차민서",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "우선 라인 시범 적용",
+      "status": "done",
+      "updatedBy": "차민서",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "전 라인 확대 적용",
+      "status": "doing",
+      "updatedBy": "차민서",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "성과 검증 및 표준화",
+      "status": "doing",
+      "updatedBy": "차민서",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    }
+  ],
+  "yearTargets": {},
+  "kpiName": "",
+  "kpiUnit": "",
+  "kpiBase": null,
+  "kpiBaseYear": null,
+  "kpiTarget": null,
+  "lifecycle": "active",
+  "carries": [],
+  "targetHistory": [],
+  "createdBy": "차민서",
+  "createdAt": "2026-09-16T12:00:00.000Z",
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}

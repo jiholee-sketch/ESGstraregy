@@ -1,0 +1,61 @@
+{
+  "title": "스테인리스 공정 온실가스 20% 감축",
+  "esg": "E",
+  "category": "E-CLM",
+  "scope": "site",
+  "teamId": "t-inoxtech-prod",
+  "team": "생산팀",
+  "siteId": null,
+  "companyId": "c-inoxtech",
+  "owner": "Luca Bianchi",
+  "startYear": 2026,
+  "startMonth": 1,
+  "endYear": 2030,
+  "endMonth": 12,
+  "priority": "상",
+  "purpose": "INOX Tech의 스테인리스 공정 온실가스 20% 감축 과제. 그룹 ESG 중장기전략에 따라 추진한다.",
+  "plans": [
+    {
+      "text": "기준선 측정 및 목표 설정",
+      "status": "done",
+      "updatedBy": "Luca Bianchi",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "설비·공정 개선 투자계획 수립",
+      "status": "doing",
+      "updatedBy": "Luca Bianchi",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "우선 라인 시범 적용",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    },
+    {
+      "text": "전 라인 확대 적용",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    },
+    {
+      "text": "성과 검증 및 표준화",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    }
+  ],
+  "yearTargets": {},
+  "kpiName": "",
+  "kpiUnit": "",
+  "kpiBase": null,
+  "kpiBaseYear": null,
+  "kpiTarget": null,
+  "lifecycle": "active",
+  "carries": [],
+  "targetHistory": [],
+  "createdBy": "Luca Bianchi",
+  "createdAt": "2026-09-16T12:00:00.000Z",
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}

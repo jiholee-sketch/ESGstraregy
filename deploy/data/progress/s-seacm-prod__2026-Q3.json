@@ -1,0 +1,16 @@
+{
+  "strategyId": "s-seacm-prod",
+  "period": "2026-Q3",
+  "progress": 60,
+  "achievement": "'26 3분기 추진 실적. 기준선 측정 및 목표 설정 / 설비·공정 개선 투자계획 수립 / 우선 라인 시범 적용 / 전 라인 확대 적용",
+  "kpiActual": null,
+  "delayReason": "",
+  "catchupPlan": "",
+  "author": "정하늘",
+  "team": "생산팀",
+  "site": "세아씨엠",
+  "planTotal": 5,
+  "planDone": 2,
+  "planDoing": 2,
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}

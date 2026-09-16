@@ -617,6 +617,21 @@ button.corow:hover .nm{color:var(--today)}
 .orgsite-h span{font-family:"IBM Plex Sans KR",sans-serif;font-weight:500;font-size:11px;color:var(--muted)}
 .orgsite-h .pv{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12.5px;color:var(--ink)}
 .orgsite .corow{padding:9px 0}
+
+/* 계열사 아코디언 — 눌러서 팀을 폈다 접는다 */
+button.sgh{width:100%;border:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
+button.sgh:hover{background:var(--line-2)}
+.sgh .chev{width:15px;height:15px;flex:none;color:var(--muted);transition:transform .16s ease}
+button.sgh[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.sgh .nm{display:flex;align-items:center;gap:8px}
+
+/* 팀 고르기 1단계 — 계열사 카드 */
+.mt-cos{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:var(--s2)}
+.mt-cos button{border:1px solid var(--line);background:var(--panel);border-radius:var(--r);padding:15px 16px;
+  cursor:pointer;text-align:left;font-family:inherit;font-weight:700;font-size:14px;color:var(--ink);line-height:1.4}
+.mt-cos button:hover{border-color:var(--today);background:var(--today-soft);color:var(--today)}
+.mt-cos button .c{display:block;font-weight:500;font-size:11px;color:var(--muted);margin-top:4px}
+.mt-cos button:hover .c{color:var(--today)}
 @media (max-width:760px){
   .corow{grid-template-columns:minmax(0,1fr) 48px 50px;row-gap:var(--s1)}
   .corow > :nth-child(4),.corow > :nth-child(5){grid-column:1 / -1}
@@ -770,6 +785,8 @@ const state = {
   backTo: "list", landed: false,
   /* drillTeam — 소속 계열사 화면에서 특정 팀을 눌러 들어갔을 때 그 팀 (D-045) */
   drillTeam: null, teamSub: "all",
+  /* 계열사 아코디언 펼침 상태. null 이면 첫 렌더에서 내 계열사만 편다 */
+  openCos: null, pickCo: "",
   filters: { q: "", company: "", site: "", team: "", esg: "", cat: "", status: "" },
   /* teamId가 이 사람의 신원이다. 로그인이 없으므로 브라우저에만 남는다 (D-039) */
   me: { team: "", teamId: "", name: "" }
@@ -1387,33 +1404,49 @@ function coTable(cos, title) {
     <div class="help" style="margin-top:var(--s2)">제출 = ${cq.replace("-", " ")} 실적을 낸 진행 과제 수. 달성률 막대의 세로선은 기간경과 기대치입니다.</div>`;
 }
 
-/** 계열사별 상세 — 계열사마다 소속 팀을 펼쳐 놓는다 */
+/* 계열사 아코디언 — 처음엔 내 계열사만 펴 두고, 나머지는 눌러서 편다 */
+const CHEV = '<svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg>';
+function coOpen(id) {
+  if (state.openCos === null) { state.openCos = {}; const m = myCoId(); if (m) state.openCos[m] = true; }
+  return !!state.openCos[id];
+}
+/** 계열사 한 칸. inner 는 펼쳤을 때 보일 내용을 만드는 함수 (접혀 있으면 부르지 않는다) */
+function coGroup(c, meta, inner) {
+  const open = coOpen(c.companyId);
+  return `<div class="sgroup">
+    <button class="sgh" data-toggleco="${esc(c.companyId)}" aria-expanded="${open}">
+      <div class="nm">${CHEV}${esc(c.name)}</div>
+      <div class="mt">${meta}</div>
+      <div class="pills">${statusPills(c.stc)}</div>
+      <div class="rr">
+        <div style="flex:1"><div class="track"><i style="width:${barW(c)}%;background:${c.pct >= c.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(c) ? `<b style="left:${c.exp}%"></b>` : ""}</div></div>
+        <span class="pv">${pctText(c)}</span>
+      </div>
+    </button>
+    ${open ? `<div class="sgb">${inner()}</div>` : ""}
+  </div>`;
+}
+
+/** 계열사별 상세 — 계열사를 누르면 그 팀이 쫙 나온다 */
 function groupCo() {
   const cos = coRollup();
+  const nOpen = cos.filter(c => coOpen(c.companyId)).length;
   return `<section class="panel">
     <div class="ph"><div><h2>계열사별 현황</h2>
-      <div class="sub">${cos.length}개 계열사 · 계열사 안에서 팀별로 묶었습니다</div></div></div>
+      <div class="sub">${cos.length}개 계열사 · 계열사를 누르면 소속 팀이 펼쳐집니다</div></div>
+      <div class="r"><button class="ghost" data-act="${nOpen === cos.length ? "collapseco" : "expandco"}">${nOpen === cos.length ? "모두 접기" : "모두 펼치기"}</button></div></div>
     ${cos.map(c => {
       const teams = teamRollup(c.list);
-      return `<div class="sgroup">
-        <div class="sgh">
-          <div class="nm">${esc(c.name)}</div>
-          <div class="mt">팀 ${teams.length}개 · 진행 ${c.nOpen}건${c.nClosed ? " · 종결 " + c.nClosed : ""} · 제출 ${c.sub}/${c.nOpen}</div>
-          <div class="pills">${statusPills(c.stc)}</div>
-          <div class="rr">
-            <div style="flex:1"><div class="track"><i style="width:${barW(c)}%;background:${c.pct >= c.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(c) ? `<b style="left:${c.exp}%"></b>` : ""}</div></div>
-            <span class="pv">${pctText(c)}</span>
-          </div>
-        </div>
-        <div class="sgb">${teams.length ? teams.map(t => `
+      return coGroup(c,
+        `팀 ${teams.length}개 · 진행 ${c.nOpen}건${c.nClosed ? " · 종결 " + c.nClosed : ""} · 제출 ${c.sub}/${c.nOpen}`,
+        () => teams.length ? teams.map(t => `
           <button class="corow" data-drill="${esc(t.key)}">
             <span class="nm">${esc(t.name)}<small>${esc(siteOf(t.list[0]))}</small></span>
             <span class="n">${t.n}</span>
             <span class="n">${t.nOpen}</span>
             <span><span class="track"><i style="width:${barW(t)}%;background:${t.pct >= t.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(t) ? `<b style="left:${t.exp}%"></b>` : ""}</span></span>
             <span class="n">${t.sub}/${t.nOpen}</span>
-          </button>`).join("") : '<p class="help">이 계열사에 등록된 과제가 없습니다.</p>'}</div>
-      </div>`;
+          </button>`).join("") : '<p class="help">이 계열사에 등록된 과제가 없습니다.</p>');
     }).join("")}
   </section>`;
 }
@@ -1680,24 +1713,15 @@ function teamsCo(manage) {
       <p>조직 관리에서 계열사를 만들고, 그 아래에 사업장·본부와 팀을 넣습니다. 중간 층이 없으면 팀을 계열사 직속으로 둘 수 있습니다.</p></div></section>`;
   return `<section class="panel">
     <div class="ph"><div><h2>조직 현황</h2>
-      <div class="sub">${cos.length}개 계열사 · 계열사 › 사업장·본부 › 팀 · 팀을 누르면 그 팀 과제로 들어갑니다</div></div>
-      <div class="r">${manage}</div></div>
+      <div class="sub">${cos.length}개 계열사 · 계열사를 누르면 사업장·본부와 팀이 펼쳐집니다</div></div>
+      <div class="r"><button class="ghost" data-act="${cos.every(c => coOpen(c.companyId)) ? "collapseco" : "expandco"}">${cos.every(c => coOpen(c.companyId)) ? "모두 접기" : "모두 펼치기"}</button>${manage}</div></div>
     ${cos.map(c => {
       const sites = sitesOfCo(c.companyId), loose = looseTeamsOfCo(c.companyId);
       const blocks = sites.map(st => orgSiteBlock(st.name, state.teams.filter(t => t.siteId === st.id)))
         .concat(loose.length ? [orgSiteBlock("계열사 직속 (사업장 없음)", loose)] : []);
-      return `<div class="sgroup">
-        <div class="sgh">
-          <div class="nm">${esc(c.name)}</div>
-          <div class="mt">사업장 ${sites.length}개${loose.length ? " + 직속 " + loose.length + "팀" : ""} · 팀 ${teamsOfCo(c.companyId).length}개 · 진행 ${c.nOpen}건${c.nClosed ? " · 종결 " + c.nClosed : ""}</div>
-          <div class="pills">${statusPills(c.stc)}</div>
-          <div class="rr">
-            <div style="flex:1"><div class="track"><i style="width:${barW(c)}%;background:${c.pct >= c.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(c) ? `<b style="left:${c.exp}%"></b>` : ""}</div></div>
-            <span class="pv">${pctText(c)}</span>
-          </div>
-        </div>
-        <div class="sgb">${blocks.join("") || '<p class="help">이 계열사에 사업장·팀이 없습니다.</p>'}</div>
-      </div>`;
+      return coGroup(c,
+        `사업장 ${sites.length}개${loose.length ? " + 직속 " + loose.length + "팀" : ""} · 팀 ${teamsOfCo(c.companyId).length}개 · 진행 ${c.nOpen}건${c.nClosed ? " · 종결 " + c.nClosed : ""}`,
+        () => blocks.join("") || '<p class="help">이 계열사에 사업장·팀이 없습니다.</p>');
     }).join("")}
   </section>`;
 }
@@ -1905,6 +1929,7 @@ function myCoId() {
 
 /** 팀 선택을 이 브라우저에 기억시킨다 (D-039) */
 function pickTeam(id) {
+  state.pickCo = "";
   if (id === "__all") state.me = { ...state.me, teamId: "__all" };
   else {
     const t = teamRec(id);
@@ -1917,23 +1942,48 @@ function pickTeam(id) {
   render(); window.scrollTo(0, 0);
 }
 
-/* ---------------- 팀 고르기 ---------------- */
+/* ---------------- 팀 고르기 — 계열사 먼저, 그다음 팀 (D-047) ---------------- */
 function viewPickTeam() {
+  const skip = `<div class="mt-skip"><button class="ghost" data-pick="__all">팀 없이 전체 보기 — 사무국·열람용</button></div>`;
+
+  if (!state.companies.length) return banners() + `<section class="panel mt-pick">
+    <div class="ph"><div><h2>어느 팀이신가요?</h2></div></div>
+    <div class="empty"><h3>등록된 계열사가 없습니다</h3>
+      <p>조직 현황 화면의 <b>조직 관리</b>에서 계열사와 팀을 먼저 등록해 주세요.</p></div>${skip}</section>`;
+
+  /* 1단계 — 계열사 */
+  if (!state.pickCo) {
+    const cos = sortedCos();
+    return banners() + `<section class="panel mt-pick">
+      <div class="ph"><div><h2>어느 계열사이신가요?</h2>
+        <div class="sub">계열사를 고르면 그 안의 팀이 나옵니다. 고른 값은 이 브라우저에만 저장되고 언제든 바꿀 수 있습니다.</div></div></div>
+      <div class="mt-cos">${cos.map(c => {
+        const nt = teamsOfCo(c.id).length;
+        const ns = state.strategies.filter(s => coIdOf(s) === c.id && isOpen(s)).length;
+        return `<button data-pickco="${esc(c.id)}">${esc(c.name)}<span class="c">팀 ${nt}개 · 진행 과제 ${ns}건</span></button>`;
+      }).join("")}</div>${skip}</section>`;
+  }
+
+  /* 2단계 — 그 계열사의 팀 */
+  const co = coRec(state.pickCo);
+  if (!co) { state.pickCo = ""; return viewPickTeam(); }
   const nOpen = id => state.strategies.filter(s => s.teamId === id && isOpen(s)).length;
   const btn = t => `<button data-pick="${esc(t.id)}">${esc(t.name)}<span class="c">진행 과제 ${nOpen(t.id)}건</span></button>`;
   const grp = (title, list) => list.length
     ? `<div class="mt-pickg"><h3>${esc(title)}</h3><div class="mt-teams">${list.slice()
       .sort((a, b) => (a.name || "").localeCompare(b.name || "", "ko")).map(btn).join("")}</div></div>`
     : "";
-  const blocks = sortedSites().map(st => grp(st.name, state.teams.filter(t => t.siteId === st.id))).join("")
-    + grp("사업장 미지정", state.teams.filter(t => !t.siteId));
+  const blocks = sitesOfCo(co.id).map(st => grp(st.name, state.teams.filter(t => t.siteId === st.id))).join("")
+    + grp(sitesOfCo(co.id).length ? "계열사 직속" : "소속 팀", looseTeamsOfCo(co.id));
 
   return banners() + `<section class="panel mt-pick">
-    <div class="ph"><div><h2>어느 팀이신가요?</h2>
-      <div class="sub">고르면 다음부터 우리 팀 과제 화면이 먼저 열립니다. 이 브라우저에만 저장되고, 언제든 바꿀 수 있습니다.</div></div></div>
-    ${state.teams.length ? blocks : `<div class="empty"><h3>등록된 팀이 없습니다</h3>
-      <p>사업장·팀 현황 화면의 <b>사업장·팀 관리</b>에서 팀을 먼저 등록해 주세요.</p></div>`}
-    <div class="mt-skip"><button class="ghost" data-pick="__all">팀 없이 전체 보기 — 사무국·열람용</button></div>
+    <div class="ph"><div><h2>${esc(co.name)} — 어느 팀이신가요?</h2>
+      <div class="sub">고르면 다음부터 우리 팀 과제 화면이 먼저 열립니다.</div></div>
+      <div class="r"><button class="ghost" data-act="backco">‹ 계열사 다시 고르기</button></div></div>
+    ${teamsOfCo(co.id).length ? blocks : `<div class="empty"><h3>이 계열사에 등록된 팀이 없습니다</h3>
+      <p>조직 현황 화면의 <b>조직 관리</b>에서 팀을 먼저 등록해 주세요.</p>
+      <button class="btn" data-act="backco">다른 계열사 고르기</button></div>`}
+    ${skip}
   </section>`;
 }
 
@@ -2165,6 +2215,16 @@ function bind(root) {
     state.selected = el.dataset.open; state.view = "detail"; render(); window.scrollTo(0, 0);
   });
   root.querySelectorAll("[data-pick]").forEach(el => el.onclick = () => pickTeam(el.dataset.pick));
+  root.querySelectorAll("[data-pickco]").forEach(el => el.onclick = () => {
+    state.pickCo = el.dataset.pickco; render(); window.scrollTo(0, 0);
+  });
+  /* 계열사 아코디언 여닫기 */
+  root.querySelectorAll("[data-toggleco]").forEach(el => el.onclick = () => {
+    const id = el.dataset.toggleco;
+    coOpen(id);                       /* openCos 초기화를 보장한다 */
+    state.openCos[id] = !state.openCos[id];
+    render();
+  });
   /* 계열사 행 → 그 계열사의 소속 화면으로 (D-044) */
   root.querySelectorAll("[data-co]").forEach(el => el.onclick = () => {
     state.filters.company = el.dataset.co; state.filters.site = ""; state.filters.team = "";
@@ -2199,6 +2259,9 @@ function bind(root) {
     if (a === "printForms") printForms();
     if (a === "pickteam") { state.view = "pick"; render(); window.scrollTo(0, 0); }
     if (a === "undrill") { state.drillTeam = null; state.sub.myco = "site"; render(); window.scrollTo(0, 0); }
+    if (a === "backco") { state.pickCo = ""; render(); window.scrollTo(0, 0); }
+    if (a === "expandco") { state.openCos = {}; state.companies.forEach(c => state.openCos[c.id] = true); state.openCos[""] = true; render(); }
+    if (a === "collapseco") { state.openCos = {}; render(); }
     if (a === "teamsub") { state.teamSub = id; render(); }
     if (a === "clearf") { state.filters = { q: "", company: "", site: "", team: "", esg: "", cat: "", status: "" }; render(); }
   });
@@ -2395,10 +2458,14 @@ function openOrgForm() {
   const show = m => { err.hidden = false; err.textContent = m; };
   const reopen = msg => { dlg.close(); toast(msg); openOrgForm(); };
 
+  $("#tNewSite").onchange = () => $("#tNew").oninput();
   $("#tNew").oninput = () => {
     const n = normName($("#tNew").value);
-    const hit = n ? state.teams.filter(t => normName(t.name) === n || (n.length > 2 && (normName(t.name).includes(n) || n.includes(normName(t.name))))) : [];
-    sim.innerHTML = hit.length ? `<div class="simwarn">비슷한 팀이 이미 있습니다: <b>${hit.map(t => esc(t.name) + (t.siteId ? " (" + esc(siteNameOf(t.siteId)) + ")" : "")).join(", ")}</b>. 같은 팀이라면 추가하지 마세요.</div>` : "";
+    /* 같은 계열사 안에서만 본다 — 계열사가 다르면 같은 이름이 정상이다 */
+    const pickV = $("#tNewSite").value;
+    const co = pickV.startsWith("co:") ? pickV.slice(3) : ((siteRec(pickV) || {}).companyId || "");
+    const hit = (n && co) ? state.teams.filter(t => coIdOfTeam(t) === co && (normName(t.name) === normName(n) || (n.length > 2 && (normName(t.name).includes(n) || n.includes(normName(t.name)))))) : [];
+    sim.innerHTML = hit.length ? `<div class="simwarn">이 계열사에 비슷한 팀이 있습니다: <b>${hit.map(t => esc(t.name) + (t.siteId ? " (" + esc(siteNameOf(t.siteId)) + ")" : "")).join(", ")}</b>. 같은 팀이라면 추가하지 마세요.</div>` : "";
   };
   $("#cAdd").onclick = async () => {
     const name = $("#cNew").value.trim();
@@ -2423,11 +2490,13 @@ function openOrgForm() {
     const name = $("#tNew").value.trim(), pick = $("#tNewSite").value;
     if (!name) return show("팀 이름을 입력해 주세요.");
     if (!pick) return show("소속을 선택해 주세요.");
-    if (state.teams.some(t => normName(t.name) === normName(name))) return show("이미 같은 팀이 등록되어 있습니다.");
     /* "co:계열사id" 면 사업장 없이 계열사 직속 */
     const direct = pick.startsWith("co:");
     const siteId = direct ? null : pick;
     const companyId = direct ? pick.slice(3) : ((siteRec(pick) || {}).companyId || null);
+    /* 같은 이름은 계열사 안에서만 막는다 (D-016 수정) — 인사팀은 계열사마다 있다 */
+    if (state.teams.some(t => coIdOfTeam(t) === companyId && normName(t.name) === normName(name)))
+      return show("이 계열사에 이미 '" + name + "'이(가) 있습니다.");
     try {
       await state.db.collection("teams").add({ name, siteId, companyId, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
       reopen("'" + name + "' 팀을 추가했습니다.");
@@ -2467,7 +2536,9 @@ function openOrgForm() {
     const name = (form.querySelector('[data-tname="' + t.id + '"]').value || "").trim();
     const siteId = form.querySelector('[data-tsite="' + t.id + '"]').value;
     if (!name) return show("팀 이름은 비워둘 수 없습니다.");
-    if (state.teams.some(x => x.id !== t.id && normName(x.name) === normName(name))) return show("이미 같은 팀이 있습니다.");
+    const newCo = (siteRec(siteId) || {}).companyId || t.companyId || null;
+    if (state.teams.some(x => x.id !== t.id && coIdOfTeam(x) === newCo && normName(x.name) === normName(name)))
+      return show("이 계열사에 이미 같은 팀이 있습니다.");
     if (name === t.name && siteId === (t.siteId || "")) return toast("변경된 내용이 없습니다.");
     const companyId = (siteRec(siteId) || {}).companyId || t.companyId || null;
     try { await save("teams/" + t.id, { name, siteId: siteId || null, companyId, updatedAt: new Date().toISOString() }, "update"); reopen("팀 정보를 수정했습니다."); }

@@ -1,0 +1,61 @@
+{
+  "title": "ESG 공시 데이터 수집 표준화",
+  "esg": "G",
+  "category": "G-DIS",
+  "scope": "site",
+  "teamId": "t-donga-qual",
+  "team": "품질경영팀",
+  "siteId": null,
+  "companyId": "c-donga",
+  "owner": "임가람",
+  "startYear": 2026,
+  "startMonth": 1,
+  "endYear": 2027,
+  "endMonth": 12,
+  "priority": "중",
+  "purpose": "동아스틸의 ESG 공시 데이터 수집 표준화 과제. 그룹 ESG 중장기전략에 따라 추진한다.",
+  "plans": [
+    {
+      "text": "대상 범위 및 기준 정의",
+      "status": "doing",
+      "updatedBy": "임가람",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "데이터 수집 체계 구축",
+      "status": "doing",
+      "updatedBy": "임가람",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "1차 진단·산정 시행",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    },
+    {
+      "text": "미흡 항목 개선 지원",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    },
+    {
+      "text": "결과 공시 및 정기 갱신",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    }
+  ],
+  "yearTargets": {},
+  "kpiName": "",
+  "kpiUnit": "",
+  "kpiBase": null,
+  "kpiBaseYear": null,
+  "kpiTarget": null,
+  "lifecycle": "active",
+  "carries": [],
+  "targetHistory": [],
+  "createdBy": "임가람",
+  "createdAt": "2026-09-16T12:00:00.000Z",
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}
