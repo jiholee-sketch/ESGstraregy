@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "titanic-dashboard",
+      "runtimeExecutable": "C:/Users/USER/AppData/Local/Programs/Python/Python313/python.exe",
+      "runtimeArgs": ["-m", "http.server", "8765"],
+      "port": 8765,
+      "url": "http://localhost:8765"
+    },
+    {
+      "name": "esg-deploy-check",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["deploy/localtest.js"],
+      "port": 5055,
+      "url": "http://localhost:5055"
+    }
+  ]
+}

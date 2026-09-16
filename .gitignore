@@ -1,0 +1,6 @@
+.server.pid
+deploy/node_modules/
+deploy/public/
+deploy/.firebase/
+deploy/firebase-debug.log
+*.log

@@ -1,0 +1,45 @@
+{
+  "carries": [],
+  "createdAt": "2025-01-20T02:00:00.000Z",
+  "createdBy": "박도현",
+  "endYear": 2027,
+  "esg": "S",
+  "kpiBase": 0.82,
+  "kpiName": "재해율 (LTIFR)",
+  "kpiTarget": 0,
+  "kpiUnit": "건/百만시간",
+  "lifecycle": "active",
+  "owner": "박도현",
+  "plans": [
+    {
+      "status": "doing",
+      "text": "전 사업장 위험성평가 정기 시행 및 개선과제 등록"
+    },
+    {
+      "status": "doing",
+      "text": "아차사고 신고 포상제 운영 및 재발방지 대책 수립"
+    },
+    {
+      "status": "doing",
+      "text": "ISO 45001 인증 유지 및 사후심사 대응"
+    },
+    {
+      "status": "doing",
+      "text": "협력사 포함 안전보건 교육 이수율 100% 달성"
+    },
+    {
+      "status": "doing",
+      "text": "안전보건 예산 매출 대비 0.5% 이상 집행"
+    }
+  ],
+  "priority": "상",
+  "purpose": "중대재해처벌법 대응 체계를 정착시키고, 위험성평가 기반의 예방 중심 안전관리로 전환한다.",
+  "scope": "site",
+  "siteId": "st-changwon",
+  "startYear": 2025,
+  "targetHistory": [],
+  "team": "안전환경팀",
+  "teamId": "t-safety",
+  "title": "중대재해 Zero 및 안전보건경영시스템(ISO 45001) 고도화",
+  "updatedAt": "2026-09-10T06:58:40.324Z"
+}

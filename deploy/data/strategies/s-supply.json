@@ -1,0 +1,45 @@
+{
+  "carries": [],
+  "createdAt": "2026-01-12T00:15:00.000Z",
+  "createdBy": "정유진",
+  "endYear": 2028,
+  "esg": "S",
+  "kpiBase": 0,
+  "kpiName": "1차 협력사 ESG 실사 완료율",
+  "kpiTarget": 100,
+  "kpiUnit": "%",
+  "lifecycle": "active",
+  "owner": "정유진",
+  "plans": [
+    {
+      "status": "doing",
+      "text": "협력사 ESG 자가진단 체크리스트 개발 및 배포"
+    },
+    {
+      "status": "todo",
+      "text": "1차 협력사 100% 서면실사, 고위험군 현장실사 시행"
+    },
+    {
+      "status": "todo",
+      "text": "협력사 행동규범 제정 및 거래계약서 반영"
+    },
+    {
+      "status": "todo",
+      "text": "취약 협력사 대상 개선 컨설팅 및 자금 지원 프로그램 운영"
+    },
+    {
+      "status": "todo",
+      "text": "공급망 ESG 평가결과 구매 의사결정 반영 기준 수립"
+    }
+  ],
+  "priority": "중",
+  "purpose": "EU 공급망 실사지침(CSDDD) 대응을 위해 1차 협력사 대상 ESG 평가체계를 구축하고, 취약 협력사 개선을 지원한다.",
+  "scope": "site",
+  "siteId": "st-hq",
+  "startYear": 2026,
+  "targetHistory": [],
+  "team": "구매팀",
+  "teamId": "t-purchase",
+  "title": "공급망 ESG 실사 및 협력사 동반성장 프로그램",
+  "updatedAt": "2026-09-10T05:00:00.000Z"
+}

@@ -1,0 +1,45 @@
+{
+  "carries": [],
+  "createdAt": "2024-03-04T03:00:00.000Z",
+  "createdBy": "최민서",
+  "endYear": 2026,
+  "esg": "G",
+  "kpiBase": 2,
+  "kpiName": "KCGS ESG 통합등급",
+  "kpiTarget": 4,
+  "kpiUnit": "등급",
+  "lifecycle": "active",
+  "owner": "최민서",
+  "plans": [
+    {
+      "status": "done",
+      "text": "이사회 산하 ESG위원회 설치 및 연 4회 정기 개최"
+    },
+    {
+      "status": "done",
+      "text": "사외이사 비중 확대 및 이사회 다양성 정책 수립"
+    },
+    {
+      "status": "done",
+      "text": "지속가능경영보고서 발간 (GRI Standards 기준)"
+    },
+    {
+      "status": "done",
+      "text": "기후 관련 재무정보(TCFD) 공시 항목 반영"
+    },
+    {
+      "status": "doing",
+      "text": "ESG 평가기관 등급 관리 및 개선과제 이행"
+    }
+  ],
+  "priority": "상",
+  "purpose": "이사회 산하 ESG위원회를 상설화하고, 지속가능경영보고서와 기후 관련 재무정보(TCFD) 공시를 정례화한다.",
+  "scope": "site",
+  "siteId": "st-hq",
+  "startYear": 2024,
+  "targetHistory": [],
+  "team": "경영기획팀",
+  "teamId": "t-planning",
+  "title": "이사회 중심 ESG 거버넌스 체계 구축 및 정보공시 확대",
+  "updatedAt": "2026-09-10T05:00:00.000Z"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "esg-strategy-tracker-deploy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ESG 중장기전략 진척관리 — Firebase Hosting + Firestore 배포 번들",
+  "scripts": {
+    "login": "firebase login",
+    "setup": "node setup.js",
+    "build": "node build.js",
+    "deploy": "node build.js && firebase deploy --only hosting,firestore:rules",
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "deploy:site": "node build.js && firebase deploy --only hosting",
+    "preview": "node build.js && firebase hosting:channel:deploy preview --expires 7d",
+    "seed": "node seed.js",
+    "seed:dry": "node seed.js --dry-run",
+    "serve": "node build.js && firebase emulators:start --only hosting,firestore,auth",
+    "open": "firebase open hosting:site"
+  },
+  "dependencies": {
+    "firebase": "12.19.0"
+  },
+  "devDependencies": {
+    "firebase-tools": "15.30.1"
+  }
+}

@@ -1,0 +1,572 @@
+<title>ESG 진척관리 이관 요청서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#F4F4F1; --surface:#FFFFFF; --surface-2:#FAFAF7; --code-bg:#F0F2EE;
+  --ink:#161A18; --ink-2:#3D443F; --muted:#6D746E; --line:#DCE0D9; --line-2:#EAEDE7;
+  --accent:#1E4F45; --accent-ink:#123029; --accent-soft:#E2ECE7; --accent-line:#B9D1C8;
+  --warn:#8F6209; --warn-soft:#F7EFDC;
+  --req:#3B5FA4; --req-soft:#E6ECF7;
+  --ask:#A93B2C; --ask-soft:#F8E7E3;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#101312; --surface:#181C1A; --surface-2:#1E2320; --code-bg:#121615;
+    --ink:#E7EBE6; --ink-2:#C0C7C1; --muted:#8A928B; --line:#2B312C; --line-2:#232825;
+    --accent:#78C3AC; --accent-ink:#B6E2D4; --accent-soft:#1A2D28; --accent-line:#2D463F;
+    --warn:#D3A248; --warn-soft:#2C2516;
+    --req:#8AA8E0; --req-soft:#1A2232;
+    --ask:#E0806F; --ask-soft:#2E1D19;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#101312; --surface:#181C1A; --surface-2:#1E2320; --code-bg:#121615;
+  --ink:#E7EBE6; --ink-2:#C0C7C1; --muted:#8A928B; --line:#2B312C; --line-2:#232825;
+  --accent:#78C3AC; --accent-ink:#B6E2D4; --accent-soft:#1A2D28; --accent-line:#2D463F;
+  --warn:#D3A248; --warn-soft:#2C2516;
+  --req:#8AA8E0; --req-soft:#1A2232;
+  --ask:#E0806F; --ask-soft:#2E1D19;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans KR","Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:14.5px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Gothic A1","IBM Plex Sans KR",system-ui,sans-serif;margin:0;text-wrap:balance;letter-spacing:-.012em}
+code,pre,.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;font-variant-numeric:tabular-nums}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 96px;display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+@media (min-width:1040px){
+  .wrap{grid-template-columns:minmax(0,1fr) 216px;gap:48px;align-items:start}
+  main{grid-column:1;grid-row:2}
+  .toc{grid-column:2;grid-row:2;position:sticky;top:34px}
+}
+
+/* ---- masthead ---- */
+.mast{border-bottom:2px solid var(--ink);padding:44px 0 20px;margin-bottom:34px;grid-column:1/-1}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.mast h1{font-size:clamp(27px,4.4vw,40px);font-weight:800;margin:9px 0 12px;line-height:1.14}
+.mast .lede{font-size:15.5px;color:var(--ink-2);max-width:64ch}
+.meta{display:flex;flex-wrap:wrap;gap:0;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.meta div{padding-right:30px;margin-right:30px;border-right:1px solid var(--line)}
+.meta div:last-child{border-right:0;margin-right:0;padding-right:0}
+.meta .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.meta .v{font-size:13.5px;font-weight:600;margin-top:1px}
+
+/* ---- toc ---- */
+.toc .th{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding-bottom:9px;border-bottom:1px solid var(--line);margin-bottom:9px;font-weight:600}
+.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.toc a{display:flex;gap:9px;padding:4px 0;font-size:12.5px;color:var(--ink-2);text-decoration:none;line-height:1.4}
+.toc a:hover{color:var(--accent)}
+.toc a span{font-family:"IBM Plex Mono",monospace;color:var(--muted);flex:none;font-size:11.5px}
+@media (max-width:1039px){
+  .toc{grid-row:auto;border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--surface);margin-bottom:34px}
+}
+
+/* ---- sections ---- */
+main{min-width:0}
+section{margin-bottom:52px;scroll-margin-top:24px}
+section > h2{font-size:21px;font-weight:800;display:flex;align-items:baseline;gap:12px;padding-bottom:9px;border-bottom:1px solid var(--ink);margin-bottom:18px}
+section > h2 .no{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--accent);font-weight:600;flex:none}
+h3{font-size:15.5px;font-weight:700;margin:26px 0 9px}
+h4{font-size:13.5px;font-weight:700;margin:18px 0 6px;color:var(--ink-2)}
+p{margin:0 0 12px;max-width:70ch}
+ul,ol.plain{margin:0 0 12px;padding-left:20px;max-width:70ch}
+li{margin-bottom:5px}
+strong{font-weight:600}
+.lead{font-size:15px;color:var(--ink-2);max-width:68ch}
+
+/* ---- requirement blocks ---- */
+.req{border-left:3px solid var(--req);background:var(--surface);border:1px solid var(--line);border-left-width:3px;border-radius:0 9px 9px 0;padding:13px 16px;margin:0 0 10px}
+.req .rid{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--req);background:var(--req-soft);border-radius:4px;padding:1px 6px;margin-right:8px}
+.req .rt{font-weight:600}
+.req p{margin:7px 0 0;font-size:13.5px;color:var(--ink-2);max-width:none}
+.req.opt{border-left-color:var(--warn)}
+.req.opt .rid{color:var(--warn);background:var(--warn-soft)}
+.req .badge{font-size:11px;font-family:"IBM Plex Mono",monospace;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:0 7px;margin-left:7px;white-space:nowrap}
+
+/* ---- tables ---- */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:9px;background:var(--surface);margin:0 0 16px}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
+th,td{text-align:left;padding:9px 13px;border-bottom:1px solid var(--line-2);vertical-align:top}
+thead th{background:var(--surface-2);font-weight:600;font-size:11.5px;letter-spacing:.03em;color:var(--ink-2);white-space:nowrap;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+td code{font-size:12px}
+td.mono,th.mono{font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+.na{color:var(--muted)}
+
+/* ---- code ---- */
+pre{
+  background:var(--code-bg);border:1px solid var(--line);border-radius:9px;
+  padding:15px 17px;overflow-x:auto;margin:0 0 16px;font-size:12.5px;line-height:1.62;
+}
+pre code{background:none;padding:0;font-size:inherit}
+code{background:var(--code-bg);border-radius:4px;padding:1px 5px;font-size:12.5px}
+.cap{font-size:11.5px;color:var(--muted);margin:-9px 0 18px;font-family:"IBM Plex Mono",monospace}
+
+/* ---- callouts ---- */
+.note{border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--accent-soft);color:var(--accent-ink);border-radius:0 9px 9px 0;padding:13px 16px;margin:0 0 16px;font-size:13.5px}
+.note p{margin:0;max-width:none}
+.note p + p{margin-top:8px}
+.note.w{border-left-color:var(--warn);background:var(--warn-soft);color:var(--warn)}
+.note .nt{font-weight:700;display:block;margin-bottom:4px}
+
+/* ---- ask checklist ---- */
+.ask{border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--surface);margin-bottom:16px}
+.ask .ah{background:var(--ask-soft);color:var(--ask);padding:12px 17px;font-weight:700;font-size:14px;border-bottom:1px solid var(--line)}
+.ask ol{list-style:none;margin:0;padding:0}
+.ask li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:13px;padding:13px 17px;border-bottom:1px solid var(--line-2);margin:0}
+.ask li:last-child{border-bottom:0}
+.ask .n{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--ask);background:var(--ask-soft);border-radius:4px;padding:1px 7px;height:fit-content;margin-top:2px}
+.ask .q{font-weight:600;font-size:13.5px}
+.ask .why{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+/* ---- flow ---- */
+.flow{display:flex;flex-wrap:wrap;gap:0;align-items:stretch;margin:0 0 16px;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface)}
+.flow .st{flex:1 1 150px;padding:13px 15px;border-right:1px solid var(--line);min-width:0}
+.flow .st:last-child{border-right:0}
+.flow .st .sn{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--accent);font-weight:600;letter-spacing:.08em}
+.flow .st .sl{font-weight:600;font-size:13.5px;margin-top:3px}
+.flow .st .sd{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.5}
+
+footer{grid-column:1/-1;border-top:1px solid var(--line);margin-top:20px;padding-top:18px;font-size:12.5px;color:var(--muted)}
+footer p{max-width:70ch}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="eyebrow">사내 시스템 이관 요청 · 기술 명세</div>
+    <h1>ESG 중장기전략 진척관리 시스템</h1>
+    <p class="lede">현업부서가 ESG 중장기전략을 등록하고 주기적으로 진행도를 입력하면, 팀별·전사 달성률이 자동 집계되어 대시보드로 확인되는 사내 웹 시스템입니다. 화면과 산정 로직은 프로토타입으로 검증을 마쳤고, 이 문서는 그것을 사내 인프라에 이관하기 위한 요건 명세입니다.</p>
+    <div class="meta">
+      <div><div class="k">요청 부서</div><div class="v">ESG 사무국</div></div>
+      <div><div class="k">작성일</div><div class="v mono">2026-09-10</div></div>
+      <div><div class="k">문서 상태</div><div class="v">IT부서 검토 요청</div></div>
+      <div><div class="k">회신 필요</div><div class="v" style="color:var(--ask)">&sect;9 체크리스트 6항</div></div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <div class="th">목차</div>
+    <ol>
+      <li><a href="#s1"><span>1</span>배경과 목적</a></li>
+      <li><a href="#s2"><span>2</span>사용자와 권한</a></li>
+      <li><a href="#s3"><span>3</span>화면 구성</a></li>
+      <li><a href="#s4"><span>4</span>데이터 모델</a></li>
+      <li><a href="#s5"><span>5</span>산정 규칙</a></li>
+      <li><a href="#s6"><span>6</span>API 명세</a></li>
+      <li><a href="#s7"><span>7</span>비기능 요건</a></li>
+      <li><a href="#s8"><span>8</span>이관 방식</a></li>
+      <li><a href="#s9"><span>9</span>회신 요청 사항</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+  <!-- 1 -->
+  <section id="s1">
+    <h2><span class="no">01</span>배경과 목적</h2>
+    <p class="lead">현재 ESG 중장기전략 관리는 부서별로 분기 PPT 양식을 작성해 제출하고, ESG 사무국이 이를 수작업으로 취합하는 방식입니다.</p>
+    <p>이 방식의 문제는 세 가지입니다. 첫째, 전사 달성률과 팀 간 비교를 실시간으로 볼 수 없습니다. 둘째, 지연이 발생한 과제를 분기 마감 이후에야 발견합니다. 셋째, 달성률이 담당자의 주관 판단이어서 팀마다 후하거나 박해 비교 자체가 무의미해집니다.</p>
+    <p>이 시스템은 <strong>계획 항목 단위의 체크로 달성률을 자동 산정</strong>해 세 문제를 함께 해결합니다. 담당자가 세부 계획 항목의 상태만 갱신하면 근거가 명확한 숫자가 나오고, 기간경과 대비 지연 여부가 자동 판정됩니다.</p>
+
+    <h3>기존 보고 양식의 구조 보존</h3>
+    <p>담당자가 이미 사용하던 분기 보고 양식의 5개 블록을 화면에 그대로 재현하는 것이 요건입니다. 학습 비용이 없다는 점이 이 시스템의 핵심 강점이므로, 임의로 재구성하지 않아야 합니다.</p>
+    <div class="tw"><table>
+      <thead><tr><th>블록</th><th>내용</th><th>시스템 대응</th></tr></thead>
+      <tbody>
+        <tr><td>실행과제(명)</td><td>과제명, KPI, 추진 배경</td><td><code>esg_strategy</code></td></tr>
+        <tr><td>계획(목표)</td><td>세부 계획 항목 목록</td><td><code>esg_strategy_plan</code> — 달성률의 분모</td></tr>
+        <tr><td>'YY nQ 실적</td><td>해당 기간 실적 서술</td><td><code>esg_progress.achievement</code></td></tr>
+        <tr><td>(해당시) 계획대비 지연 사유</td><td>지연 원인, 개선 필요사항</td><td><code>esg_progress.delay_reason</code></td></tr>
+        <tr><td>Catch-up / Follow-up Plan</td><td>만회·후속 계획</td><td><code>esg_progress.catchup_plan</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>범위에서 제외된 것</h3>
+    <p>다음은 <strong>의도적으로 만들지 않습니다.</strong> 실사용 피드백 없이 만들면 쓰지 않는 기능이 될 가능성이 높다고 판단했습니다. 추가 요청이 없는 한 구현하지 마십시오.</p>
+    <div class="tw"><table>
+      <thead><tr><th>제외 항목</th><th>대체 운영 방식</th></tr></thead>
+      <tbody>
+        <tr><td>팀장 승인 워크플로</td><td>담당자 입력이 곧 확정. 검증은 사무국이 대시보드에서 사후 확인</td></tr>
+        <tr><td>증빙자료 파일 첨부</td><td>증빙은 기존 방식대로 부서가 별도 보관</td></tr>
+        <tr><td>자동 알림 메일 발송</td><td>사무국이 미제출 목록을 보고 사내 도구로 직접 독촉</td></tr>
+        <tr><td>목표 변경 이력 저장</td><td>목표 변경은 덮어쓰기. 변경 전 값은 남기지 않음</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 2 -->
+  <section id="s2">
+    <h2><span class="no">02</span>사용자와 권한</h2>
+    <p class="lead">세 종류의 사용자가 있고, 권한은 서버가 판정해야 합니다.</p>
+    <div class="tw"><table>
+      <thead><tr><th>사용자</th><th>규모(예상)</th><th>할 수 있는 일</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ESG 사무국</strong></td><td>1–2명</td><td>전 과제 등록·수정·삭제, 팀 마스터 관리, CSV 추출</td></tr>
+        <tr><td><strong>현업부서 담당자</strong></td><td>부서당 1–2명</td><td>과제 등록·수정, 계획 항목 상태 변경, 기간 실적 입력</td></tr>
+        <tr><td><strong>전 임직원</strong></td><td>전사</td><td>대시보드·과제 목록·상세 <strong>열람만</strong></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="req"><span class="rid">R-1</span><span class="rt">인증은 사내 계정에 위임한다</span>
+      <p>별도 회원가입·비밀번호 관리를 만들지 않습니다. 사내 SSO 또는 그룹웨어 계정 세션으로 로그인 상태를 판정합니다.</p></div>
+
+    <div class="req"><span class="rid">R-2</span><span class="rt">쓰기 권한은 서버가 차단한다</span>
+      <p>열람자에게 입력 UI를 숨기는 것만으로는 부족합니다. 모든 쓰기 API가 서버에서 권한을 재확인해 거절해야 합니다. 프로토타입 단계에서 열람자가 다른 팀 과제를 삭제할 수 있었던 것이 이 요건의 배경입니다.</p></div>
+
+    <div class="req"><span class="rid">R-3</span><span class="rt">화면은 권한에 따라 달라진다</span>
+      <p>열람자에게는 등록·수정·삭제·실적 입력·항목 체크 UI가 아예 표시되지 않아야 합니다. <code>GET /api/session</code>이 내려주는 권한 등급으로 프론트엔드가 분기합니다(§6).</p></div>
+
+    <div class="req opt"><span class="rid">R-4</span><span class="rt">담당자는 자기 팀 과제만 수정<span class="badge">권장 · 선택</span></span>
+      <p>사내 계정으로 소속 팀을 알 수 있다면, 담당자의 쓰기 범위를 본인 팀 과제로 제한하는 것이 안전합니다. 프로토타입에서는 사용자 신원을 알 수 없어 구현하지 못했던 항목입니다. <strong>ESG 사무국은 예외로 전 팀을 수정할 수 있어야 합니다</strong>(대리 입력·정정 필요).</p></div>
+  </section>
+
+  <!-- 3 -->
+  <section id="s3">
+    <h2><span class="no">03</span>화면 구성</h2>
+    <p class="lead">화면 5개와 입력 폼 3개로 구성됩니다. 프로토타입에 모두 구현되어 있어 레이아웃은 그대로 참고할 수 있습니다(§8).</p>
+    <div class="tw"><table>
+      <thead><tr><th>화면</th><th>내용</th><th>권한</th></tr></thead>
+      <tbody>
+        <tr><td><strong>대시보드</strong></td><td><strong>중장기전략 로드맵</strong>(간트형 시간축 그리드, R-10)이 상단을 차지하고, 하단에 조치 필요 과제 · 팀별 달성률 카드 · 전사 요약(달성률 게이지, 등록 과제 수, 당분기 제출률, 조치 필요 건수)이 배치됩니다</td><td>전원</td></tr>
+        <tr><td><strong>과제 목록</strong></td><td>과제별 팀·담당자·추진기간·계획 항목 진행수·상태·달성률. 검색(과제명·담당자·계획·KPI) 및 팀/영역/상태 필터</td><td>전원</td></tr>
+        <tr><td><strong>사업장·팀 현황</strong></td><td>사업장별로 묶어 그 안에 팀을 나열합니다. 사업장 헤더에 사업장 평균 달성률, 각 팀 행에 과제 수·달성/기대·상태 내역·당분기 제출 건수·최근 갱신. <strong>팀 전체</strong> 하위탭에서 사업장 구분 없이 나열도 가능</td><td>전원</td></tr>
+        <tr><td><strong>과제 상세</strong></td><td>기존 5블록 양식 재현 + 계획 항목 체크리스트 + 기간별 실적 이력 타임라인 + KPI 요약</td><td>전원 (체크는 담당자 이상)</td></tr>
+        <tr><td><strong>사업장·팀 관리</strong></td><td>사업장 추가·이름 수정·삭제, 팀 추가·이름 수정·<strong>소속 사업장 변경</strong>·삭제. 유사 팀명 경고</td><td>담당자 이상</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>입력 폼</h3>
+    <div class="tw"><table>
+      <thead><tr><th>폼</th><th>주요 입력</th><th>검증</th></tr></thead>
+      <tbody>
+        <tr><td>전략 등록·수정</td><td>과제명, <strong>사업장 → 팀</strong>(둘 다 목록에서 선택하며, 사업장을 고르면 팀 목록이 걸러집니다), ESG 영역, 담당자, 추진 시작·완료연도, 우선순위, 추진 배경, 세부 계획(한 줄에 하나), KPI(지표명·단위·기준값·목표값)</td><td>완료연도 ≥ 시작연도, 계획 항목 1개 이상, 사업장·팀 필수</td></tr>
+        <tr><td>기간 실적 입력</td><td>보고 단위(분기/월), 보고 시점, 계획 항목 상태 체크, 실적 서술, KPI 실적, 지연 사유, Catch-up Plan</td><td><strong>기대치 미달 시 지연 사유 필수</strong>(§5 R-9)</td></tr>
+        <tr><td>팀 추가</td><td>팀 이름</td><td>정규화 후 중복 불가, 유사명 경고</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="req"><span class="rid">R-12</span><span class="rt">내비게이션은 좌측 1단 + 상단 하위탭 2단이다</span>
+      <p>좌측 아이콘 레일이 <strong>주 화면</strong>(대시보드 / 과제 목록 / 사업장·팀 현황 / 전략 등록)을 고르고, 상단 알약형 탭은 <strong>그 화면의 하위 섹션</strong>을 고릅니다. 같은 항목을 양쪽에 중복 배치하지 마십시오.</p>
+      <p>대시보드 하위탭은 <strong>전체화면 · 중장기전략 로드맵 · 조치 필요 · 팀별 달성률</strong>이며, 탭에 해당 건수를 함께 표시합니다. 각 하위 화면은 <strong>요약 통계 박스 + 상세 목록</strong> 형태로 펼칩니다 — 예: 조치 필요 화면은 위험·지연·미제출·지연사유 미기재 건수를 상단에 놓고, 각 과제 카드에 달성/기대 갭과 지연 사유·Catch-up Plan 본문을 함께 보여줍니다. 과제 목록은 ESG 영역별(전체/환경/사회/지배구조), 사업장·팀 현황은 사업장별/팀 전체를 하위탭으로 씁니다.</p></div>
+
+    <h3>중장기전략 로드맵 (대시보드 상단)</h3>
+    <div class="req"><span class="rid">R-10</span><span class="rt">로드맵은 분기 단위 간트 그리드로 그린다</span>
+      <p><strong>행</strong>은 실행과제(왼쪽에 과제명·팀·담당자 카드를 고정 표시), <strong>열</strong>은 분기입니다. 열 범위는 전체 과제의 추진기간을 덮되 현재 분기가 항상 포함되어야 하며, 가로 스크롤로 처리하고 <strong>최초 표시 시 현재 분기가 보이는 위치로 스크롤</strong>합니다.</p>
+      <p>과제마다 <code>start_year</code>~<code>end_year</code> 구간에 막대를 그립니다. 막대 색은 <strong>ESG 영역</strong>(환경/사회/지배구조 3색), 막대 아래를 가로지르는 얇은 띠가 <strong>현재 달성률</strong>, 막대 오른쪽 끝의 흰 칩이 <strong>이행 상태와 달성률</strong>입니다. 색으로 영역을, 칩으로 상태를 나누어 두 정보가 섞이지 않게 한 구성이므로 유지하십시오.</p>
+      <p>경과된 분기 열은 사선 해칭으로, 현재 분기는 열 머리를 강조하고 세로 점선을 그려 구분합니다. 행 정렬은 <strong>위험 → 지연 → 미착수 → 정상 → 완료</strong> 순으로, 조치가 필요한 과제가 위에 오게 합니다.</p></div>
+
+    <div class="note"><span class="nt">담당자 입력 부담이 설계 제약입니다</span>
+      <p>담당자는 분기에 한 번 들어오는 사용자입니다. 한 과제 입력이 5분을 넘기면 제출률이 떨어집니다. 실적 입력 폼에서 <strong>계획 항목 체크와 실적 서술을 한 화면에서 처리</strong>하고, 체크하는 즉시 계산된 달성률이 화면에 보이도록 설계되어 있습니다. 이 구조를 여러 단계로 쪼개지 마십시오.</p></div>
+  </section>
+
+  <!-- 4 -->
+  <section id="s4">
+    <h2><span class="no">04</span>데이터 모델</h2>
+    <p class="lead">테이블 4개입니다. 아래 DDL은 표준 SQL로 작성했으며, 자료형은 사내 DB에 맞게 조정하십시오.</p>
+
+    <pre><code>-- 0. 사업장 마스터. 본사 / 포항공장 / 창원공장 / 군산공장 / 순천공장
+CREATE TABLE esg_site (
+  site_id      INTEGER      PRIMARY KEY,
+  name         VARCHAR(30)  NOT NULL UNIQUE,
+  sort_order   INTEGER      NULL,                 -- 화면 표시 순서 (본사 우선)
+  created_at   TIMESTAMP    NOT NULL,
+  updated_at   TIMESTAMP    NOT NULL
+);
+
+-- 1. 팀 마스터. 팀은 반드시 한 사업장에 속한다 (R-11).
+CREATE TABLE esg_team (
+  team_id      INTEGER      PRIMARY KEY,          -- MSSQL: IDENTITY / MySQL: AUTO_INCREMENT
+  site_id      INTEGER      NOT NULL REFERENCES esg_site(site_id),
+  name         VARCHAR(40)  NOT NULL UNIQUE,      -- 유니크 제약 필수 (R-5)
+  sort_order   INTEGER      NULL,
+  created_at   TIMESTAMP    NOT NULL,
+  updated_at   TIMESTAMP    NOT NULL
+);
+
+-- 2. 실행과제
+CREATE TABLE esg_strategy (
+  strategy_id  INTEGER      PRIMARY KEY,
+  title        VARCHAR(200) NOT NULL,
+  esg_category CHAR(1)      NOT NULL CHECK (esg_category IN ('E','S','G')),
+  team_id      INTEGER      NOT NULL REFERENCES esg_team(team_id),
+  owner_name   VARCHAR(40)  NULL,                 -- 실무 담당자 표기용
+  start_year   INTEGER      NOT NULL,
+  end_year     INTEGER      NOT NULL,
+  priority     VARCHAR(4)   NULL CHECK (priority IN ('상','중','하')),
+  purpose      VARCHAR(2000) NULL,                -- 추진 배경·목적
+  kpi_name     VARCHAR(100) NULL,
+  kpi_unit     VARCHAR(20)  NULL,
+  kpi_base     DECIMAL(18,4) NULL,                -- 기준값(Baseline)
+  kpi_target   DECIMAL(18,4) NULL,                -- 목표값
+  created_by   VARCHAR(40)  NOT NULL,
+  created_at   TIMESTAMP    NOT NULL,
+  updated_at   TIMESTAMP    NOT NULL,
+  CHECK (end_year >= start_year)
+);
+
+-- 3. 계획 항목. 달성률의 근거이므로 반드시 별도 행으로 관리한다.
+CREATE TABLE esg_strategy_plan (
+  plan_id      INTEGER      PRIMARY KEY,
+  strategy_id  INTEGER      NOT NULL REFERENCES esg_strategy(strategy_id) ON DELETE CASCADE,
+  seq          INTEGER      NOT NULL,             -- 화면 표시 순서
+  plan_text    VARCHAR(500) NOT NULL,
+  status       VARCHAR(5)   NOT NULL DEFAULT 'todo'
+                            CHECK (status IN ('todo','doing','done')),
+  updated_by   VARCHAR(40)  NULL,
+  updated_at   TIMESTAMP    NOT NULL,
+  UNIQUE (strategy_id, seq)
+);
+
+-- 4. 기간별 실적. 분기는 필수 보고, 월은 선택 기록.
+CREATE TABLE esg_progress (
+  progress_id  INTEGER      PRIMARY KEY,
+  strategy_id  INTEGER      NOT NULL REFERENCES esg_strategy(strategy_id) ON DELETE CASCADE,
+  period_type  CHAR(1)      NOT NULL CHECK (period_type IN ('Q','M')),
+  period_key   VARCHAR(7)   NOT NULL,             -- 'YYYY-Qn' 또는 'YYYY-MM'
+  progress_pct INTEGER      NOT NULL,             -- 제출 시점 달성률 스냅샷 (0~100)
+  achievement  VARCHAR(4000) NOT NULL,            -- 해당 기간 실적 서술
+  kpi_actual   DECIMAL(18,4) NULL,
+  delay_reason VARCHAR(4000) NULL,
+  catchup_plan VARCHAR(4000) NULL,
+  author_name  VARCHAR(40)  NOT NULL,
+  author_team  VARCHAR(40)  NOT NULL,
+  updated_at   TIMESTAMP    NOT NULL,
+  UNIQUE (strategy_id, period_key)                -- 같은 기간 재제출은 덮어쓰기(UPSERT)
+);
+
+CREATE INDEX ix_strategy_team   ON esg_strategy(team_id);
+CREATE INDEX ix_plan_strategy   ON esg_strategy_plan(strategy_id);
+CREATE INDEX ix_prog_strategy   ON esg_progress(strategy_id);
+CREATE INDEX ix_prog_period     ON esg_progress(period_key);</code></pre>
+    <p class="cap">DDL — 표준 SQL. IDENTITY/AUTO_INCREMENT, TIMESTAMP 자료형, 한글 CHECK 제약은 사내 DB 문법에 맞게 조정</p>
+
+    <div class="req"><span class="rid">R-5</span><span class="rt">팀 이름은 유니크해야 한다</span>
+      <p>"품질경영팀"과 "품질경영 팀"이 서로 다른 팀으로 들어가면 팀별 달성률이 쪼개져 대시보드 자체가 신뢰를 잃습니다. DB 유니크 제약과 함께, 저장 전 <strong>공백·하이픈·언더바·중점·마침표·괄호를 제거하고 소문자화한 값</strong>으로 중복을 검사하십시오.</p></div>
+
+    <div class="req"><span class="rid">R-6</span><span class="rt">달성률은 저장하지 않고 계산한다</span>
+      <p><code>esg_strategy</code>에 달성률 컬럼을 두지 마십시오. 현재 달성률은 항상 <code>esg_strategy_plan</code>에서 실시간 계산합니다(§5 R-7). <code>esg_progress.progress_pct</code>는 <strong>제출 시점의 스냅샷</strong>으로, 추이 조회 전용이며 현재값으로 쓰지 않습니다.</p></div>
+
+    <div class="req"><span class="rid">R-7</span><span class="rt">과제가 남은 팀은 삭제할 수 없다</span>
+      <p>외래키 제약으로 막고, API도 삭제 전 과제 수를 확인해 거절하십시오. <strong>소속 팀이 남은 사업장</strong>도 같습니다.</p></div>
+
+    <div class="req"><span class="rid">R-11</span><span class="rt">조직은 사업장 → 팀 2단 계층이다</span>
+      <p>과제는 <code>team_id</code>만 들고, <strong>사업장은 팀을 통해 파생</strong>시킵니다(<code>esg_team.site_id</code>). 과제에 <code>site_id</code>를 중복 저장하지 마십시오 — 팀의 사업장이 바뀌면 두 값이 어긋납니다.</p>
+      <p>등록 화면에서는 <strong>사업장을 먼저 고르면 그 사업장의 팀만</strong> 선택 목록에 나옵니다. 집계는 팀 → 사업장 → 전사 3단으로 올라가며, 각 단계 모두 <strong>단순 평균</strong>입니다(§5).</p>
+      <p>초기 사업장: <strong>본사, 포항공장, 창원공장, 군산공장, 순천공장</strong>. 사업장 추가·변경은 사무국이 관리 화면에서 처리합니다.</p></div>
+  </section>
+
+  <!-- 5 -->
+  <section id="s5">
+    <h2><span class="no">05</span>산정 규칙</h2>
+    <p class="lead">이 절이 이 문서에서 가장 중요합니다. 숫자가 달라지면 시스템의 신뢰가 무너지므로, 아래 정의를 그대로 구현하십시오. 프로토타입에서 검증된 규칙입니다.</p>
+
+    <h3>달성률 (현재값)</h3>
+    <pre><code>달성률(%) = ROUND( (완료항목수 + 진행중항목수 × 0.5) / 전체항목수 × 100 )
+전체항목수 = 0 인 경우 → 0</code></pre>
+    <p><strong>진행중을 0.5로 세는 것이 핵심입니다.</strong> 완료만 인정하면 보고서를 3개월 붙잡고 있는 동안 내내 0%로 잡히다가 어느 분기에 갑자기 튀어오르는 계단형이 되고, 담당자는 "일한 것이 반영되지 않는다"고 느낍니다. 반대로 항목마다 %를 직접 입력하게 하면 결국 주관 판단으로 되돌아갑니다.</p>
+
+    <h3>기간경과 기대치</h3>
+    <pre><code>분기인덱스(period) = 연도 × 4 + (분기 − 1)          -- 예: 2026-Q3 → 8106
+
+총분기수   = (완료연도 − 시작연도 + 1) × 4
+경과분기수 = 분기인덱스(현재분기) − 시작연도 × 4 + 1
+기대치(%)  = CLAMP( ROUND(경과분기수 / 총분기수 × 100), 0, 100 )</code></pre>
+    <p>"2025~2027 과제가 2026년 3분기에 45%"라는 숫자만으로는 정상인지 알 수 없습니다. 이 기대치가 기준선 역할을 합니다.</p>
+
+    <h3>이행 상태 판정</h3>
+    <div class="tw"><table>
+      <thead><tr><th>상태</th><th>조건</th><th class="mono">우선순위</th></tr></thead>
+      <tbody>
+        <tr><td><strong>완료</strong></td><td>달성률 ≥ 100</td><td class="mono">1</td></tr>
+        <tr><td><strong>미착수</strong></td><td>달성률 = 0 <strong>이고</strong> 실적 이력이 하나도 없음</td><td class="mono">2</td></tr>
+        <tr><td><strong>정상</strong></td><td>(달성률 − 기대치) ≥ −5 %p</td><td class="mono">3</td></tr>
+        <tr><td><strong>지연</strong></td><td>(달성률 − 기대치) ≥ −20 %p</td><td class="mono">4</td></tr>
+        <tr><td><strong>위험</strong></td><td>그 미만</td><td class="mono">5</td></tr>
+      </tbody>
+    </table></div>
+    <p>위에서부터 먼저 맞는 조건을 적용합니다.</p>
+
+    <h3>KPI 달성률</h3>
+    <pre><code>IF 기준값 존재 AND 기준값 ≠ 목표값 THEN
+    ROUND( (실적 − 기준값) / (목표값 − 기준값) × 100 )
+ELSE IF 목표값 ≠ 0 THEN
+    ROUND( 실적 / 목표값 × 100 )
+ELSE
+    표시하지 않음 (N/A)</code></pre>
+    <div class="note w"><span class="nt">감축형 지표 주의</span>
+      <p>재해율 0.82 → 0, 배출 원단위 12.4 → 8.7 처럼 <strong>낮출수록 좋은 지표</strong>가 ESG에는 많습니다. <code>실적 ÷ 목표</code>로 단순 계산하면 무의미한 값이 나오거나 0으로 나누는 오류가 발생합니다. 기준값 대비 방식이 이를 해결합니다.</p></div>
+
+    <h3>입력 주기와 미제출 판정</h3>
+    <div class="req"><span class="rid">R-8</span><span class="rt">분기는 필수, 월은 선택</span>
+      <p>분기 마감만 의무이고, 그 사이에 진전이 생기면 월 단위로도 기록할 수 있습니다. <strong>미제출 독촉과 팀 집계는 분기 행(<code>period_type = 'Q'</code>)만 기준으로 판정</strong>하며, 월 행은 세지 않습니다. 월 의무화는 입력 횟수를 3배로 만들고 변화 없는 과제에 "동일"을 반복 입력하게 해 제출률을 떨어뜨립니다.</p></div>
+    <pre><code>미제출 과제 = 현재 분기의 period_key 행이 없는 과제
+당분기 제출률(%) = ROUND(제출 과제 수 / 전체 과제 수 × 100)</code></pre>
+
+    <div class="req"><span class="rid">R-9</span><span class="rt">기대치 미달 시 지연 사유 필수</span>
+      <p>조건: <code>달성률 &lt; 기대치 − 5</code> <strong>이고</strong> <code>달성률 &lt; 100</code> 인 경우, <code>delay_reason</code>이 비어 있으면 저장을 거절합니다. 원본 양식의 "(해당시) 계획대비 지연 사유" 블록이 실제 보고에서 비어 오는 것을 방지하는 장치입니다. <strong>서버에서도 검증하십시오.</strong></p></div>
+
+    <h3>집계값</h3>
+    <div class="tw"><table>
+      <thead><tr><th>지표</th><th>정의</th></tr></thead>
+      <tbody>
+        <tr><td>팀 평균 달성률</td><td>해당 팀 과제들의 달성률 <strong>단순 평균</strong> (가중 없음)</td></tr>
+        <tr><td>사업장 평균 달성률</td><td>해당 사업장 <strong>과제 전체</strong>의 달성률 단순 평균. 팀 평균을 다시 평균하지 마십시오 — 과제 수가 다른 팀이 같은 무게가 되어 값이 달라집니다</td></tr>
+        <tr><td>전사 평균 달성률</td><td>전체 과제 달성률의 단순 평균</td></tr>
+        <tr><td>팀 평균 기대치</td><td>해당 팀 과제들의 기대치 단순 평균 — 팀별 막대의 기준선으로 표시</td></tr>
+        <tr><td>조치 필요 건수</td><td>상태가 <strong>지연 + 위험</strong>인 과제 수</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 6 -->
+  <section id="s6">
+    <h2><span class="no">06</span>API 명세</h2>
+    <p class="lead">REST + JSON을 전제로 정리했습니다. 사내 표준이 다르면 그에 맞추되, 엔드포인트가 담당하는 역할은 유지하십시오.</p>
+    <div class="tw"><table>
+      <thead><tr><th class="mono">Method</th><th class="mono">Path</th><th>역할</th><th>권한</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">GET</td><td class="mono">/api/session</td><td>로그인 사용자, 소속 팀, <strong>권한 등급</strong>(<code>viewer</code> / <code>editor</code> / <code>admin</code>) 반환. 프론트엔드 UI 분기의 유일한 근거</td><td>전원</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/sites</td><td>사업장 목록 (표시 순서 포함)</td><td>전원</td></tr>
+        <tr><td class="mono">POST<br>PUT<br>DELETE</td><td class="mono">/api/sites[/{id}]</td><td>사업장 추가·수정·삭제 (소속 팀 있으면 삭제 거절)</td><td>editor↑</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/teams</td><td>팀 목록 — <code>siteId</code> 포함. <code>?siteId=</code>로 사업장 내 팀만 조회</td><td>전원</td></tr>
+        <tr><td class="mono">POST</td><td class="mono">/api/teams</td><td>팀 추가 (중복·유사명 검사)</td><td>editor↑</td></tr>
+        <tr><td class="mono">PUT</td><td class="mono">/api/teams/{id}</td><td>팀 이름 수정 (해당 팀 과제 전체에 반영)</td><td>editor↑</td></tr>
+        <tr><td class="mono">DELETE</td><td class="mono">/api/teams/{id}</td><td>팀 삭제 (과제 있으면 거절)</td><td>editor↑</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/strategies</td><td>과제 목록 — 계획 항목과 최신 실적 요약 포함(목록 화면이 달성률·상태를 계산할 수 있어야 함)</td><td>전원</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/strategies/{id}</td><td>과제 상세 — 계획 항목 + 실적 이력 전체</td><td>전원</td></tr>
+        <tr><td class="mono">POST</td><td class="mono">/api/strategies</td><td>과제 등록 (계획 항목 배열 동시 생성)</td><td>editor↑</td></tr>
+        <tr><td class="mono">PUT</td><td class="mono">/api/strategies/{id}</td><td>과제 수정. 계획 항목은 <strong>문구가 같으면 기존 상태를 유지</strong>하고 재구성</td><td>editor↑</td></tr>
+        <tr><td class="mono">DELETE</td><td class="mono">/api/strategies/{id}</td><td>과제 삭제 (계획·실적 CASCADE)</td><td>editor↑</td></tr>
+        <tr><td class="mono">PATCH</td><td class="mono">/api/strategies/{id}/plans/{planId}</td><td><strong>항목 상태만 변경.</strong> 상세 화면에서 칩 클릭 시 즉시 호출되는 경량 엔드포인트</td><td>editor↑</td></tr>
+        <tr><td class="mono">PUT</td><td class="mono">/api/strategies/{id}/progress/{periodKey}</td><td>기간 실적 등록·수정(UPSERT). 계획 항목 상태를 함께 받아 갱신하고, 그 결과 달성률을 <code>progress_pct</code>로 저장</td><td>editor↑</td></tr>
+        <tr><td class="mono">GET</td><td class="mono">/api/export.csv</td><td>과제 × 기간 단위 CSV. UTF-8 BOM 포함(Excel 한글 깨짐 방지)</td><td>전원</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>예시 — 세션 응답</h3>
+    <pre><code>GET /api/session  →  200
+{
+  "userId":   "hong.gildong",
+  "userName": "홍길동",
+  "teamId":   3,
+  "teamName": "품질경영팀",
+  "role":     "editor"          // viewer | editor | admin
+}</code></pre>
+
+    <h3>예시 — 실적 등록</h3>
+    <pre><code>PUT /api/strategies/12/progress/2026-Q3
+{
+  "periodType":  "Q",
+  "achievement": "UL 측 EPD Report 최종 보고서 제출 및 심사 대응\nUL EPD 인증 획득",
+  "kpiActual":   4,
+  "delayReason": "",
+  "catchupPlan": "4Q 공급망 확산을 위한 협력사 데이터 수집 양식 배포",
+  "plans": [                     // 계획 항목 상태를 함께 갱신
+    { "planId": 101, "status": "done"  },
+    { "planId": 102, "status": "doing" },
+    { "planId": 103, "status": "todo"  }
+  ]
+}
+→ 200 { "progressPct": 50, "status": "지연" }
+→ 400 { "error": "DELAY_REASON_REQUIRED" }    // R-9 위반
+→ 403 { "error": "FORBIDDEN" }                // R-2 / R-4 위반</code></pre>
+
+    <div class="note"><span class="nt">실시간 동시 편집은 요건이 아닙니다</span>
+      <p>같은 과제를 두 사람이 동시에 편집하는 상황은 실무에서 거의 없습니다(과제마다 담당자가 1명). 웹소켓·실시간 동기화를 구현하지 말고, <strong>저장 후 최신값 재조회</strong>로 충분합니다.</p></div>
+  </section>
+
+  <!-- 7 -->
+  <section id="s7">
+    <h2><span class="no">07</span>비기능 요건</h2>
+    <div class="tw"><table>
+      <thead><tr><th>항목</th><th>요건</th></tr></thead>
+      <tbody>
+        <tr><td>데이터 규모</td><td>과제 수백 건, 실적 수천 행 수준. 대용량 설계 불필요</td></tr>
+        <tr><td>동시 사용자</td><td>분기 마감 주에 집중. 동시 수십 명 수준</td></tr>
+        <tr><td>브라우저</td><td>사내 표준 브라우저. 프로토타입은 ES6+ 문법 사용 — <strong>IE 지원이 필요하면 별도 협의 필요</strong></td></tr>
+        <tr><td>화면 대응</td><td>PC 우선. 모바일 열람 대응 (현장에서 대시보드 확인)</td></tr>
+        <tr><td>다크모드</td><td>프로토타입에 구현되어 있음. 이관 시 유지 권장, 필수는 아님</td></tr>
+        <tr><td>감사 로그</td><td>계획 항목 상태 변경과 실적 등록에 <strong>변경자·변경시각</strong> 기록 (스키마에 컬럼 있음). 목표 변경 이력은 범위 제외</td></tr>
+        <tr><td>데이터 보존</td><td>중장기전략은 3~6년 과제. <strong>과제 종료 후에도 삭제하지 않고 보존</strong>해야 공시·감사 대응이 가능</td></tr>
+        <tr><td>백업</td><td>사내 표준 정책 적용</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 8 -->
+  <section id="s8">
+    <h2><span class="no">08</span>이관 방식</h2>
+    <p class="lead">프론트엔드는 대부분 재사용할 수 있습니다. 프로토타입은 단일 HTML 파일(약 1,100행, 외부 프레임워크 없음 · 순수 JavaScript)로 되어 있어, 데이터 접근 계층만 교체하면 됩니다.</p>
+
+    <div class="flow">
+      <div class="st"><div class="sn">STEP 1</div><div class="sl">환경 확인</div><div class="sd">§9 체크리스트 회신. 스택 확정</div></div>
+      <div class="st"><div class="sn">STEP 2</div><div class="sl">DB 구축</div><div class="sd">§4 DDL 적용, 팀 마스터 초기 등록</div></div>
+      <div class="st"><div class="sn">STEP 3</div><div class="sl">API 구현</div><div class="sd">§6 엔드포인트, §5 산정 규칙 서버 검증</div></div>
+      <div class="st"><div class="sn">STEP 4</div><div class="sl">프론트 연결</div><div class="sd">데이터 접근부만 REST 호출로 교체</div></div>
+      <div class="st"><div class="sn">STEP 5</div><div class="sl">권한 검증</div><div class="sd">열람자 계정으로 실제 차단 확인</div></div>
+    </div>
+
+    <h3>교체가 필요한 지점</h3>
+    <div class="tw"><table>
+      <thead><tr><th>프로토타입</th><th>이관 후</th></tr></thead>
+      <tbody>
+        <tr><td>플랫폼 데이터베이스 호출 (<code>claude.use("db")</code>)</td><td><code>fetch()</code> 기반 REST 호출로 교체</td></tr>
+        <tr><td>실시간 구독 (<code>onSnapshot</code>)</td><td>저장 후 재조회. 실시간 불필요(§6)</td></tr>
+        <tr><td>쓰기 권한 프로브 — 작은 쓰기를 시도해 실패하면 열람자로 판단하던 우회책</td><td><strong>삭제.</strong> <code>GET /api/session</code>의 <code>role</code> 값으로 대체</td></tr>
+        <tr><td>작성자 정보를 브라우저에 저장(<code>localStorage</code>)</td><td><strong>삭제.</strong> 사내 계정에서 사용자명·소속 팀을 받아 씀</td></tr>
+        <tr><td>CSV 저장 (플랫폼 다운로드 기능)</td><td><code>GET /api/export.csv</code> 링크로 교체</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>재사용 가능한 것</h3>
+    <p>화면 레이아웃 · CSS 전체 · 산정 로직 함수 · 5블록 양식 재현 마크업 · 대시보드 차트(외부 라이브러리 없이 SVG/CSS로 구현) · 필터·검색 · 다크모드 · 반응형 대응.</p>
+
+    <div class="note w"><span class="nt">프로토타입 접근에 관하여</span>
+      <p>프로토타입은 AI 도구 플랫폼에 게시되어 있으며, <strong>ESG 사무국 계정으로만 열람 가능</strong>합니다. 해당 플랫폼은 공용 데이터베이스를 쓰는 페이지를 조직 내부 전용으로 고정하므로, 전 임직원 배포가 구조적으로 불가능합니다 — 이것이 사내 이관을 요청하는 직접적인 이유입니다.</p>
+      <p>화면 확인이 필요하시면 ESG 사무국에 요청하십시오. <strong>소스 HTML 파일은 전달 가능</strong>하며, 로컬에서 파일을 열면 레이아웃과 상호작용을 확인할 수 있습니다(데이터 연결은 되지 않음).</p></div>
+  </section>
+
+  <!-- 9 -->
+  <section id="s9">
+    <h2><span class="no">09</span>회신 요청 사항</h2>
+    <p class="lead">아래 6개 항목의 답을 받으면 그에 맞춘 DB 스키마와 백엔드 코드를 준비할 수 있습니다. 환경을 모르는 상태에서 작성하면 버리는 작업이 되므로, 이 회신이 다음 단계의 선행 조건입니다.</p>
+
+    <div class="ask">
+      <div class="ah">IT부서 회신 요청 — 6항</div>
+      <ol>
+        <li><span class="n">Q1</span><div><div class="q">서버 환경은 무엇입니까?</div>
+          <div class="why">서버 OS, 웹서버(IIS / nginx / Apache), 실행 런타임(.NET / Node.js / PHP / Java 등)</div></div></li>
+        <li><span class="n">Q2</span><div><div class="q">데이터베이스 종류와 버전은 무엇입니까?</div>
+          <div class="why">MSSQL / MySQL / MariaDB / PostgreSQL / Oracle. §4 DDL의 자료형과 시퀀스 방식이 여기서 결정됩니다</div></div></li>
+        <li><span class="n">Q3</span><div><div class="q">사내 계정 인증을 연동할 수 있습니까?</div>
+          <div class="why">SSO 또는 그룹웨어 세션. <strong>사용자 식별자·이름·소속 팀을 애플리케이션이 받을 수 있는지</strong>가 핵심입니다(R-1, R-3)</div></div></li>
+        <li><span class="n">Q4</span><div><div class="q">권한 등급을 어떻게 부여합니까?</div>
+          <div class="why">담당자(editor)와 열람자(viewer)를 구분할 방법 — 인사시스템 직무 정보, 별도 권한 테이블, 사무국 수동 지정 중 무엇이 가능한지. R-4(자기 팀만 수정) 구현 여부도 여기에 달려 있습니다</div></div></li>
+        <li><span class="n">Q5</span><div><div class="q">팀 정보를 인사시스템에서 가져올 수 있습니까?</div>
+          <div class="why">가능하다면 <code>esg_team</code> 마스터와 팀 관리 화면이 불필요해지고, 조직 개편 시 자동 반영됩니다. 불가능하면 §4 설계대로 별도 관리합니다</div></div></li>
+        <li><span class="n">Q6</span><div><div class="q">접속 범위와 예상 일정은 어떻게 됩니까?</div>
+          <div class="why">사내망 전용인지 외부(재택) 접속이 필요한지, 그리고 구축 가능 시점. ESG 사무국은 분기 마감 주기에 맞춰 배포 시점을 잡아야 합니다</div></div></li>
+      </ol>
+    </div>
+
+    <div class="note"><span class="nt">Q3~Q5가 안 되는 경우</span>
+      <p>사내 계정 연동이 불가능하다면 권한 구분을 포기하거나(전원 편집 가능), 사무국 전용 도구로 범위를 축소하는 선택이 됩니다. 그 경우 요건을 다시 잡아야 하므로, <strong>불가능하다는 답도 그대로 회신해 주시면 됩니다.</strong></p></div>
+  </section>
+
+  </main>
+
+  <footer>
+    <p>이 문서는 ESG 사무국이 프로토타입 검증을 마친 뒤 작성한 이관 요청서입니다. §5 산정 규칙과 §2 권한 요건은 실제 사용 과정에서 결정된 사항이므로 임의로 변경하지 마시고, 조정이 필요하면 ESG 사무국과 협의해 주십시오. 문서 작성일 2026-09-10.</p>
+  </footer>
+</div>

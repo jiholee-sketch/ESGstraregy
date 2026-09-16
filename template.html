@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>타이타닉 생존 분석 대시보드</title>
+<script>/*__CHARTJS__*/</script>
+<style>
+:root{
+  color-scheme: light;
+  --plane:#f9f9f7; --surface:#fcfcfb;
+  --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --s1:#2a78d6; --s2:#eb6834;
+  --neg:#d03b3b;
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme: dark;
+    --plane:#0d0d0d; --surface:#1a1a19;
+    --ink:#ffffff; --ink2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10);
+    --s1:#3987e5; --s2:#d95926;
+    --neg:#e66767;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --plane:#0d0d0d; --surface:#1a1a19;
+  --ink:#ffffff; --ink2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10);
+  --s1:#3987e5; --s2:#d95926;
+  --neg:#e66767;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--plane);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif;
+  font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:32px 24px 72px}
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:28px}
+h1{font-size:26px;font-weight:650;letter-spacing:-.02em;margin:0 0 6px}
+.sub{color:var(--ink2);font-size:13px;margin:0}
+.sub code{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:12px}
+button.theme{background:var(--surface);border:1px solid var(--border);color:var(--ink2);
+  border-radius:8px;padding:7px 13px;font:inherit;font-size:13px;cursor:pointer}
+button.theme:hover{color:var(--ink)}
+h2{font-size:12px;font-weight:650;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);margin:40px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--grid)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.tile .k{font-size:11.5px;color:var(--muted);letter-spacing:.03em;margin-bottom:7px}
+.tile .v{font-size:29px;font-weight:600;letter-spacing:-.025em;line-height:1.1}
+.tile .n{font-size:11.5px;color:var(--ink2);margin-top:5px}
+.hero{grid-column:span 2}
+.hero .v{font-size:44px;color:var(--s1)}
+@media (max-width:560px){.tiles{grid-template-columns:1fr}.hero{grid-column:span 1}.hero .v{font-size:34px}}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 18px 12px;min-width:0}
+.card.wide{grid-column:1/-1}
+.card h3{font-size:14.5px;font-weight:620;margin:0 0 3px}
+.card p.note{font-size:12.5px;color:var(--ink2);margin:0 0 14px}
+.cv{position:relative;height:265px}
+.cv.tall{height:330px}
+.ins{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.ins .card{padding:16px 18px}
+.ins b{display:block;font-size:13.5px;margin-bottom:5px}
+.ins b .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--s1);margin-right:7px;vertical-align:1px}
+.ins span{font-size:13px;color:var(--ink2)}
+.ins .num{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+details{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-top:16px}
+summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--ink2)}
+summary:hover{color:var(--ink)}
+.tblwrap{overflow-x:auto;margin-top:14px}
+table{border-collapse:collapse;font-size:12.5px;width:100%;min-width:460px}
+th,td{text-align:right;padding:7px 12px;border-bottom:1px solid var(--grid);font-variant-numeric:tabular-nums;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;font-variant-numeric:normal}
+thead th{color:var(--muted);font-weight:600;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase}
+tbody tr:last-child td{border-bottom:none}
+td.grp{font-weight:650;color:var(--ink);padding-top:16px}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--grid);color:var(--muted);font-size:12px;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>타이타닉 생존 분석 대시보드</h1>
+    <p class="sub">RMS Titanic 승객 <b id="mRows"></b>명 · <b id="mCols"></b>개 변수 · pandas 분석 · 출처 <code id="mSrc"></code></p>
+  </div>
+  <button class="theme" id="themeBtn" type="button">◐ 테마 전환</button>
+</header>
+
+<h2>핵심 지표</h2>
+<div class="tiles">
+  <div class="tile hero"><div class="k">전체 생존율</div><div class="v" id="tRate"></div><div class="n" id="tRateN"></div></div>
+  <div class="tile"><div class="k">여성 생존율</div><div class="v" id="tF"></div><div class="n" id="tFN"></div></div>
+  <div class="tile"><div class="k">남성 생존율</div><div class="v" id="tM"></div><div class="n" id="tMN"></div></div>
+  <div class="tile"><div class="k">1등급 생존율</div><div class="v" id="tC1"></div><div class="n" id="tC1N"></div></div>
+  <div class="tile"><div class="k">3등급 생존율</div><div class="v" id="tC3"></div><div class="n" id="tC3N"></div></div>
+  <div class="tile"><div class="k">평균 연령</div><div class="v" id="tAge"></div><div class="n">Age 결측 <span id="tAgeM"></span>건은 등급·성별 중위값 대체</div></div>
+  <div class="tile"><div class="k">평균 운임</div><div class="v" id="tFare"></div><div class="n">1등급 평균은 3등급의 약 <span id="tFareX"></span>배</div></div>
+</div>
+
+<h2>인사이트</h2>
+<div class="ins" id="insights"></div>
+
+<h2>생존을 가른 요인</h2>
+<div class="grid">
+  <div class="card">
+    <h3>성별 생존율</h3>
+    <p class="note">가장 강력한 단일 예측 변수</p>
+    <div class="cv"><canvas id="cSex"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>객실 등급별 생존율</h3>
+    <p class="note">등급이 낮아질수록 단조 감소</p>
+    <div class="cv"><canvas id="cClass"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>성별 × 객실 등급 교차 생존율</h3>
+    <p class="note">두 요인은 함께 작동하되 서로를 뒤집지 못한다 — 3등급 여성이 1등급 남성보다 높다</p>
+    <div class="cv"><canvas id="cCross"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>연령대별 생존율</h3>
+    <p class="note">아동 우선 구조의 흔적, 그리고 고령층의 취약성</p>
+    <div class="cv"><canvas id="cAge"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>연령 분포 (생존 / 사망)</h3>
+    <p class="note">Age 실측값 714명 기준 · 20~30대 구간이 사망자를 압도적으로 채운다</p>
+    <div class="cv"><canvas id="cHist"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>운임 4분위별 생존율</h3>
+    <p class="note">지불 능력이 곧 생존 확률 — 최저 분위에서 최고 분위까지 단조 증가</p>
+    <div class="cv"><canvas id="cFare"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>동반 가족 규모별 생존율</h3>
+    <p class="note">2~4인이 최적, 단독 승객과 5인 이상 대가족은 모두 불리</p>
+    <div class="cv"><canvas id="cFam"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>호칭(Title)별 생존율</h3>
+    <p class="note">이름에서 추출 — 성별·연령·기혼 여부를 압축한 대리 변수</p>
+    <div class="cv"><canvas id="cTitle"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>탑승 항구 · 객실번호 기록 여부</h3>
+    <p class="note">두 변수 모두 실제로는 사회경제적 지위의 대리 지표</p>
+    <div class="cv"><canvas id="cEmb"></canvas></div>
+  </div>
+  <div class="card wide">
+    <h3>생존과의 상관계수</h3>
+    <p class="note">수치형 변수 기준 · 파랑 = 생존과 양(+)의 관계, 빨강 = 음(−)의 관계</p>
+    <div class="cv"><canvas id="cCorr"></canvas></div>
+  </div>
+</div>
+
+<details>
+  <summary>데이터 표로 보기 (전체 집계값)</summary>
+  <div class="tblwrap"><table id="tbl">
+    <thead><tr><th>구분</th><th>인원</th><th>생존</th><th>사망</th><th>생존율</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+</details>
+
+<footer>
+  데이터: Kaggle Titanic 학습셋 891행 (<span id="fSrc"></span>)<br>
+  전처리: Age 결측 177건은 Pclass×Sex 중위값 대체, Embarked 결측 2건은 최빈값(S) 대체, Cabin 결측 687건은 "기록 없음"으로 별도 변수화<br>
+  분석: pandas 3.0.5 · 시각화: Chart.js 4.4 · 상관계수는 Pearson 기준이며 인과관계를 뜻하지 않습니다
+</footer>
+
+</div>
+
+<script>
+const D = /*__DATA__*/;
+const F = n => n.toLocaleString('ko-KR');
+const $ = id => document.getElementById(id);
+const P = r => r.toFixed(1) + '%';   // rates always carry one decimal
+
+/* ---------- stat tiles ---------- */
+const M = D.meta, ix = (b, l) => b.labels.indexOf(l);
+const set = (id, v) => $(id).textContent = v;
+set('mRows', F(M.rows)); set('mCols', M.cols); set('mSrc', M.source); set('fSrc', M.source);
+set('tRate', P(M.overall_rate)); set('tRateN', F(M.survived) + '명 생존 · ' + F(M.died) + '명 사망');
+const sx = D.sex, fi = ix(sx, 'female'), mi = ix(sx, 'male');
+set('tF', P(sx.rate[fi])); set('tFN', F(sx.survived[fi]) + ' / ' + F(sx.n[fi]) + '명');
+set('tM', P(sx.rate[mi])); set('tMN', F(sx.survived[mi]) + ' / ' + F(sx.n[mi]) + '명');
+const pc = D.pclass;
+set('tC1', P(pc.rate[0])); set('tC1N', F(pc.survived[0]) + ' / ' + F(pc.n[0]) + '명');
+set('tC3', P(pc.rate[2])); set('tC3N', F(pc.survived[2]) + ' / ' + F(pc.n[2]) + '명');
+set('tAge', M.avg_age + '세'); set('tAgeM', F(M.missing.Age));
+set('tFare', '$' + M.avg_fare.toFixed(2));
+set('tFareX', (D.class_fare.avg_fare[0] / D.class_fare.avg_fare[2]).toFixed(1));
+
+/* ---------- insights ---------- */
+const al = D.alone, aT = ix(al, 'True'), aF = ix(al, 'False');
+const hc = D.hascabin, hT = ix(hc, 'True'), hF = ix(hc, 'False');
+const ag = D.agegroup, tt = D.title, fb = D.fareband;
+const cv = k => D.corr.values[D.corr.labels.indexOf(k)];
+const INS = [
+  ['성별이 거의 모든 것을 결정했다',
+   `여성 <span class="num">${P(sx.rate[fi])}</span> vs 남성 <span class="num">${P(sx.rate[mi])}</span>, 격차 <span class="num">${(sx.rate[fi] - sx.rate[mi]).toFixed(1)}%p</span>로 단일 변수 중 최대다. "여성과 아이 먼저" 원칙이 실제로 집행됐음을 데이터가 보여준다.`],
+  ['객실 등급은 두 번째 축',
+   `1등급 <span class="num">${P(pc.rate[0])}</span> → 2등급 <span class="num">${P(pc.rate[1])}</span> → 3등급 <span class="num">${P(pc.rate[2])}</span>. Pclass는 생존과 상관계수 <span class="num">${cv('Pclass')}</span>로 수치형 변수 중 절댓값이 가장 크다.`],
+  ['그러나 등급이 성별을 뒤집지는 못한다',
+   `1등급 여성 <span class="num">${P(D.cross.female[0])}</span>는 사실상 전원 생존, 3등급 남성은 <span class="num">${P(D.cross.male[2])}</span>. 3등급 여성(<span class="num">${P(D.cross.female[2])}</span>)조차 1등급 남성(<span class="num">${P(D.cross.male[0])}</span>)을 앞선다.`],
+  ['아동은 우선, 고령층은 최하위',
+   `12세 이하 <span class="num">${P(ag.rate[0])}</span>, 60세 이상 <span class="num">${P(ag.rate[ag.labels.length - 1])}</span>. 반면 Age 자체의 상관계수는 <span class="num">${cv('Age').toFixed(3)}</span>에 그치는데, 효과가 선형이 아니라 구간형이기 때문이다.`],
+  ['혼자 탄 승객이 불리했다',
+   `단독 승객 <span class="num">${P(al.rate[aT])}</span> vs 가족 동반 <span class="num">${P(al.rate[aF])}</span>. 다만 5인 이상 대가족은 다시 <span class="num">20%</span> 아래로 떨어진다 — 흩어진 가족을 찾다 함께 남았을 가능성.`],
+  ['객실번호가 기록된 승객은 두 배 이상 살았다',
+   `Cabin 기록 있음 <span class="num">${P(hc.rate[hT])}</span> vs 없음 <span class="num">${P(hc.rate[hF])}</span>. 결측 <span class="num">${F(M.missing.Cabin)}</span>건은 무작위 결측이 아니라 하위 등급 신호 그 자체이므로, 채우기보다 결측 여부를 변수로 쓰는 편이 낫다.`],
+  ['호칭은 가장 압축적인 대리 변수',
+   `Mrs <span class="num">${P(tt.rate[ix(tt, 'Mrs')])}</span> · Miss <span class="num">${P(tt.rate[ix(tt, 'Miss')])}</span> · Master(소년) <span class="num">${P(tt.rate[ix(tt, 'Master')])}</span> vs Mr <span class="num">${P(tt.rate[ix(tt, 'Mr')])}</span>. 이름 한 칸에서 성별·연령대·기혼 여부가 동시에 추출된다.`],
+  ['운임은 등급보다 세밀한 계층 지표',
+   `최저 분위 <span class="num">${P(fb.rate[0])}</span> → 최고 분위 <span class="num">${P(fb.rate[3])}</span>로 단조 증가(상관계수 <span class="num">+${cv('Fare')}</span>). 같은 등급 안에서도 지불액에 따라 생존 확률이 갈렸다.`],
+];
+$('insights').innerHTML = INS.map(([t, b]) =>
+  `<div class="card"><b><span class="dot"></span>${t}</b><span>${b}</span></div>`).join('');
+
+/* ---------- data table (the non-color reading of every chart) ---------- */
+const TBL = [['성별', D.sex], ['객실 등급', D.pclass], ['연령대', D.agegroup], ['운임 4분위', D.fareband],
+             ['탑승 항구', D.embarked], ['호칭', D.title], ['동반 가족 포함 인원', D.family],
+             ['단독 탑승 여부', D.alone], ['객실번호 기록 여부', D.hascabin]];
+const LBL = { female: '여성', male: '남성', True: '예', False: '아니오',
+              C: 'C · Cherbourg', Q: 'Q · Queenstown', S: 'S · Southampton',
+              '1': '1등급', '2': '2등급', '3': '3등급' };
+document.querySelector('#tbl tbody').innerHTML =
+  TBL.map(([g, b]) =>
+    `<tr><td class="grp" colspan="5">${g}</td></tr>` +
+    b.labels.map((l, i) => {
+      const name = (g === '객실 등급' || g === '동반 가족 포함 인원') ? (g === '객실 등급' ? LBL[l] : l + '인') : (LBL[l] || l);
+      return `<tr><td>${name}</td><td>${F(b.n[i])}</td><td>${F(b.survived[i])}</td><td>${F(b.n[i] - b.survived[i])}</td><td>${P(b.rate[i])}</td></tr>`;
+    }).join('')).join('') +
+  `<tr><td class="grp">전체</td><td class="grp">${F(M.rows)}</td><td class="grp">${F(M.survived)}</td><td class="grp">${F(M.died)}</td><td class="grp">${P(M.overall_rate)}</td></tr>`;
+
+/* ---------- charts ---------- */
+let charts = [];
+const V = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* selective direct labels: on for the few-bar rate charts, off for the 16-bin histogram */
+const valueLabels = {
+  id: 'valueLabels',
+  afterDatasetsDraw(c, a, o) {
+    if (!o || !o.on) return;
+    const x = c.ctx;
+    x.save();
+    x.font = '600 11.5px system-ui, -apple-system, "Segoe UI", sans-serif';
+    x.fillStyle = o.ink;
+    c.data.datasets.forEach((ds, di) => {
+      const meta = c.getDatasetMeta(di);
+      if (meta.hidden) return;
+      meta.data.forEach((el, i) => {
+        const v = ds.data[i];
+        if (v == null) return;
+        const t = o.fmt ? o.fmt(v) : String(v);
+        if (o.horiz) {
+          x.textBaseline = 'middle';
+          if (v < 0) { x.textAlign = 'right'; x.fillText(t, el.x - 7, el.y); }
+          else { x.textAlign = 'left'; x.fillText(t, el.x + 7, el.y); }
+        } else {
+          x.textAlign = 'center'; x.textBaseline = 'bottom';
+          x.fillText(t, el.x, el.y - 6);
+        }
+      });
+    });
+    x.restore();
+  }
+};
+/* overall-rate reference: an actual threshold, so the dash is meaningful */
+const baseline = {
+  id: 'baseline',
+  beforeDatasetsDraw(c, a, o) {
+    if (!o || !o.on || !c.scales.y) return;
+    const x = c.ctx, y = c.scales.y.getPixelForValue(o.value);
+    x.save();
+    x.strokeStyle = o.color; x.lineWidth = 1; x.setLineDash([4, 4]);
+    x.beginPath(); x.moveTo(c.chartArea.left, y); x.lineTo(c.chartArea.right, y); x.stroke();
+    x.setLineDash([]);
+    /* label sits in the right gutter, outside the plot, so it can never collide with a bar */
+    x.fillStyle = o.color;
+    x.font = '600 10.5px system-ui, -apple-system, "Segoe UI", sans-serif';
+    x.textAlign = 'left'; x.textBaseline = 'bottom';
+    x.fillText('전체 ' + o.value + '%', c.chartArea.right + 5, y - 2);
+    x.restore();
+  }
+};
+Chart.register(valueLabels, baseline);
+
+function build() {
+  charts.forEach(c => c.destroy());
+  charts = [];
+  const ink = V('--ink'), ink2 = V('--ink2'), muted = V('--muted'), grid = V('--grid'),
+        axis = V('--axis'), surf = V('--surface'), s1 = V('--s1'), s2 = V('--s2'), neg = V('--neg');
+
+  Chart.defaults.font.family = 'system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif';
+  Chart.defaults.font.size = 11.5;
+  Chart.defaults.color = muted;
+  Chart.defaults.animation.duration = 420;
+  /* resize snaps instead of animating - an interrupted resize transition would otherwise
+     leave bars drawn against the previous layout's scale */
+  Chart.defaults.transitions.resize.animation.duration = 0;
+  Chart.defaults.maintainAspectRatio = false;
+
+  const tip = {
+    backgroundColor: surf, titleColor: ink, bodyColor: ink2,
+    borderColor: axis, borderWidth: 1, cornerRadius: 8, padding: 10,
+    titleFont: { weight: '650', size: 12.5 }, bodyFont: { size: 12 },
+    displayColors: false, boxPadding: 4
+  };
+  const cat = rot => ({ grid: { display: false }, border: { color: axis },
+    ticks: { color: muted, maxRotation: rot || 0, minRotation: rot ? rot : 0, autoSkip: false } });
+  /* no axis title: the tick suffix already says "%" and the card heading says 생존율 */
+  const pct = () => ({ beginAtZero: true, max: 100,
+    grid: { color: grid, drawTicks: false }, border: { display: false },
+    ticks: { color: muted, padding: 8, stepSize: 25, callback: v => v + '%' } });
+  const cnt = t => ({ beginAtZero: true, grid: { color: grid, drawTicks: false },
+    border: { display: false }, ticks: { color: muted, padding: 8 },
+    title: { display: true, text: t, color: muted, font: { size: 11 } } });
+  /* 2px surface gap between adjacent fills; 4px rounded data-end at the baseline */
+  const bar = { borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 0, bottomRight: 0 },
+                borderSkipped: 'bottom', borderColor: surf,
+                borderWidth: { top: 0, left: 2, right: 2, bottom: 0 }, maxBarThickness: 46 };
+  /* grouped pairs sit together inside the category, separated only by the 2px surface gap */
+  const pair = { categoryPercentage: 0.62, barPercentage: 0.98, maxBarThickness: 42 };
+  const legend = { position: 'top', align: 'end',
+    labels: { color: ink2, boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: 'circle', padding: 16 } };
+  const vl = o => ({ valueLabels: Object.assign({ on: true, ink: ink2 }, o) });
+  const bl = on => ({ baseline: { on: !!on, value: M.overall_rate, color: muted } });
+  const mk = (el, cfg) => charts.push(new Chart($(el), cfg));
+  const nOf = b => ti => `${F(b.survived[ti.dataIndex])}명 생존 / ${F(b.n[ti.dataIndex])}명 탑승`;
+
+  /* one series -> one color (slot 1); never a ramp keyed to bar length */
+  function rateBar(el, b, labels, opts) {
+    opts = opts || {};
+    mk(el, {
+      type: 'bar',
+      data: { labels: labels || b.labels,
+              datasets: [Object.assign({ label: '생존율', data: b.rate, backgroundColor: s1 }, bar,
+                opts.horiz ? { borderRadius: { topRight: 4, bottomRight: 4, topLeft: 0, bottomLeft: 0 },
+                               borderSkipped: 'left',
+                               borderWidth: { top: 2, bottom: 2, left: 0, right: 0 },
+                               maxBarThickness: 24 } : {})] },
+      options: {
+        indexAxis: opts.horiz ? 'y' : 'x',
+        layout: { padding: { top: opts.horiz ? 4 : 22, right: opts.horiz ? 50 : 62 } },
+        scales: opts.horiz
+          ? { x: pct(),
+              y: { grid: { display: false }, border: { color: axis }, ticks: { color: ink2 } } }
+          : { x: cat(opts.rot), y: pct() },
+        plugins: {
+          legend: { display: false },
+          ...bl(!opts.horiz),
+          ...vl({ on: opts.labels !== false, horiz: opts.horiz, fmt: v => v.toFixed(1) + '%' }),
+          tooltip: Object.assign({}, tip, {
+            callbacks: { label: ti => `생존율 ${ti.raw}%`, afterLabel: nOf(b) } })
+        }
+      }
+    });
+  }
+
+  rateBar('cSex', D.sex, ['여성', '남성']);
+  rateBar('cClass', D.pclass, ['1등급', '2등급', '3등급']);
+  rateBar('cAge', D.agegroup, D.agegroup.labels.map(l => l.replace(')', '').split('(')));
+  rateBar('cFare', D.fareband, [['저 Q1', '$0–7.9'], ['중저 Q2', '$7.9–14.5'], ['중고 Q3', '$14.5–31'], ['고 Q4', '$31+']]);
+  /* 9 categories: too many for a number on every bar - axis + tooltip + table carry the values */
+  rateBar('cFam', D.family, D.family.labels.map(l => l + '인'), { labels: false });
+  rateBar('cTitle', D.title, D.title.labels, { horiz: true });
+
+  /* sex x class - 2 series: legend present AND direct-labeled */
+  mk('cCross', {
+    type: 'bar',
+    data: { labels: ['1등급', '2등급', '3등급'],
+      datasets: [Object.assign({ label: '여성', data: D.cross.female, backgroundColor: s1 }, bar, pair),
+                 Object.assign({ label: '남성', data: D.cross.male, backgroundColor: s2 }, bar, pair)] },
+    options: {
+      layout: { padding: { top: 24, right: 62 } },
+      scales: { x: cat(), y: pct() },
+      plugins: { legend, ...bl(true), ...vl({ fmt: v => v.toFixed(1) + '%' }),
+        tooltip: Object.assign({}, tip, { displayColors: true,
+          callbacks: { label: ti => `${ti.dataset.label} ${ti.raw}%` } }) }
+    }
+  });
+
+  /* age histogram - counts, not rates; labels off (16 bins x 2 series) */
+  mk('cHist', {
+    type: 'bar',
+    data: { labels: D.age_hist.labels,
+      datasets: [Object.assign({ label: '생존', data: D.age_hist.survived, backgroundColor: s1 }, bar, { categoryPercentage: 0.8, barPercentage: 0.95, maxBarThickness: 20 }),
+                 Object.assign({ label: '사망', data: D.age_hist.died, backgroundColor: s2 }, bar, { categoryPercentage: 0.8, barPercentage: 0.95, maxBarThickness: 20 })] },
+    options: {
+      scales: {
+        x: { grid: { display: false }, border: { color: axis },
+             ticks: { color: muted, maxRotation: 60, minRotation: 60, autoSkip: false, font: { size: 10 } } },
+        y: cnt('승객 수 (명)') },
+      plugins: { legend, ...vl({ on: false }), ...bl(false),
+        tooltip: Object.assign({}, tip, { displayColors: true,
+          callbacks: { title: ti => ti[0].label + '세', label: ti => `${ti.dataset.label} ${F(ti.raw)}명` } }) }
+    }
+  });
+
+  /* embarked + cabin on one shared rate axis */
+  const eb = D.embarked, ei = l => eb.labels.indexOf(l);
+  const embL = ['Cherbourg', 'Queenstown', 'Southampton', '객실번호 있음', '객실번호 없음'];
+  const embV = [eb.rate[ei('C')], eb.rate[ei('Q')], eb.rate[ei('S')], hc.rate[hT], hc.rate[hF]];
+  const embN = [eb.n[ei('C')], eb.n[ei('Q')], eb.n[ei('S')], hc.n[hT], hc.n[hF]];
+  const embS = [eb.survived[ei('C')], eb.survived[ei('Q')], eb.survived[ei('S')], hc.survived[hT], hc.survived[hF]];
+  mk('cEmb', {
+    type: 'bar',
+    data: { labels: embL,
+      datasets: [Object.assign({ label: '생존율', data: embV, backgroundColor: s1 }, bar)] },
+    options: {
+      layout: { padding: { top: 22, right: 62 } },
+      scales: {
+        x: { grid: { display: false }, border: { color: axis },
+             ticks: { color: muted, maxRotation: 34, minRotation: 34, autoSkip: false, font: { size: 10.5 } } },
+        y: pct() },
+      plugins: { legend: { display: false }, ...bl(true), ...vl({ fmt: v => v.toFixed(1) + '%' }),
+        tooltip: Object.assign({}, tip, { callbacks: {
+          title: ti => embL[ti[0].dataIndex],
+          label: ti => `생존율 ${ti.raw}%`,
+          afterLabel: ti => `${F(embS[ti.dataIndex])}명 생존 / ${F(embN[ti.dataIndex])}명 탑승` } }) }
+    }
+  });
+
+  /* correlation - diverging blue<->red around a neutral zero */
+  const CL = { Pclass: '객실 등급 (Pclass)', Age: '연령 (Age)', SibSp: '형제·배우자 수 (SibSp)',
+               Parch: '부모·자녀 수 (Parch)', Fare: '운임 (Fare)', FamilySize: '가족 규모 (FamilySize)' };
+  const co = D.corr.labels.map((l, i) => ({ l: CL[l] || l, v: D.corr.values[i] })).sort((a, b) => b.v - a.v);
+  mk('cCorr', {
+    type: 'bar',
+    data: { labels: co.map(o => o.l),
+      datasets: [{ label: '상관계수', data: co.map(o => o.v),
+        backgroundColor: co.map(o => o.v >= 0 ? s1 : neg),
+        borderRadius: 4, borderSkipped: false, borderColor: surf,
+        borderWidth: { top: 2, bottom: 2, left: 0, right: 0 }, maxBarThickness: 22 }] },
+    options: {
+      indexAxis: 'y',
+      layout: { padding: { right: 50, left: 50 } },
+      scales: {
+        x: { min: -0.4, max: 0.4, grid: { color: grid, drawTicks: false }, border: { display: false },
+             ticks: { color: muted, padding: 8, stepSize: 0.1 },
+             title: { display: true, text: 'Pearson 상관계수 (생존 = 1)', color: muted, font: { size: 11 } } },
+        y: { grid: { display: false }, border: { color: axis }, ticks: { color: ink2 } } },
+      plugins: { legend: { display: false }, ...bl(false),
+        ...vl({ horiz: true, fmt: v => (v > 0 ? '+' : '') + v.toFixed(3) }),
+        tooltip: Object.assign({}, tip, { callbacks: {
+          label: ti => `상관계수 ${ti.raw > 0 ? '+' : ''}${ti.raw.toFixed(3)}`,
+          afterLabel: ti => ti.raw >= 0 ? '값이 클수록 생존에 유리' : '값이 클수록 생존에 불리' } }) }
+    }
+  });
+}
+build();
+
+/* ---------- theme toggle: rebuild so charts re-read the tokens ---------- */
+$('themeBtn').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const now = cur || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', now === 'dark' ? 'light' : 'dark');
+  build();
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!document.documentElement.getAttribute('data-theme')) build();
+});
+</script>
+</body>
+</html>

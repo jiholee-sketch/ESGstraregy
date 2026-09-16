@@ -1,0 +1,64 @@
+rules_version = '2';
+
+/* ============================================================
+   ESG 중장기전략 진척관리 — Firestore 보안 규칙
+   ------------------------------------------------------------
+   지금 설정: 익명 로그인을 마친 브라우저만 읽고 쓸 수 있다.
+
+   담당자에게 로그인 화면은 보이지 않는다. 페이지를 열면 앱이
+   자동으로 익명 로그인을 하고, 그때 받은 신원으로 저장한다.
+   이 한 겹이 막는 것은 주소만 알고 들어오는 외부 스크립트다.
+   사람에게는 여전히 URL을 아는 누구나 수정할 수 있다.
+
+   주의 — 이 규칙은 열람자와 담당자를 구분하지 않는다.
+   구분이 필요해지면 아래 '나중에' 블록을 참고한다.
+   ============================================================ */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    /* 앱이 실제로 쓰는 컬렉션만 연다.
+       와일드카드로 한 번에 열지 않는 이유 — 열어 두면 아무 이름의
+       컬렉션이나 만들 수 있어 저장소가 남의 파일 창고가 된다. */
+    match /sites/{id}      { allow read, write: if signedIn(); }  // 사업장
+    match /teams/{id}      { allow read, write: if signedIn(); }  // 팀
+    match /strategies/{id} { allow read, write: if signedIn(); }  // 실행과제
+    match /progress/{id}   { allow read, write: if signedIn(); }  // 분기·월 실적
+    match /deadlines/{id}  { allow read, write: if signedIn(); }  // 제출 마감일
+    match /system/{id}     { allow read, write: if signedIn(); }  // 쓰기 권한 확인용
+
+    /* 그 밖의 모든 경로는 막는다. */
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+/* ============================================================
+   나중에 — 열람자와 담당자를 나누고 싶을 때
+
+   1) 익명 로그인 대신 Google 로그인으로 바꾼다
+      (앱의 initFirebase 안 signInAnonymously 를 교체)
+
+   2) admins 컬렉션에 사무국 계정의 uid 를 넣는다
+      admins/{uid}  →  { name: "홍길동" }
+
+   3) 위 여섯 줄을 아래처럼 바꾼다
+
+        function isAdmin() {
+          return signedIn()
+            && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+        }
+        match /strategies/{id} {
+          allow read:  if signedIn();     // 전 임직원 열람
+          allow write: if isAdmin();      // 사무국만 수정
+        }
+
+   앱은 이미 이 구분을 화면에 반영할 준비가 되어 있다.
+   시작할 때 system/writeProbe 에 한 번 써 보고, 거부당하면
+   수정 버튼을 숨긴다. 규칙만 바꾸면 화면이 따라온다.
+   ============================================================ */

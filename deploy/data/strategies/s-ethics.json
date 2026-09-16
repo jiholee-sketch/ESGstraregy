@@ -1,0 +1,45 @@
+{
+  "carries": [],
+  "createdAt": "2025-04-11T01:10:00.000Z",
+  "createdBy": "한지우",
+  "endYear": 2027,
+  "esg": "G",
+  "kpiBase": 68,
+  "kpiName": "임직원 윤리교육 이수율",
+  "kpiTarget": 100,
+  "kpiUnit": "%",
+  "lifecycle": "active",
+  "owner": "한지우",
+  "plans": [
+    {
+      "status": "done",
+      "text": "익명 제보채널 운영 및 처리 프로세스 표준화"
+    },
+    {
+      "status": "done",
+      "text": "준법 리스크 맵 작성 및 부서별 통제항목 정의"
+    },
+    {
+      "status": "done",
+      "text": "전 임직원 윤리·준법 교육 연 2회 시행"
+    },
+    {
+      "status": "done",
+      "text": "ISO 37301 인증 심사 준비 및 취득"
+    },
+    {
+      "status": "done",
+      "text": "이해충돌 방지 서약 및 정기 점검 체계 운영"
+    }
+  ],
+  "priority": "중",
+  "purpose": "부패방지 및 준법경영 시스템을 표준화해 규제 리스크를 선제적으로 관리하고, 임직원 윤리의식을 제고한다.",
+  "scope": "site",
+  "siteId": "st-hq",
+  "startYear": 2025,
+  "targetHistory": [],
+  "team": "법무팀",
+  "teamId": "t-legal",
+  "title": "윤리·준법 리스크 관리체계(ISO 37301) 내재화",
+  "updatedAt": "2026-09-10T06:58:54.182Z"
+}

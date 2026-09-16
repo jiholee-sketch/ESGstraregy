@@ -1,0 +1,63 @@
+{
+  "carries": [],
+  "createdAt": "2026-09-14T00:25:58.296Z",
+  "createdBy": "이지호",
+  "endMonth": 12,
+  "endYear": 2028,
+  "esg": "E",
+  "kpiBase": 5,
+  "kpiBaseYear": 2002,
+  "kpiName": "1",
+  "kpiTarget": 6,
+  "kpiUnit": "2",
+  "lifecycle": "active",
+  "owner": "이지호",
+  "plans": [
+    {
+      "status": "doing",
+      "text": "추진 계획 수립, TFT 구성 및 구성원 교육",
+      "updatedAt": "2026-09-14T00:26:06.020Z",
+      "updatedBy": "이지호"
+    },
+    {
+      "status": "todo",
+      "text": "제품 시스템 경계 및 공정 분석, LCA 분석",
+      "updatedAt": "",
+      "updatedBy": ""
+    },
+    {
+      "status": "todo",
+      "text": "추진 계획 수립, TFT 구성 및 구성원 교육",
+      "updatedAt": "",
+      "updatedBy": ""
+    },
+    {
+      "status": "todo",
+      "text": "제품 시스템 경계 및 공정 분석, LCA 분석",
+      "updatedAt": "",
+      "updatedBy": ""
+    },
+    {
+      "status": "todo",
+      "text": "LCA/EPD 보고서 작성 및 제출, 검증 및 보완",
+      "updatedAt": "",
+      "updatedBy": ""
+    }
+  ],
+  "priority": "중",
+  "purpose": "",
+  "scope": "site",
+  "siteId": "st-pohang",
+  "startMonth": 1,
+  "startYear": 2026,
+  "targetHistory": [],
+  "team": "품질경영팀",
+  "teamId": "t-quality",
+  "title": ". ⭕ 환경성적표지(EPD) 인증 획득 및 활용",
+  "updatedAt": "2026-09-14T00:26:20.354Z",
+  "yearTargets": {
+    "2026": 33,
+    "2027": 67,
+    "2028": 100
+  }
+}

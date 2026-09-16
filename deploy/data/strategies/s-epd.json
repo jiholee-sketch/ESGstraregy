@@ -1,0 +1,53 @@
+{
+  "carries": [],
+  "createdAt": "2024-01-15T01:20:00.000Z",
+  "createdBy": "김성호",
+  "endYear": 2027,
+  "esg": "E",
+  "kpiBase": 0,
+  "kpiName": "EPD 인증 취득 제품 수",
+  "kpiTarget": 6,
+  "kpiUnit": "건",
+  "lifecycle": "active",
+  "owner": "김성호",
+  "plans": [
+    {
+      "status": "done",
+      "text": "추진 계획 수립, 팀별 업무분장 및 TFT 구성, 구성원 교육"
+    },
+    {
+      "status": "done",
+      "text": "Environmental Effect Analysis — 제품 시스템 경계 및 공정 분석, 데이터 수집 및 분석, LCA 분석"
+    },
+    {
+      "status": "done",
+      "text": "LCA/EPD 보고서 작성 및 제출, 검증 및 보완, EPD 인증 획득"
+    },
+    {
+      "status": "done",
+      "text": "유럽 및 북미 수요가 탄소배출 인증요구 실시간 대응"
+    },
+    {
+      "status": "doing",
+      "text": "물질 데이터 전과정평가(LCA) 자료를 활용한 탄소발자국 측정 및 감축 방안 수립"
+    },
+    {
+      "status": "todo",
+      "text": "환경적 책임을 공급망에 확산시켜 지속가능한 파트너십 구축을 통한 ESG경영 실천"
+    },
+    {
+      "status": "todo",
+      "text": "EPD 사후 심사를 통해 지속적인 환경 배출량 자료 Update 및 모니터링 실시"
+    }
+  ],
+  "priority": "상",
+  "purpose": "유럽·북미 고객사의 탄소배출 인증 요구에 실시간 대응하고, 전과정평가(LCA) 데이터를 확보해 제품 단위 탄소발자국 관리 기반을 마련한다.",
+  "scope": "site",
+  "siteId": "st-pohang",
+  "startYear": 2024,
+  "targetHistory": [],
+  "team": "품질경영팀",
+  "teamId": "t-quality",
+  "title": "환경성적표지(EPD) 인증 획득 및 활용",
+  "updatedAt": "2026-09-10T05:00:00.000Z"
+}

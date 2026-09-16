@@ -1,0 +1,45 @@
+{
+  "carries": [],
+  "createdAt": "2025-02-03T00:40:00.000Z",
+  "createdBy": "이가온",
+  "endYear": 2030,
+  "esg": "E",
+  "kpiBase": 12.4,
+  "kpiName": "매출액 기준 배출 원단위",
+  "kpiTarget": 8.7,
+  "kpiUnit": "tCO2e/억원",
+  "lifecycle": "active",
+  "owner": "이가온",
+  "plans": [
+    {
+      "status": "done",
+      "text": "Scope 1·2 배출량 산정체계 구축 및 제3자 검증"
+    },
+    {
+      "status": "doing",
+      "text": "노후 유틸리티 설비 고효율 교체 (연 2개 라인)"
+    },
+    {
+      "status": "doing",
+      "text": "사업장 태양광 자가발전 설비 도입 및 REC 구매"
+    },
+    {
+      "status": "todo",
+      "text": "공정 폐열 회수 시스템 적용 확대"
+    },
+    {
+      "status": "todo",
+      "text": "Scope 3 배출량 산정 범위 단계적 확대"
+    }
+  ],
+  "priority": "상",
+  "purpose": "2030년까지 매출액 기준 온실가스 배출 원단위를 2024년 대비 30% 감축한다. Scope 1·2 직접 감축과 재생에너지 전환을 병행 추진한다.",
+  "scope": "site",
+  "siteId": "st-changwon",
+  "startYear": 2025,
+  "targetHistory": [],
+  "team": "안전환경팀",
+  "teamId": "t-safety",
+  "title": "온실가스 배출 원단위 30% 감축 (2030 로드맵)",
+  "updatedAt": "2026-09-10T05:00:00.000Z"
+}
