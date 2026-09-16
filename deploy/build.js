@@ -139,6 +139,14 @@ s = put(s,
   try { await navigator.clipboard.writeText(data); toast("파일 저장을 사용할 수 없어 CSV 내용을 클립보드에 복사했습니다."); }`,
   "CSV 내려받기");
 
+/* ── 모션 라이브러리를 CDN 대신 vendor 로 (D-050) ───────────── */
+s = put(s,
+  `<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></` + `script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></` + `script>`,
+  `<script src="vendor/gsap.min.js"></` + `script>
+<script src="vendor/ScrollTrigger.min.js"></` + `script>`,
+  "GSAP vendor 경로");
+
 /* ── SDK 스크립트 삽입 (본문 script 바로 앞) ────────────────── */
 const SDK = [
   '<!-- Firebase SDK — vendor/ 에 함께 배포한다. 외부 CDN에 의존하지 않는다. -->',
@@ -191,6 +199,14 @@ if (fs.existsSync(srcSdk)) {
   }
 } else {
   missed.push("node_modules/firebase 없음 — npm install 먼저");
+}
+
+/* GSAP — 배포본은 외부 CDN 을 타지 않는다 */
+const srcGsap = path.join(ROOT, "node_modules", "gsap", "dist");
+for (const f of ["gsap.min.js", "ScrollTrigger.min.js"]) {
+  const from = path.join(srcGsap, f);
+  if (fs.existsSync(from)) { fs.mkdirSync(VENDOR, { recursive: true }); fs.copyFileSync(from, path.join(VENDOR, f)); copied++; }
+  else missed.push("GSAP 없음: " + f + " — npm install gsap");
 }
 
 /* ── 결과 ───────────────────────────────────────────────────── */

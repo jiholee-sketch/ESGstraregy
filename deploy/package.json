@@ -17,7 +17,8 @@
     "open": "firebase open hosting:site"
   },
   "dependencies": {
-    "firebase": "12.19.0"
+    "firebase": "12.19.0",
+    "gsap": "^3.12.5"
   },
   "devDependencies": {
     "firebase-tools": "15.30.1"
