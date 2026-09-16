@@ -54,10 +54,12 @@
   "team": "품질경영팀",
   "teamId": "t-quality",
   "title": ". ⭕ 환경성적표지(EPD) 인증 획득 및 활용",
-  "updatedAt": "2026-09-14T00:26:20.354Z",
+  "updatedAt": "2026-09-16T00:00:00.000Z",
   "yearTargets": {
     "2026": 33,
     "2027": 67,
     "2028": 100
-  }
+  },
+  "companyId": "c-seah",
+  "category": "E-CLM"
 }

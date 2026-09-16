@@ -76,7 +76,7 @@ cd deploy && npm run deploy
 cd deploy && npm run seed
 ```
 
-`data/` 의 30건(사업장 5 · 팀 5 · 과제 7 · 실적 12 · 마감일 1)을 넣는다.
+`data/` 의 97건(계열사 9 · 사업장 5 · 팀 31 · 과제 26 · 실적 25 · 마감일 1)을 넣는다.
 **이미 있는 문서는 건드리지 않는다.** 먼저 `npm run seed:dry` 로 무엇이 들어갈지 볼 수 있다.
 
 > 이 데이터는 예시다. 실제 운영 전에 지워야 한다.
@@ -96,6 +96,26 @@ cd deploy && npm run seed
 | `npm run seed` | 예시 데이터 넣기 (없는 것만) |
 | `npm run seed:dry` | 넣지 않고 목록만 보기 |
 | `node localtest.js` | 로컬에서 화면만 확인 (가짜 저장소) |
+
+---
+
+## 조직 계층
+
+```
+그룹사
+ └ 계열사            companies
+    └ 사업장·본부     sites      (companyId)   ← 없으면 건너뛸 수 있다
+       └ 팀          teams      (siteId · companyId)
+          └ 실행과제  strategies (teamId · siteId · companyId · category)
+```
+
+중간 층이 없는 계열사는 사업장을 비우면 팀이 **계열사 직속**으로 달린다(해외법인 등).
+과제의 `siteId` · `companyId` 는 **등록 시점에 굳힌 값**이다 — 팀이 나중에 다른
+조직으로 옮겨가도 과거 과제와 분기 실적이 소급 이동하지 않는다.
+
+`category` 는 팀을 가로지르는 주제 축으로, 값은 앱의 `CATS` 한 곳에서만 정의한다
+(`환경·기후` · `인권·노동` · `안전보건` · `공급망` · `공시·규제 대응`). 비워 두면
+**분류 미지정**으로 따로 집계되어 그룹사 화면에 표시된다.
 
 ---
 
@@ -129,6 +149,7 @@ cd deploy && npm run seed
 ## 보안 — 지금 설정과 한계
 
 `firestore.rules` 는 **익명 로그인을 마친 브라우저만** 읽고 쓰게 한다.
+여는 컬렉션은 `companies` · `sites` · `teams` · `strategies` · `progress` · `deadlines` · `system` 일곱 개뿐이다.
 
 담당자에게 로그인 화면은 보이지 않는다. 페이지를 열면 앱이 알아서 익명 로그인을 한다.
 입력 부담은 그대로 0이다.
@@ -176,7 +197,7 @@ deploy/
   seed.js                예시 데이터 넣기
   localtest.js           로컬 화면 확인
 
-  data/                  예시 데이터 30건
+  data/                  예시 데이터 97건 (폴더 이름 = 컬렉션)
   public/                배포본 (자동 생성)
   node_modules/          Firebase SDK · CLI
 ```

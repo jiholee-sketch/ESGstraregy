@@ -24,7 +24,8 @@ service cloud.firestore {
     /* 앱이 실제로 쓰는 컬렉션만 연다.
        와일드카드로 한 번에 열지 않는 이유 — 열어 두면 아무 이름의
        컬렉션이나 만들 수 있어 저장소가 남의 파일 창고가 된다. */
-    match /sites/{id}      { allow read, write: if signedIn(); }  // 사업장
+    match /companies/{id}  { allow read, write: if signedIn(); }  // 계열사
+    match /sites/{id}      { allow read, write: if signedIn(); }  // 사업장·본부
     match /teams/{id}      { allow read, write: if signedIn(); }  // 팀
     match /strategies/{id} { allow read, write: if signedIn(); }  // 실행과제
     match /progress/{id}   { allow read, write: if signedIn(); }  // 분기·월 실적

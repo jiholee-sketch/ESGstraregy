@@ -1,0 +1,61 @@
+{
+  "title": "협력사 행동규범 제정 및 실사",
+  "esg": "G",
+  "category": "G-SCM",
+  "scope": "site",
+  "teamId": "t-seahwind-qual",
+  "team": "품질경영팀",
+  "siteId": null,
+  "companyId": "c-seahwind",
+  "owner": "강태오",
+  "startYear": 2026,
+  "startMonth": 4,
+  "endYear": 2028,
+  "endMonth": 12,
+  "priority": "중",
+  "purpose": "세아윈드의 협력사 행동규범 제정 및 실사 과제. 그룹 ESG 중장기전략에 따라 추진한다.",
+  "plans": [
+    {
+      "text": "대상 범위 및 기준 정의",
+      "status": "done",
+      "updatedBy": "강태오",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "데이터 수집 체계 구축",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    },
+    {
+      "text": "1차 진단·산정 시행",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    },
+    {
+      "text": "미흡 항목 개선 지원",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    },
+    {
+      "text": "결과 공시 및 정기 갱신",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    }
+  ],
+  "yearTargets": {},
+  "kpiName": "",
+  "kpiUnit": "",
+  "kpiBase": null,
+  "kpiBaseYear": null,
+  "kpiTarget": null,
+  "lifecycle": "active",
+  "carries": [],
+  "targetHistory": [],
+  "createdBy": "강태오",
+  "createdAt": "2026-09-16T12:00:00.000Z",
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}

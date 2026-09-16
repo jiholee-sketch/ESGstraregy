@@ -1,0 +1,16 @@
+{
+  "strategyId": "s-donga-qual",
+  "period": "2026-Q3",
+  "progress": 20,
+  "achievement": "'26 3분기 추진 실적. 대상 범위 및 기준 정의 / 데이터 수집 체계 구축",
+  "kpiActual": null,
+  "delayReason": "",
+  "catchupPlan": "",
+  "author": "임가람",
+  "team": "품질경영팀",
+  "site": "동아스틸",
+  "planTotal": 5,
+  "planDone": 0,
+  "planDoing": 2,
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}

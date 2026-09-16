@@ -1,0 +1,61 @@
+{
+  "title": "EU CSRD 대응 지속가능성 공시 준비",
+  "esg": "G",
+  "category": "G-DIS",
+  "scope": "site",
+  "teamId": "t-inoxtech-qual",
+  "team": "품질경영팀",
+  "siteId": null,
+  "companyId": "c-inoxtech",
+  "owner": "Marco Rossi",
+  "startYear": 2025,
+  "startMonth": 1,
+  "endYear": 2027,
+  "endMonth": 12,
+  "priority": "상",
+  "purpose": "INOX Tech의 EU CSRD 대응 지속가능성 공시 준비 과제. 그룹 ESG 중장기전략에 따라 추진한다.",
+  "plans": [
+    {
+      "text": "대상 범위 및 기준 정의",
+      "status": "done",
+      "updatedBy": "Marco Rossi",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "데이터 수집 체계 구축",
+      "status": "done",
+      "updatedBy": "Marco Rossi",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "1차 진단·산정 시행",
+      "status": "done",
+      "updatedBy": "Marco Rossi",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "미흡 항목 개선 지원",
+      "status": "doing",
+      "updatedBy": "Marco Rossi",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "결과 공시 및 정기 갱신",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    }
+  ],
+  "yearTargets": {},
+  "kpiName": "",
+  "kpiUnit": "",
+  "kpiBase": null,
+  "kpiBaseYear": null,
+  "kpiTarget": null,
+  "lifecycle": "active",
+  "carries": [],
+  "targetHistory": [],
+  "createdBy": "Marco Rossi",
+  "createdAt": "2026-09-16T12:00:00.000Z",
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}

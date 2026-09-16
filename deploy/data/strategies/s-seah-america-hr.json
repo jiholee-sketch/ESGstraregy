@@ -1,0 +1,61 @@
+{
+  "title": "현지 채용 임직원 처우 형평성 개선",
+  "esg": "S",
+  "category": "S-HRT",
+  "scope": "site",
+  "teamId": "t-seah-america-hr",
+  "team": "인사팀",
+  "siteId": null,
+  "companyId": "c-seah-america",
+  "owner": "Kevin Park",
+  "startYear": 2026,
+  "startMonth": 1,
+  "endYear": 2028,
+  "endMonth": 12,
+  "priority": "중",
+  "purpose": "세아스틸America의 현지 채용 임직원 처우 형평성 개선 과제. 그룹 ESG 중장기전략에 따라 추진한다.",
+  "plans": [
+    {
+      "text": "현황 진단 및 개선과제 도출",
+      "status": "done",
+      "updatedBy": "Kevin Park",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "제도·지침 제정 및 사내 공표",
+      "status": "done",
+      "updatedBy": "Kevin Park",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "전 사업장 교육 시행",
+      "status": "doing",
+      "updatedBy": "Kevin Park",
+      "updatedAt": "2026-09-16T12:00:00.000Z"
+    },
+    {
+      "text": "정기 점검·모니터링 체계 운영",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    },
+    {
+      "text": "성과 공시 및 외부 검증",
+      "status": "todo",
+      "updatedBy": "",
+      "updatedAt": ""
+    }
+  ],
+  "yearTargets": {},
+  "kpiName": "",
+  "kpiUnit": "",
+  "kpiBase": null,
+  "kpiBaseYear": null,
+  "kpiTarget": null,
+  "lifecycle": "active",
+  "carries": [],
+  "targetHistory": [],
+  "createdBy": "Kevin Park",
+  "createdAt": "2026-09-16T12:00:00.000Z",
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}

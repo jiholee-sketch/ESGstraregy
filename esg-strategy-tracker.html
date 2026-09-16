@@ -1,127 +1,186 @@
 <title>ESG 중장기전략 진척관리</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap">
 <style>
+/* ============================================================
+   디자인 토큰 — MongoDB 디자인 시스템 기반 (D-049)
+   출처: DESIGN-mongodb.md. 색을 바꾸려면 이 세 블록만 고친다.
+   마케팅 구조(히어로 밴드·프로모 배너)는 가져오지 않았다 — 이 앱은
+   읽는 문서가 아니라 조작하는 화면이다 (CLAUDE.md 디자인 태도).
+   ============================================================ */
 :root{
-  --ground:#A9AEB5; --frame:rgba(255,255,255,.52); --frame-line:rgba(255,255,255,.75);
-  --panel:#FFFFFF; --panel-2:#F5F6F8; --cell:#FCFCFD; --cell-line:#EDEFF2;
-  --ink:#14181C; --ink-2:#454C54; --muted:#767E88; --line:#E6E8EC; --line-2:#F0F1F4;
-  --chip:rgba(255,255,255,.94); --chip-line:rgba(255,255,255,.5);
-  --today:#2266DD; --today-soft:#E8F0FE; --on-today:#FFFFFF;
-  --e:#12A67A; --s:#EE8B3C; --g:#7B5BE6;
-  --ok:#0E9F6E; --ok-soft:#E4F5EE;
-  --warn:#A8650B; --warn-soft:#FCF1DE;
-  --risk:#C43A29; --risk-soft:#FCE9E5;
-  --done:#2E7BF6; --done-soft:#E8F0FE;
-  --r-xl:30px; --r-lg:20px; --r:14px; --r-sm:10px;
-  --sh:0 1px 2px rgba(20,26,34,.04), 0 10px 28px -18px rgba(20,26,34,.20);
-  --sh-pop:0 2px 4px rgba(20,26,34,.06), 0 20px 44px -22px rgba(20,26,34,.34);
-  --sh-blk:0 1px 2px rgba(20,26,34,.10), 0 8px 18px -10px rgba(20,26,34,.30);
+  /* 글꼴 — Euclid Circular A 는 상용이라 있으면 쓰고, 없으면 Plus Jakarta Sans.
+     한글 글리프는 두 서체에 없으므로 IBM Plex Sans KR 이 받는다. */
+  --font-ui:"Outfit","IBM Plex Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"Source Code Pro","IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --ground:#F4F7F6;                              /* surface-soft */
+  --frame:transparent; --frame-line:transparent; /* 프레임을 없앴다 — 평평한 캔버스 */
+  --panel:#FFFFFF;                               /* canvas */
+  --panel-2:#F9FBFA;                             /* surface */
+  --cell:#FFFFFF; --cell-line:#ECEFF1;           /* hairline-soft */
+  --ink:#001E2B;                                 /* ink */
+  --ink-2:#3D4F5B;                               /* slate */
+  --muted:#5C6C7A;                               /* steel */
+  --line:#E1E5E8;                                /* hairline */
+  --line-2:#ECEFF1;                              /* hairline-soft */
+  --chip:#FFFFFF; --chip-line:#E1E5E8;
+
+  /* 기본 동작 · 현재 시점 — MongoDB 그린.
+     --today 는 글씨·테두리용 진한 초록, --today-fill 은 채움용 밝은 초록이다.
+     밝은 초록은 흰 바탕에서 글씨로 쓰면 읽히지 않는다 (스펙 Don't 항목). */
+  --today:#00684A;                               /* brand-green-dark */
+  --today-fill:#00ED64;                          /* brand-green */
+  /* 악센트 면 위의 글씨색. 라이트는 면이 어두워 흰 글씨, 다크는 면이 밝아 짙은 글씨다 */
+  --on-accent:#FFFFFF;
+  --today-soft:#E3FCEF;                          /* surface-feature */
+  --on-today:#001E2B;                            /* on-primary */
+
+  /* ESG 영역 · 대분류 — 카테고리 악센트. 이 다섯 색은 분류 표시에만 쓴다 */
+  --e:#00794A; --s:#C44E18; --g:#6A2FD6;
+  --cat-1:#00915A; --cat-2:#7B3FF2; --cat-3:#E05A22; --cat-4:#3D4F9F; --cat-5:#D2479B;
+
+  --ok:#00684A; --ok-soft:#C3F0D2;               /* brand-green-dark / -soft */
+  --warn:#6E5124; --warn-soft:#FFF8E0;           /* semantic-warning — 스펙 값은 대비 4.29라 한 단계 진하게 */
+  --risk:#C2321F; --risk-soft:#FDEBE7;           /* 파생 — 스펙에 위험색이 없다 */
+  --done:#3D4F9F; --done-soft:#E8EBF7;           /* accent-blue */
+
+  --r-xl:24px; --r-lg:12px; --r:8px; --r-sm:6px;
+  /* 그림자는 아끼고 헤어라인으로 나눈다 (스펙 Don't: 평평한 카드에 무거운 그림자 금지) */
+  --sh:0 1px 2px rgba(0,30,43,.04);
+  --sh-pop:0 16px 48px -8px rgba(0,30,43,.16);
+  --sh-blk:0 4px 12px rgba(0,30,43,.08);
   /* 줄간격 · 여백 스케일 — 개별 값을 쓰지 말고 이 토큰만 쓴다 */
-  --lh-h:1.3; --lh:1.62; --lh-s:1.5;
-  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:26px;
+  --lh-h:1.2; --lh:1.55; --lh-s:1.5;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px;
   color-scheme:light;
 }
+/* 다크 값은 스펙에 없다(Known Gaps). brand-teal-deep 을 캔버스로 삼아 파생했다. */
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --ground:#0B0D0F; --frame:rgba(255,255,255,.045); --frame-line:rgba(255,255,255,.08);
-    --panel:#171B1F; --panel-2:#1E2328; --cell:#1B2024; --cell-line:#24292E;
-    --ink:#E9ECEF; --ink-2:#B7BEC5; --muted:#89919A; --line:#2A3035; --line-2:#22272B;
-    --chip:rgba(255,255,255,.13); --chip-line:rgba(255,255,255,.10);
-    --today:#5B9BFF; --today-soft:#16233A; --on-today:#10151C;
-    --e:#1FBD8C; --s:#F09B4F; --g:#9075F0;
-    --ok:#2BBE85; --ok-soft:#12281F;
-    --warn:#DDA33C; --warn-soft:#2A2214;
-    --risk:#F06853; --risk-soft:#2E1A16;
-    --done:#5B9BFF; --done-soft:#16233A;
-    --sh:0 1px 2px rgba(0,0,0,.5), 0 12px 32px -20px rgba(0,0,0,.9);
-    --sh-pop:0 3px 8px rgba(0,0,0,.55), 0 24px 50px -24px rgba(0,0,0,1);
-    --sh-blk:0 1px 3px rgba(0,0,0,.5), 0 10px 22px -12px rgba(0,0,0,.7);
+    --ground:#00141D; --frame:transparent; --frame-line:transparent;
+    --panel:#001E2B; --panel-2:#00293A; --cell:#00232F; --cell-line:#123040;
+    --ink:#FFFFFF; --ink-2:#C1CCD6; --muted:#A8B3BC; --line:#1C2D38; --line-2:#152730;
+    --chip:#00293A; --chip-line:#1C2D38;
+    --today:#00ED64; --today-fill:#00ED64; --today-soft:#023A2A; --on-today:#001E2B;
+    --on-accent:#001E2B;
+    --e:#1FD182; --s:#FF8F63; --g:#A98BFF;
+    --cat-1:#1FD182; --cat-2:#A98BFF; --cat-3:#FF8F63; --cat-4:#8093E8; --cat-5:#F79AD0;
+    --ok:#00ED64; --ok-soft:#023A2A;
+    --warn:#E0B872; --warn-soft:#2E2617;
+    --risk:#FF7A63; --risk-soft:#33150F;
+    --done:#8093E8; --done-soft:#1A2140;
+    --sh:0 1px 2px rgba(0,0,0,.45);
+    --sh-pop:0 16px 48px -8px rgba(0,0,0,.75);
+    --sh-blk:0 4px 12px rgba(0,0,0,.5);
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --ground:#0B0D0F; --frame:rgba(255,255,255,.045); --frame-line:rgba(255,255,255,.08);
-  --panel:#171B1F; --panel-2:#1E2328; --cell:#1B2024; --cell-line:#24292E;
-  --ink:#E9ECEF; --ink-2:#B7BEC5; --muted:#89919A; --line:#2A3035; --line-2:#22272B;
-  --chip:rgba(255,255,255,.13); --chip-line:rgba(255,255,255,.10);
-  --today:#5B9BFF; --today-soft:#16233A; --on-today:#10151C;
-  --e:#1FBD8C; --s:#F09B4F; --g:#9075F0;
-  --ok:#2BBE85; --ok-soft:#12281F;
-  --warn:#DDA33C; --warn-soft:#2A2214;
-  --risk:#F06853; --risk-soft:#2E1A16;
-  --done:#5B9BFF; --done-soft:#16233A;
-  --sh:0 1px 2px rgba(0,0,0,.5), 0 12px 32px -20px rgba(0,0,0,.9);
-  --sh-pop:0 3px 8px rgba(0,0,0,.55), 0 24px 50px -24px rgba(0,0,0,1);
-  --sh-blk:0 1px 3px rgba(0,0,0,.5), 0 10px 22px -12px rgba(0,0,0,.7);
+  --ground:#00141D; --frame:transparent; --frame-line:transparent;
+  --panel:#001E2B; --panel-2:#00293A; --cell:#00232F; --cell-line:#123040;
+  --ink:#FFFFFF; --ink-2:#C1CCD6; --muted:#A8B3BC; --line:#1C2D38; --line-2:#152730;
+  --chip:#00293A; --chip-line:#1C2D38;
+  --today:#00ED64; --today-fill:#00ED64; --today-soft:#023A2A; --on-today:#001E2B;
+  --on-accent:#001E2B;
+  --e:#1FD182; --s:#FF8F63; --g:#A98BFF;
+  --cat-1:#1FD182; --cat-2:#A98BFF; --cat-3:#FF8F63; --cat-4:#8093E8; --cat-5:#F79AD0;
+  --ok:#00ED64; --ok-soft:#023A2A;
+  --warn:#E0B872; --warn-soft:#2E2617;
+  --risk:#FF7A63; --risk-soft:#33150F;
+  --done:#8093E8; --done-soft:#1A2140;
+  --sh:0 1px 2px rgba(0,0,0,.45);
+  --sh-pop:0 16px 48px -8px rgba(0,0,0,.75);
+  --sh-blk:0 4px 12px rgba(0,0,0,.5);
   color-scheme:dark;
 }
 
 *{box-sizing:border-box}
 body{
   margin:0; background:var(--ground); color:var(--ink);
-  font-family:"IBM Plex Sans KR","Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-size:13.5px; line-height:var(--lh); -webkit-font-smoothing:antialiased;
-  padding:var(--s5);
+  font-family:var(--font-ui);
+  font-size:14px; line-height:var(--lh); -webkit-font-smoothing:antialiased;
+  padding:var(--s6);
 }
-h1,h2,h3,h4{font-family:"Gothic A1","IBM Plex Sans KR",system-ui,sans-serif;margin:0;line-height:var(--lh-h);letter-spacing:-.015em;text-wrap:balance}
+/* 한글은 단어 중간에서 끊으면 안 된다 */
+h1,h2,h3,h4{font-family:var(--font-ui);font-weight:500;margin:0;line-height:var(--lh-h);letter-spacing:-.5px;text-wrap:balance;word-break:keep-all;overflow-wrap:break-word}
 p{margin:0;line-height:var(--lh)}
 button,input,select,textarea{font:inherit;color:inherit;line-height:var(--lh)}
 :focus-visible{outline:2px solid var(--today);outline-offset:2px;border-radius:8px}
-.num{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
 .sub,.help,.meta,.tm,.ad,.upd,.tc{line-height:var(--lh-s)}
 
 /* ================= frame ================= */
+/* 프레임 없이 평평하게. 면은 헤어라인으로 나눈다 */
 .app{
-  max-width:1560px;margin:0 auto;background:var(--frame);
-  border:1px solid var(--frame-line);border-radius:var(--r-xl);
-  padding:var(--s3);display:grid;grid-template-columns:76px minmax(0,1fr);gap:var(--s3);
-  backdrop-filter:blur(24px) saturate(1.2);
-  box-shadow:0 1px 1px rgba(255,255,255,.4) inset, 0 30px 70px -40px rgba(16,22,30,.6);
+  max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:236px minmax(0,1fr);gap:var(--s3);align-items:start;
 }
+/* ================= 왼쪽 메뉴 : 주 조작면 (D-051) =================
+   그룹 → 조직(계열사 · 사업장) → 팀 순으로 층이 내려간다. 화면 전환은 여기서만 한다. */
 .rail{
-  background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--sh);
-  display:flex;flex-direction:column;align-items:center;gap:var(--s2);padding:var(--s4) 0;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh);
+  display:flex;flex-direction:column;gap:var(--s2);padding:var(--s4) var(--s3);
+  position:sticky;top:var(--s6);max-height:calc(100vh - var(--s6) * 2);overflow:auto;
 }
-.logo{width:38px;height:38px;border-radius:12px;background:var(--panel-2);display:grid;place-items:center;margin-bottom:var(--s3);flex:none}
-.logo svg{width:19px;height:19px}
-.rail-nav{display:flex;flex-direction:column;gap:var(--s1);flex:1}
-.ricon{
-  width:44px;height:44px;border-radius:14px;border:1px solid transparent;background:none;cursor:pointer;
-  display:grid;place-items:center;color:var(--muted);
+.brand{display:flex;align-items:center;gap:10px;padding:0 var(--s2) var(--s3);border-bottom:1px solid var(--line-2)}
+.logo{width:34px;height:34px;border-radius:11px;background:var(--panel-2);display:grid;place-items:center;flex:none}
+.logo svg{width:18px;height:18px}
+.brand .bt{min-width:0}
+.brand .bt b{display:block;font-size:13px;font-weight:700;line-height:1.35}
+.brand .bt span{font-size:10.5px;color:var(--muted)}
+.rail-nav{display:flex;flex-direction:column;gap:2px;flex:1;min-height:0}
+.navsec{font-size:10px;font-weight:700;letter-spacing:.09em;color:var(--muted);padding:var(--s3) var(--s2) 5px}
+.navsec:first-child{padding-top:0}
+/* 1층 — 어느 층을 보는가 */
+.nav1{
+  display:flex;align-items:center;gap:9px;width:100%;border:1px solid transparent;background:none;cursor:pointer;
+  border-radius:var(--r);padding:9px 10px;color:var(--ink-2);font-family:inherit;font-weight:600;font-size:13px;text-align:left;
 }
-.ricon:hover{background:var(--panel-2);color:var(--ink)}
-.ricon[aria-current="page"]{background:var(--ink);color:var(--panel);box-shadow:var(--sh-blk)}
-.ricon svg{width:19px;height:19px}
-.ricon[hidden]{display:none}
+.nav1:hover{background:var(--panel-2);color:var(--ink)}
+.nav1[aria-current="page"]{background:var(--ink);color:var(--panel);box-shadow:var(--sh-blk)}
+.nav1 svg{width:17px;height:17px;flex:none}
+.nav1 .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 2층 — 고른 층 안의 갈래. 왼쪽 세로선이 층을 나타낸다 */
+.nav2wrap{display:flex;flex-direction:column;gap:2px;margin:3px 0 var(--s2) 19px;padding-left:11px;border-left:1px solid var(--line)}
+.nav2{
+  display:flex;align-items:center;gap:7px;border:0;background:none;cursor:pointer;border-radius:9px;
+  padding:7px 9px;color:var(--ink-2);font-family:inherit;font-size:12.5px;font-weight:500;text-align:left;
+}
+.nav2:hover{background:var(--panel-2);color:var(--ink)}
+.nav2[aria-current="true"]{background:var(--today-soft);color:var(--today);font-weight:700}
+.nav2 .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav2 .n{font-family:var(--font-mono);font-size:10.5px;opacity:.75}
+/* 3층 — 지금 열어 둔 팀 */
+.nav2.lv3{margin-left:11px;color:var(--ink);font-weight:600}
+.nav2.lv3::before{content:"";width:6px;height:6px;border-radius:99px;background:var(--today);flex:none}
+.rail-me{border-top:1px solid var(--line-2);padding:var(--s3) var(--s2) 0;font-size:11px;color:var(--muted);line-height:1.6}
+.rail-me b{display:block;color:var(--ink);font-size:12.5px;font-weight:700;line-height:1.4}
+.rail-me .ghost{margin-top:7px}
 
 .stage{display:flex;flex-direction:column;gap:var(--s3);min-width:0}
 
-/* ================= topbar : 현재 화면의 하위 탭 ================= */
+/* ================= topbar : 현재 위치 + 항상 같은 기능 (D-051) =================
+   화면이 바뀌어도 오른쪽 버튼은 그대로다. 왼쪽은 현재 위치(그룹 › 계열사 › 사업장 › 팀). */
 .topbar{
-  background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--sh);
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh);
   padding:var(--s2) var(--s3);display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;
+  position:sticky;top:var(--s6);z-index:30;
 }
-.subtabs{display:flex;gap:var(--s1);flex-wrap:wrap;min-width:0}
-.stab{
-  display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--panel);
-  border-radius:99px;padding:8px 15px;cursor:pointer;font-weight:500;font-size:13px;color:var(--ink-2);white-space:nowrap;
+/* 스크롤된 본문이 상단바 위 여백으로 비쳐 보이지 않도록 덮는다 */
+.topbar::before{content:"";position:absolute;left:-1px;right:-1px;bottom:100%;height:var(--s6);background:var(--ground)}
+.crumbs{display:flex;align-items:center;gap:1px;flex-wrap:wrap;min-width:0}
+.crumb{
+  border:0;background:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);
+  padding:7px 9px;border-radius:9px;white-space:nowrap;max-width:min(42vw,340px);overflow:hidden;text-overflow:ellipsis;
 }
-.stab:hover{background:var(--panel-2);color:var(--ink)}
-.stab[aria-current="true"]{background:var(--today-soft);border-color:transparent;color:var(--today);font-weight:600}
-.stab svg{width:15px;height:15px;flex:none}
-.stab .n{font-family:"IBM Plex Mono",monospace;font-size:11px;opacity:.8}
-.crumbtab{display:flex;align-items:center;gap:var(--s3);min-width:0}
-.backbtn{
-  display:inline-flex;align-items:center;gap:7px;border:1px solid transparent;background:var(--today);
-  border-radius:99px;padding:8px 17px 8px 13px;cursor:pointer;font-weight:600;font-size:13px;
-  color:var(--on-today);white-space:nowrap;box-shadow:var(--sh-blk);
-}
-.backbtn:hover{filter:brightness(1.12)}
-.backbtn:active{filter:brightness(.94)}
-.backbtn svg{width:15px;height:15px;flex:none}
-.crumbtab .t{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumb:hover{background:var(--panel-2);color:var(--ink)}
+.crumb.cur{color:var(--ink);cursor:default}
+.crumb.cur:hover{background:none}
+.crumb.back{color:var(--today);background:var(--today-soft)}
+.crumb.back:hover{background:var(--today-soft);filter:brightness(.97)}
+.crumbs .sep{color:var(--muted);opacity:.45;font-size:12px}
 .iconbtn{
   width:38px;height:38px;border-radius:99px;border:1px solid var(--line);background:var(--panel);
   display:grid;place-items:center;cursor:pointer;color:var(--ink-2);flex:none;
@@ -132,23 +191,23 @@ button,input,select,textarea{font:inherit;color:inherit;line-height:var(--lh)}
 .stack{display:flex;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:4px 12px 4px 4px}
 .av{
   width:30px;height:30px;border-radius:99px;display:grid;place-items:center;flex:none;
-  font-family:"Gothic A1",sans-serif;font-weight:700;font-size:10.5px;color:#fff;
+  font-family:var(--font-ui);font-weight:700;font-size:10.5px;color:#fff;
   border:2px solid var(--panel);margin-right:-9px;line-height:1;
 }
-.stack .more{margin-left:16px;font-size:12px;font-weight:600;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.stack .more{margin-left:16px;font-size:12px;font-weight:600;color:var(--muted);font-family:var(--font-mono)}
 .pillbtn{
   display:inline-flex;align-items:center;gap:7px;border-radius:99px;padding:9px 16px;cursor:pointer;
   border:1px solid var(--line);background:var(--panel);font-weight:500;font-size:13px;white-space:nowrap;
 }
 .pillbtn:hover{background:var(--panel-2)}
-.pillbtn.dark{background:var(--ink);color:var(--panel);border-color:var(--ink);font-weight:600;box-shadow:var(--sh-blk)}
-.pillbtn.dark:hover{filter:brightness(1.15);background:var(--ink)}
+.pillbtn.dark{background:var(--today-fill);color:var(--on-today);border-color:var(--today-fill);font-weight:600}
+.pillbtn.dark:hover{filter:brightness(1.06);background:var(--today-fill)}
 .pillbtn svg{width:15px;height:15px}
 .pillbtn[hidden]{display:none}
 .pillbtn:disabled{opacity:.45;cursor:not-allowed}
 
 /* ================= panels ================= */
-.panel{background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--sh);padding:var(--s5) 22px;min-width:0}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh);padding:var(--s5) 22px;min-width:0}
 .ph{display:flex;align-items:flex-start;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s4)}
 .ph h2{font-size:23px;font-weight:800}
 .ph h3{font-size:17px;font-weight:800}
@@ -169,7 +228,7 @@ select.ghost{width:auto;max-width:220px;padding-right:26px;appearance:none;
 .stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:var(--s2);margin-bottom:var(--s4)}
 .sbox{background:var(--panel-2);border-radius:var(--r);padding:var(--s3) var(--s4);display:flex;flex-direction:column;gap:var(--s1)}
 .sbox .k{font-size:10.5px;color:var(--muted);letter-spacing:.03em}
-.sbox .v{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:21px;line-height:1.15}
+.sbox .v{font-family:var(--font-ui);font-weight:800;font-size:21px;line-height:1.15}
 .sbox .v small{font-size:11px;font-weight:600;color:var(--muted);margin-left:1px}
 .sbox.risk{box-shadow:inset 3px 0 0 var(--risk)}
 .sbox.warn{box-shadow:inset 3px 0 0 var(--warn)}
@@ -180,31 +239,31 @@ select.ghost{width:auto;max-width:220px;padding-right:26px;appearance:none;
 .tl-wrap{overflow:auto;padding-bottom:var(--s1);scrollbar-width:thin}
 .tl-head{position:sticky;top:0;z-index:6;background:var(--panel)}
 .tl-head .tl-name{z-index:7}
-.tl-more{font-size:11.5px;color:var(--muted);margin-top:var(--s2);text-align:right;font-family:"IBM Plex Mono",monospace}
+.tl-more{font-size:11.5px;color:var(--muted);margin-top:var(--s2);text-align:right;font-family:var(--font-mono)}
 .tl{min-width:min-content}
 .tl-row{display:flex;align-items:stretch}
 .tl-name{flex:none;position:sticky;left:0;z-index:3;background:var(--panel);padding-right:var(--s3);display:flex;align-items:center}
 .tl-head .tl-name{align-items:flex-end;padding-bottom:9px}
-.tl-name .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:"IBM Plex Mono",monospace;font-weight:600;line-height:1.4}
+.tl-name .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:var(--font-mono);font-weight:600;line-height:1.4}
 .card-name{
   display:flex;align-items:center;gap:var(--s2);border:1px solid var(--line);border-radius:var(--r);
   padding:var(--s2) 11px;background:var(--panel);width:100%;min-width:0;text-align:left;cursor:pointer;
 }
 .card-name:hover{background:var(--panel-2);border-color:var(--muted)}
 .card-name .ic{width:30px;height:30px;border-radius:10px;flex:none;display:grid;place-items:center}
-.card-name .ic svg{width:15px;height:15px;color:#fff}
+.card-name .ic svg{width:15px;height:15px;color:var(--panel)}
 .card-name .tx{min-width:0;display:flex;flex-direction:column;gap:1px}
 .card-name .t1{font-weight:600;font-size:13px;line-height:var(--lh-s);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-name .t2{font-size:11px;color:var(--muted);line-height:var(--lh-s);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-name .t3{font-size:10.5px;color:var(--muted);line-height:var(--lh-s);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:"IBM Plex Mono",monospace}
+.card-name .t3{font-size:10.5px;color:var(--muted);line-height:var(--lh-s);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--font-mono)}
 
 .tl-track{position:relative;flex:none;display:flex}
 .tl-head .tl-track{align-items:flex-end}
 .qh{flex:none;text-align:center;padding:5px 0 9px;border-radius:12px 12px 0 0}
-.qh .q{display:block;font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink-2);line-height:1.35}
-.qh .y{display:block;font-size:9.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;letter-spacing:.04em;line-height:1.35}
+.qh .q{display:block;font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--ink-2);line-height:1.35}
+.qh .y{display:block;font-size:9.5px;color:var(--muted);font-family:var(--font-mono);letter-spacing:.04em;line-height:1.35}
 .qh.past .q,.qh.past .y{color:var(--muted);opacity:.75}
-.qh.now{background:var(--today);box-shadow:var(--sh-blk)}
+.qh.now{background:var(--today-fill)}
 .qh.now .q,.qh.now .y{color:var(--on-today)}
 
 .tl-body{position:relative}
@@ -212,24 +271,25 @@ select.ghost{width:auto;max-width:220px;padding-right:26px;appearance:none;
 .cellrow{position:absolute;inset:0;display:flex;pointer-events:none}
 .cl{flex:none;border-radius:12px;background:var(--cell);box-shadow:0 0 0 1px var(--cell-line) inset;margin:5px 3px}
 .cl.past{background:transparent;background-image:repeating-linear-gradient(45deg,transparent 0 4px,var(--cell-line) 4px 5.5px)}
-.nowline{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--today);z-index:4;pointer-events:none;opacity:.85}
+.nowline{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--today);z-index:4;pointer-events:none;opacity:.9}
 
 .blk{
   position:absolute;top:5px;bottom:5px;border-radius:14px;box-shadow:var(--sh-blk);
   display:flex;align-items:center;justify-content:center;padding:0 var(--s3);overflow:hidden;cursor:pointer;
-  border:0;text-align:left;color:#fff;z-index:2;
+  border:0;text-align:left;color:var(--on-accent);z-index:2;
 }
 .blk.has-chip{padding-right:122px}
 .blk:hover{filter:brightness(1.06)}
-.blk.esg-E{background:linear-gradient(135deg,var(--e),color-mix(in srgb,var(--e) 78%,#0B6B52))}
-.blk.esg-S{background:linear-gradient(135deg,var(--s),color-mix(in srgb,var(--s) 78%,#B75C13))}
-.blk.esg-G{background:linear-gradient(135deg,var(--g),color-mix(in srgb,var(--g) 78%,#4B32AE))}
+/* 블록 위에는 흰 글씨가 얹히므로 악센트를 그대로 쓰지 않고 한 단계 눌러 깐다 */
+.blk.esg-E{background:linear-gradient(135deg,color-mix(in srgb,var(--e) 88%,#001E2B),color-mix(in srgb,var(--e) 58%,#001E2B))}
+.blk.esg-S{background:linear-gradient(135deg,color-mix(in srgb,var(--s) 88%,#001E2B),color-mix(in srgb,var(--s) 58%,#001E2B))}
+.blk.esg-G{background:linear-gradient(135deg,color-mix(in srgb,var(--g) 88%,#001E2B),color-mix(in srgb,var(--g) 58%,#001E2B))}
 .blk .bmid{display:flex;align-items:center;gap:9px;min-width:0;margin-bottom:3px}
-.blk .bic{width:26px;height:26px;border-radius:9px;background:rgba(255,255,255,.24);display:grid;place-items:center;flex:none}
+.blk .bic{width:26px;height:26px;border-radius:var(--r-sm);background:color-mix(in srgb,currentColor 20%,transparent);display:grid;place-items:center;flex:none}
 .blk .bic svg{width:14px;height:14px}
 .blk .bt{display:block;font-weight:600;font-size:12.5px;line-height:var(--lh-s);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.blk .bar{position:absolute;left:11px;right:11px;bottom:6px;height:3px;border-radius:99px;background:rgba(255,255,255,.32);overflow:hidden}
-.blk .bar i{display:block;height:100%;border-radius:99px;background:#fff}
+.blk .bar{position:absolute;left:11px;right:11px;bottom:6px;height:3px;border-radius:99px;background:color-mix(in srgb,currentColor 26%,transparent);overflow:hidden}
+.blk .bar i{display:block;height:100%;border-radius:99px;background:currentColor}
 .blk .bchip{
   position:absolute;right:10px;top:50%;transform:translateY(-50%);
   background:var(--chip);border-radius:99px;padding:2px 9px;font-size:10.5px;font-weight:700;line-height:1.7;
@@ -266,19 +326,19 @@ select.ghost{width:auto;max-width:220px;padding-right:26px;appearance:none;
 .acard .achips{display:flex;gap:6px;flex-wrap:wrap}
 .acard .anote{font-size:12px;color:var(--ink-2);background:var(--panel-2);border-radius:var(--r-sm);padding:var(--s2) 11px;line-height:var(--lh-s)}
 .acard.hot .anote{background:var(--panel)}
-.acard .anote b{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-family:"IBM Plex Mono",monospace;margin-bottom:2px}
+.acard .anote b{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-family:var(--font-mono);margin-bottom:2px}
 .mini{
   display:inline-flex;align-items:center;gap:5px;background:var(--panel-2);border-radius:99px;
   padding:4px 10px;font-size:11px;font-weight:500;color:var(--ink-2);white-space:nowrap;line-height:1.5;
 }
 .acard.hot .mini{background:var(--panel)}
 .mini svg{width:12px;height:12px;opacity:.7}
-.mini b{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink)}
+.mini b{font-family:var(--font-mono);font-weight:600;color:var(--ink)}
 
 /* team cards */
 .tcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:var(--s2)}
 .tcard{border:1px solid var(--line);border-radius:var(--r);padding:var(--s3) var(--s3);text-align:center;background:var(--panel);display:flex;flex-direction:column;align-items:center;gap:var(--s1)}
-.tav{border-radius:99px;display:grid;place-items:center;color:#fff;font-family:"Gothic A1",sans-serif;font-weight:800;line-height:1;flex:none}
+.tav{border-radius:99px;display:grid;place-items:center;color:#fff;font-family:var(--font-ui);font-weight:800;line-height:1;flex:none}
 .tcard .tav{width:44px;height:44px;font-size:14px;margin-bottom:var(--s1)}
 .tcard .tn{font-weight:700;font-size:12.5px;line-height:var(--lh-s);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .tcard .tm{font-size:10.5px;color:var(--muted)}
@@ -291,11 +351,11 @@ select.ghost{width:auto;max-width:220px;padding-right:26px;appearance:none;
 /* site group */
 .sgroup{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:var(--s2)}
 .sgh{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) var(--s4);background:var(--panel-2);flex-wrap:wrap}
-.sgh .nm{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:14.5px;display:flex;align-items:center;gap:var(--s2)}
+.sgh .nm{font-family:var(--font-ui);font-weight:800;font-size:14.5px;display:flex;align-items:center;gap:var(--s2)}
 .sgh .nm .tav{width:26px;height:26px;font-size:10px}
 .sgh .mt{font-size:11.5px;color:var(--muted)}
 .sgh .rr{margin-left:auto;display:flex;align-items:center;gap:var(--s3);min-width:190px;flex:1;max-width:320px}
-.sgh .rr .pv{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:13.5px;flex:none}
+.sgh .rr .pv{font-family:var(--font-mono);font-weight:600;font-size:13.5px;flex:none}
 .sgb{padding:var(--s3) var(--s4);display:flex;flex-direction:column;gap:var(--s2)}
 .trow2{display:grid;grid-template-columns:minmax(0,1fr) 128px minmax(120px,180px) 92px;gap:var(--s3);align-items:center}
 .trow2 .nm{display:flex;align-items:center;gap:9px;min-width:0}
@@ -303,31 +363,27 @@ select.ghost{width:auto;max-width:220px;padding-right:26px;appearance:none;
 .trow2 .t1{font-weight:600;font-size:13px;line-height:var(--lh-s)}
 .trow2 .t2{font-size:11px;color:var(--muted);line-height:var(--lh-s)}
 .trow2 .pl{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:var(--s1)}
-.trow2 .pl b{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink)}
+.trow2 .pl b{font-family:var(--font-mono);font-size:12.5px;color:var(--ink)}
 .pills{display:flex;gap:5px;flex-wrap:wrap}
 
 /* summary orb */
 .orb-panel{display:flex;flex-direction:column;align-items:center;text-align:center;padding:var(--s6) 22px;gap:0}
+/* 평평한 강조 원 — MongoDB 의 featured 타일(민트 면 + 초록 테두리)을 원형으로 옮겼다.
+   광택 그라디언트를 쓰면 면의 밝기가 자리마다 달라 글씨 대비를 보장할 수 없다. */
 .orb{
   width:150px;height:150px;border-radius:99px;position:relative;margin:var(--s1) 0 var(--s4);flex:none;
-  background:
-    radial-gradient(circle at 32% 26%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.35) 16%, transparent 42%),
-    radial-gradient(circle at 68% 78%, color-mix(in srgb,var(--today) 55%,#fff) 0%, transparent 55%),
-    linear-gradient(150deg, color-mix(in srgb,var(--today) 32%,#fff), color-mix(in srgb,var(--today) 88%,#12305F));
-  box-shadow:0 18px 34px -16px color-mix(in srgb,var(--today) 60%,transparent),
-             0 2px 5px rgba(20,26,34,.14),
-             inset 0 -10px 22px -8px rgba(10,26,60,.45);
+  background:var(--today-soft);border:2px solid var(--today-fill);
 }
-.orb .on{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-shadow:0 1px 8px rgba(12,30,62,.5)}
-.orb .on .v{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:40px;line-height:1}
-.orb .on .k{font-size:10.5px;letter-spacing:.1em;font-family:"IBM Plex Mono",monospace;opacity:.92;margin-top:2px;line-height:1.4}
+.orb .on{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink)}
+.orb .on .v{font-family:var(--font-ui);font-weight:800;font-size:40px;line-height:1}
+.orb .on .k{font-size:10.5px;letter-spacing:.1em;font-family:var(--font-mono);color:var(--ink-2);margin-top:2px;line-height:1.4}
 .orb-panel h3{font-size:19px;font-weight:800;margin-bottom:var(--s1)}
 .orb-panel .od{font-size:12.5px;color:var(--muted);max-width:34ch;margin-bottom:var(--s4);line-height:var(--lh-s)}
 .orb-panel .od b{color:var(--ink)}
 .ostats{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:var(--s3)}
 .ostat{background:var(--panel-2);border-radius:var(--r);padding:9px 13px;min-width:80px}
 .ostat .k{font-size:10px;color:var(--muted);white-space:nowrap;line-height:1.4}
-.ostat .v{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:19px;line-height:1.2;margin-top:1px}
+.ostat .v{font-family:var(--font-ui);font-weight:800;font-size:19px;line-height:1.2;margin-top:1px}
 .ostat .v small{font-size:11px;font-weight:600;color:var(--muted);margin-left:1px}
 .ostat.risk .v{color:var(--risk)}
 .oacts{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
@@ -343,11 +399,11 @@ select.ghost{width:auto;max-width:220px;padding-right:26px;appearance:none;
 .lc-closed{opacity:.5}
 .thist{display:flex;flex-direction:column;gap:var(--s2);font-size:12px}
 .thist .th1{display:flex;gap:var(--s2);flex-wrap:wrap;align-items:baseline}
-.thist .th1 .w{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:11px}
+.thist .th1 .w{font-family:var(--font-mono);color:var(--muted);font-size:11px}
 .thist .ch{color:var(--ink-2);line-height:var(--lh-s)}
 .thist .ch b{font-weight:600}
 .thist .ch s{color:var(--muted);text-decoration-thickness:1px}
-.ytline{font-size:11.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;line-height:var(--lh-s);margin-top:var(--s1)}
+.ytline{font-size:11.5px;color:var(--muted);font-family:var(--font-mono);line-height:var(--lh-s);margin-top:var(--s1)}
 .ytline b{color:var(--ink);font-weight:600}
 .miss-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--s2);align-items:center;padding:var(--s2) 0;border-bottom:1px solid var(--line-2);font-size:12.5px}
 .miss-row:last-child{border-bottom:0}
@@ -373,8 +429,8 @@ select.ghost{width:auto;max-width:220px;padding-right:26px;appearance:none;
 .item .meta .sep{opacity:.4}
 .item .prog{display:flex;flex-direction:column;gap:var(--s1)}
 .item .prog .pl{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
-.item .prog .pl b{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink)}
-.item .upd{font-size:11.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.item .prog .pl b{font-family:var(--font-mono);font-size:12.5px;color:var(--ink)}
+.item .upd{font-size:11.5px;color:var(--muted);font-family:var(--font-mono)}
 .item .upd em{font-style:normal;color:var(--risk);font-weight:600}
 .empty{border:1px dashed var(--line);border-radius:var(--r-lg);padding:44px 24px;text-align:center;color:var(--muted);background:var(--panel-2)}
 .empty h3{font-size:17px;color:var(--ink);margin-bottom:var(--s2)}
@@ -383,39 +439,39 @@ select.ghost{width:auto;max-width:220px;padding-right:26px;appearance:none;
 /* ================= detail ================= */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:var(--s2);margin-bottom:var(--s4)}
 .kpi-grid .c{background:var(--panel-2);border-radius:var(--r);padding:var(--s3) var(--s4)}
-.kpi-grid .c .k{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-family:"IBM Plex Mono",monospace;line-height:1.5}
-.kpi-grid .c .v{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:19px;line-height:1.25;margin-top:2px}
+.kpi-grid .c .k{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-family:var(--font-mono);line-height:1.5}
+.kpi-grid .c .v{font-family:var(--font-ui);font-weight:800;font-size:19px;line-height:1.25;margin-top:2px}
 .kpi-grid .c .v small{font-size:11px;font-weight:500;color:var(--muted);margin-left:2px}
 .form-doc{border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:var(--panel)}
 .drow{display:grid;grid-template-columns:136px minmax(0,1fr);border-bottom:1px solid var(--line)}
 .drow:last-child{border-bottom:0}
 .dlabel{
-  background:var(--panel-2);color:var(--ink);padding:var(--s3);font-family:"Gothic A1",sans-serif;
+  background:var(--panel-2);color:var(--ink);padding:var(--s3);font-family:var(--font-ui);
   font-weight:700;font-size:12.5px;text-align:center;display:flex;flex-direction:column;justify-content:center;
   gap:2px;border-right:1px solid var(--line);line-height:var(--lh-h);
 }
-.dlabel small{font-weight:500;font-size:10.5px;color:var(--muted);font-family:"IBM Plex Sans KR",sans-serif;line-height:var(--lh-s)}
+.dlabel small{font-weight:500;font-size:10.5px;color:var(--muted);font-family:var(--font-ui);line-height:var(--lh-s)}
 .dbody{padding:var(--s4) var(--s5);min-width:0}
 .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 .split > div{padding:var(--s4) var(--s5);min-width:0}
 .split > div:first-child{border-right:1px solid var(--line)}
-.blk-h{font-family:"Gothic A1",sans-serif;font-weight:700;font-size:12.5px;margin-bottom:var(--s3);display:flex;align-items:center;gap:var(--s2);line-height:var(--lh-h)}
-.blk-h .r{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:11px;color:var(--muted)}
+.blk-h{font-family:var(--font-ui);font-weight:700;font-size:12.5px;margin-bottom:var(--s3);display:flex;align-items:center;gap:var(--s2);line-height:var(--lh-h)}
+.blk-h .r{margin-left:auto;font-family:var(--font-mono);font-weight:500;font-size:11px;color:var(--muted)}
 .plans{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:var(--s2)}
 .plans li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--s2);align-items:start}
 .ptext{font-size:13px;line-height:var(--lh-s)}
 .plans li[data-st="done"] .ptext{color:var(--muted)}
-.pmeta{display:block;font-size:10.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;margin-top:1px;line-height:1.45}
+.pmeta{display:block;font-size:10.5px;color:var(--muted);font-family:var(--font-mono);margin-top:1px;line-height:1.45}
 .ytrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:var(--s2)}
 .ytcell{display:flex;flex-direction:column;gap:3px}
-.ytcell .yy{font-size:10.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;text-align:center}
+.ytcell .yy{font-size:10.5px;color:var(--muted);font-family:var(--font-mono);text-align:center}
 .ytcell input{text-align:center;padding:8px 6px}
 .ytcell input[readonly]{background:var(--panel-2);color:var(--muted)}
 .ytcell input.bad{border-color:var(--risk);box-shadow:0 0 0 3px var(--risk-soft)}
 .ytwarn{font-size:11.5px;color:var(--risk);font-weight:500;line-height:var(--lh-s)}
 .dlrow{display:grid;grid-template-columns:84px minmax(0,1fr) auto auto;gap:var(--s2);align-items:center;padding:var(--s2) 0;border-bottom:1px solid var(--line-2)}
 .dlrow:last-of-type{border-bottom:0}
-.dlrow .qp{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:13px}
+.dlrow .qp{font-family:var(--font-mono);font-weight:600;font-size:13px}
 .dlrow .st{font-size:11px;white-space:nowrap}
 .dlrow input[type=date]{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:13px;width:100%}
 .pchip{
@@ -432,8 +488,8 @@ button.pchip:hover{border-color:var(--ink)}
 .qlog .q.mo{border-left-style:dotted}
 .qlog .q.mo::before{background:var(--panel);border-color:var(--line)}
 .qlog .qh2{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:var(--s1)}
-.qlog .qp{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:12.5px}
-.qlog .qv{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:15px}
+.qlog .qp{font-family:var(--font-mono);font-weight:500;font-size:12.5px}
+.qlog .qv{font-family:var(--font-ui);font-weight:800;font-size:15px}
 .qlog .qa{font-size:11px;color:var(--muted);margin-left:auto}
 .qlog .qtext{font-size:12.5px;white-space:pre-wrap;color:var(--ink-2);line-height:var(--lh-s)}
 
@@ -467,24 +523,24 @@ dialog::backdrop{background:rgba(24,30,38,.5);backdrop-filter:blur(4px)}
 .row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:var(--s3)}
 .row3{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:var(--s3)}
 .fieldset{border:1px solid var(--line);border-radius:var(--r);padding:var(--s4);display:flex;flex-direction:column;gap:var(--s3)}
-.fieldset > legend{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-family:"IBM Plex Mono",monospace;padding:0 7px;font-weight:600}
+.fieldset > legend{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-family:var(--font-mono);padding:0 7px;font-weight:600}
 .calcbox{display:flex;align-items:center;gap:var(--s4);flex-wrap:wrap;background:var(--today-soft);border-radius:var(--r);padding:var(--s3) var(--s4)}
-.calcbox .n{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:27px;color:var(--today);line-height:1}
+.calcbox .n{font-family:var(--font-ui);font-weight:800;font-size:27px;color:var(--today);line-height:1}
 .calcbox .d{font-size:12px;color:var(--ink-2);line-height:var(--lh-s)}
 .err{color:var(--risk);font-size:12.5px;font-weight:500}
 .banner{border-radius:var(--r);padding:11px var(--s4);font-size:12.5px;margin-bottom:var(--s3);background:var(--warn-soft);color:var(--warn);border-left:3px solid var(--warn);line-height:var(--lh-s)}
 .banner.ro{background:var(--done-soft);color:var(--done);border-left-color:var(--done)}
 .mrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:var(--s2);align-items:center;padding:var(--s2) 0;border-bottom:1px solid var(--line-2)}
 .mrow:last-of-type{border-bottom:0}
-.mrow .tc{font-size:11.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+.mrow .tc{font-size:11.5px;color:var(--muted);font-family:var(--font-mono);white-space:nowrap}
 .simwarn{background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:9px var(--s3);font-size:12.5px;line-height:var(--lh-s)}
-.mhead{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:13px;margin:var(--s3) 0 var(--s1);display:flex;align-items:center;gap:var(--s2)}
+.mhead{font-family:var(--font-ui);font-weight:800;font-size:13px;margin:var(--s3) 0 var(--s1);display:flex;align-items:center;gap:var(--s2)}
 .mhead:first-child{margin-top:0}
 .mhead .tav{width:22px;height:22px;font-size:9px}
 .btn{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--panel);font-weight:500;font-size:13px;white-space:nowrap}
 .btn:hover{background:var(--panel-2)}
-.btn-primary{background:var(--ink);border-color:var(--ink);color:var(--panel);font-weight:600}
-.btn-primary:hover{filter:brightness(1.15);background:var(--ink)}
+.btn-primary{background:var(--today-fill);border-color:var(--today-fill);color:var(--on-today);font-weight:600}
+.btn-primary:hover{filter:brightness(1.06);background:var(--today-fill)}
 .btn-danger{color:var(--risk)}
 .btn-danger:hover{background:var(--risk-soft);border-color:var(--risk)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
@@ -512,7 +568,7 @@ dialog::backdrop{background:rgba(24,30,38,.5);backdrop-filter:blur(4px)}
 .pr-h{display:flex;align-items:flex-end;gap:12mm;border-bottom:2px solid #000;padding-bottom:3mm;margin-bottom:5mm}
 .pr-h h1{font-size:16pt;font-weight:800;margin:0}
 .pr-sub{font-size:8.5pt;color:#444;margin-top:1mm}
-.pr-big{margin-left:auto;text-align:right;font-family:"Gothic A1",sans-serif;font-weight:800;font-size:24pt;line-height:1}
+.pr-big{margin-left:auto;text-align:right;font-family:var(--font-ui);font-weight:800;font-size:24pt;line-height:1}
 .pr-big span{display:block;font-size:8pt;font-weight:500;color:#444}
 .pr-sec{font-size:10pt;font-weight:800;margin:5mm 0 2mm;padding-bottom:1mm;border-bottom:1px solid #000}
 .pr-t{width:100%;border-collapse:collapse;font-size:8.5pt}
@@ -530,9 +586,17 @@ dialog::backdrop{background:rgba(24,30,38,.5);backdrop-filter:blur(4px)}
 @media (max-width:900px){
   body{padding:10px}
   .app{grid-template-columns:1fr;padding:10px;border-radius:22px}
-  .rail{flex-direction:row;justify-content:flex-start;padding:10px var(--s3);gap:var(--s1)}
-  .logo{margin-bottom:0}
-  .rail-nav{flex-direction:row;flex:1}
+  .rail{position:static;max-height:none;overflow:visible;padding:var(--s3);gap:var(--s2)}
+  .brand{border-bottom:0;padding-bottom:0}
+  .navsec{display:none}
+  .rail-nav{flex-direction:row;flex-wrap:wrap;gap:6px}
+  .nav1{width:auto}
+  .nav2wrap{width:100%;margin:0;padding:0;border-left:0;flex-direction:row;flex-wrap:wrap}
+  .nav2.lv3{margin-left:0}
+  .rail-me{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;padding-top:var(--s2)}
+  .rail-me .ghost{margin-top:0}
+  .topbar{top:10px}
+  .topbar::before{height:10px}
   .ph h2{font-size:20px}
   .item{grid-template-columns:minmax(0,1fr);gap:var(--s2)}
   .trow2{grid-template-columns:minmax(0,1fr);gap:var(--s2)}
@@ -543,7 +607,7 @@ dialog::backdrop{background:rgba(24,30,38,.5);backdrop-filter:blur(4px)}
 }
 /* ================= 담당팀 전략 (D-039~D-042) ================= */
 .mt-head{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s4)}
-.mt-head .nm{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:19px;line-height:1.25}
+.mt-head .nm{font-family:var(--font-ui);font-weight:800;font-size:19px;line-height:1.25}
 .mt-head .st{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5}
 .mt-head .sp{flex:1 1 auto}
 
@@ -580,28 +644,236 @@ dialog::backdrop{background:rgba(24,30,38,.5);backdrop-filter:blur(4px)}
 .mt-known b{font-weight:600;font-size:13.5px}
 .mt-known .s{font-size:12px;color:var(--muted)}
 .mt-known .ghost{margin-left:auto}
+
+/* ================= 그룹사 전체 · 계열사 (D-043~D-046) ================= */
+.sbox .c{font-size:10.5px;color:var(--muted);line-height:1.45}
+.gsplit{display:grid;grid-template-columns:repeat(auto-fit,minmax(304px,1fr));gap:var(--s3);align-items:start;margin-bottom:var(--s3)}
+.barlist{display:flex;flex-direction:column;gap:11px}
+.barrow{display:grid;grid-template-columns:minmax(66px,124px) minmax(0,1fr) 44px;gap:var(--s3);align-items:center;font-size:12.5px}
+.barrow .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink-2)}
+.barrow .pv{text-align:right;font-family:var(--font-mono);font-weight:600}
+.donut{display:flex;align-items:center;gap:var(--s5);flex-wrap:wrap}
+.donut svg{width:136px;height:136px;flex:none}
+.donut .mid{font-family:var(--font-ui);font-weight:800;font-size:22px;text-anchor:middle;fill:var(--ink)}
+.donut .midk{font-size:9px;fill:var(--muted);text-anchor:middle;letter-spacing:.06em}
+.legend{display:flex;flex-direction:column;gap:8px;min-width:168px;flex:1}
+.legend .li{display:grid;grid-template-columns:11px minmax(0,1fr) 40px;gap:9px;align-items:center;font-size:12px}
+.legend .sw{width:11px;height:11px;border-radius:3px}
+.legend .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink-2)}
+.legend .pv{text-align:right;font-family:var(--font-mono);font-weight:600}
+
+.cotable{display:flex;flex-direction:column}
+.corow{display:grid;grid-template-columns:minmax(0,1fr) 54px 54px minmax(110px,200px) 50px;gap:var(--s3);
+  align-items:center;padding:11px 0;border-bottom:1px solid var(--line-2);font-size:12.5px;text-align:left}
+.corow:last-child{border-bottom:0}
+.corow.h{font-size:10.5px;color:var(--muted);letter-spacing:.03em;padding:0 0 var(--s2);border-bottom:1px solid var(--line)}
+.corow .n{text-align:right;font-family:var(--font-mono)}
+.corow .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.corow .nm small{display:block;font-weight:500;font-size:10.5px;color:var(--muted);margin-top:2px}
+button.corow{width:100%;background:none;border:0;border-bottom:1px solid var(--line-2);cursor:pointer;color:inherit;font:inherit}
+button.corow:hover{background:var(--panel-2)}
+button.corow:hover .nm{color:var(--today)}
+.drillback{margin-bottom:var(--s3)}
+.orgsite{margin-bottom:var(--s3)}
+.orgsite:last-child{margin-bottom:0}
+.orgsite-h{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;padding:0 0 var(--s1);
+  font-family:var(--font-ui);font-weight:700;font-size:12.5px;color:var(--ink-2)}
+.orgsite-h span{font-family:var(--font-ui);font-weight:500;font-size:11px;color:var(--muted)}
+.orgsite-h .pv{margin-left:auto;font-family:var(--font-mono);font-weight:600;font-size:12.5px;color:var(--ink)}
+.orgsite .corow{padding:9px 0}
+
+/* 계열사 아코디언 — 눌러서 팀을 폈다 접는다 */
+button.sgh{width:100%;border:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
+button.sgh:hover{background:var(--line-2)}
+.sgh .chev{width:15px;height:15px;flex:none;color:var(--muted);transition:transform .16s ease}
+button.sgh[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.sgh .nm{display:flex;align-items:center;gap:8px}
+
+/* 팀 고르기 1단계 — 계열사 카드 */
+.mt-cos{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:var(--s2)}
+.mt-cos button{border:1px solid var(--line);background:var(--panel);border-radius:var(--r);padding:15px 16px;
+  cursor:pointer;text-align:left;font-family:inherit;font-weight:700;font-size:14px;color:var(--ink);line-height:1.4}
+.mt-cos button:hover{border-color:var(--today);background:var(--today-soft);color:var(--today)}
+.mt-cos button .c{display:block;font-weight:500;font-size:11px;color:var(--muted);margin-top:4px}
+.mt-cos button:hover .c{color:var(--today)}
+
+/* ================================================================
+   gpt-taste 개편 (D-050) — seed 1085
+   Editorial Split 히어로 · Gapless Bento · 최근 입력 캐러셀
+   GSAP: 스크럽 텍스트 · 좌측 핀 고정
+   ================================================================ */
+.app{overflow-x:hidden}
+
+/* 떠 있는 유리 알약 내비 */
+.topbar{
+  position:sticky;top:var(--s3);z-index:30;
+  background:color-mix(in srgb,var(--panel) 84%,transparent);
+  backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid var(--line);border-radius:99px;
+  padding:var(--s2) var(--s3);
+  box-shadow:0 8px 32px -14px rgba(0,30,43,.22);
+}
+
+/* ---------------- 히어로 : Editorial Split ---------------- */
+.hero{
+  display:grid;grid-template-columns:minmax(0,8fr) minmax(0,4fr);
+  gap:48px;align-items:center;padding:88px 0 104px;position:relative;
+}
+.hero::before{
+  content:"";position:absolute;inset:-20% -40% auto -30%;height:120%;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(38% 52% at 18% 30%, color-mix(in srgb,var(--today-fill) 22%,transparent), transparent 70%),
+    radial-gradient(34% 44% at 76% 12%, color-mix(in srgb,var(--cat-4) 16%,transparent), transparent 72%);
+  filter:blur(28px);
+}
+.hero h1{
+  font-size:clamp(1.9rem,3.2vw,3.15rem);line-height:1.08;letter-spacing:-1.4px;
+  font-weight:600;margin:0 0 24px;max-width:none;
+}
+.hero .lede{
+  font-size:clamp(1rem,1.35vw,1.15rem);line-height:1.55;color:var(--ink-2);word-break:keep-all;
+  max-width:52ch;margin-bottom:36px;
+}
+.hero .lede span{opacity:.18;transition:opacity .2s linear}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-cta .btn{padding:14px 28px;font-size:15px}
+/* 제목 안에 들어가는 알약 이미지 */
+.inline-pill{
+  display:inline-block;width:1.9em;height:.92em;border-radius:99px;vertical-align:-.06em;
+  margin:0 .12em;background-size:cover;background-position:center;
+  background-image:linear-gradient(120deg,var(--today-fill),var(--cat-4));
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent);
+}
+/* 오른쪽 아트 플레이트 */
+.hero-plate{
+  position:relative;aspect-ratio:3/4;border-radius:var(--r-xl);overflow:hidden;
+  background:
+    radial-gradient(70% 60% at 30% 20%, color-mix(in srgb,var(--today-fill) 34%,transparent), transparent 70%),
+    linear-gradient(150deg, var(--today), #001E2B 78%);
+  box-shadow:0 24px 60px -24px rgba(0,30,43,.55);
+}
+.hero-plate img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:grayscale(1) contrast(1.15);mix-blend-mode:luminosity;opacity:.55;
+  transform:scale(1.04);transition:transform 1.2s cubic-bezier(.2,.7,.2,1);
+}
+.hero-plate:hover img{transform:scale(1.1)}
+.hero-plate .veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,30,43,.55))}
+
+/* ---------------- Gapless Bento ---------------- */
+.bento{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-auto-flow:dense;gap:var(--s3);align-items:stretch;
+}
+.bento > *{min-width:0}
+.bx{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:var(--s5) 22px;display:flex;flex-direction:column;gap:var(--s2);
+  transition:transform .5s cubic-bezier(.2,.7,.2,1), border-color .3s ease;
+}
+.bx:hover{transform:translateY(-3px);border-color:var(--muted)}
+.bx-2{grid-column:span 2;grid-row:span 2}
+.bx-4{grid-column:span 4}
+.bx .bk{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.bx .bv{font-family:var(--font-ui);font-weight:600;font-size:clamp(2rem,3.4vw,2.9rem);line-height:1;letter-spacing:-1.5px}
+.bx .bv small{font-size:.38em;font-weight:500;color:var(--muted);margin-left:3px;letter-spacing:0}
+.bx .bc{font-size:12px;color:var(--muted);line-height:1.5;margin-top:auto}
+.bx.accent{background:var(--today-soft);border-color:var(--today-fill)}
+.bx.tone-risk{box-shadow:inset 3px 0 0 var(--risk)}
+.bx.tone-warn{box-shadow:inset 3px 0 0 var(--warn)}
+.bx.tone-ok{box-shadow:inset 3px 0 0 var(--ok)}
+.bx-cta{flex-direction:row;align-items:center;gap:var(--s4);flex-wrap:wrap}
+.bx-cta .bv{font-size:clamp(1.5rem,2.2vw,2rem)}
+
+/* ---------------- 섹션 리듬 ---------------- */
+.chapter{padding:80px 0}
+.chapter-h{margin-bottom:40px;max-width:44ch}
+.chapter-h h2{font-size:clamp(1.8rem,3vw,2.75rem);line-height:1.12;letter-spacing:-1.2px;font-weight:600}
+.chapter-h p{margin-top:12px;font-size:15px;color:var(--ink-2);line-height:1.6}
+
+/* 좌측 고정 + 우측 스크롤 (GSAP pin) */
+.pinsplit{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:56px;align-items:start}
+.pinsplit-l{align-self:start}
+
+/* ---------------- 최근 입력 캐러셀 ---------------- */
+.fcar{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:center}
+.fcar-faces{display:flex;flex-direction:column;gap:-10px}
+.fcar-faces .tav{width:46px;height:46px;font-size:13px;border:3px solid var(--panel);margin-bottom:-12px}
+.fcar-faces .tav:last-child{margin-bottom:0}
+.fcar-q{font-size:clamp(1.05rem,1.8vw,1.4rem);line-height:1.5;letter-spacing:-.4px;color:var(--ink);font-weight:400}
+.fcar-m{margin-top:16px;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fcar-nav{display:flex;gap:8px;margin-top:20px}
+.fcar-nav button{width:38px;height:38px;border-radius:99px;border:1px solid var(--line);background:var(--panel);
+  cursor:pointer;color:var(--ink-2);display:grid;place-items:center}
+.fcar-nav button:hover{background:var(--panel-2);color:var(--ink);border-color:var(--muted)}
+
+/* ---------------- 마감 CTA 밴드 + 푸터 ---------------- */
+.ctaband{
+  background:#001E2B;color:#fff;border-radius:var(--r-xl);padding:72px 56px;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.ctaband::after{
+  content:"";position:absolute;right:-12%;top:-40%;width:52%;height:180%;pointer-events:none;
+  background:radial-gradient(closest-side, color-mix(in srgb,var(--today-fill) 30%,transparent), transparent);
+  filter:blur(10px);
+}
+.ctaband h2{font-size:clamp(1.7rem,3vw,2.6rem);line-height:1.14;letter-spacing:-1.2px;font-weight:600;color:#fff}
+.ctaband p{margin-top:14px;color:#A8B3BC;font-size:15px;line-height:1.6;max-width:46ch}
+.ctaband .r{position:relative;z-index:1;display:flex;gap:10px;flex-wrap:wrap}
+.foot{display:flex;gap:var(--s4);flex-wrap:wrap;align-items:center;padding:40px 4px 8px;
+  border-top:1px solid var(--line);margin-top:56px;font-size:12.5px;color:var(--muted)}
+.foot .sp{flex:1}
+
+/* ---------------- GSAP 진입 상태 ---------------- */
+.reveal{opacity:0;transform:translateY(26px)}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none}
+  .hero .lede span{opacity:1}
+  .hero-plate img,.bx{transition:none}
+}
+
+@media (max-width:1020px){
+  .hero{grid-template-columns:minmax(0,1fr);gap:40px;padding:56px 0 72px}
+  .hero-plate{aspect-ratio:16/10}
+  .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bx-2,.bx-4{grid-column:span 2}
+  .pinsplit{grid-template-columns:minmax(0,1fr);gap:32px}
+  .ctaband{grid-template-columns:minmax(0,1fr);padding:48px 32px}
+  .fcar{grid-template-columns:minmax(0,1fr);gap:20px}
+  .fcar-faces{flex-direction:row;gap:0}
+  .fcar-faces .tav{margin-bottom:0;margin-right:-12px}
+}
+@media (max-width:560px){
+  .bento{grid-template-columns:minmax(0,1fr)}
+  .bx-2,.bx-4{grid-column:span 1}
+  .hero h1{letter-spacing:-1.2px}
+}
+@media (max-width:760px){
+  .corow{grid-template-columns:minmax(0,1fr) 48px 50px;row-gap:var(--s1)}
+  .corow > :nth-child(4),.corow > :nth-child(5){grid-column:1 / -1}
+  .corow.h > :nth-child(4),.corow.h > :nth-child(5){display:none}
+}
 </style>
 
 <div class="app">
   <aside class="rail">
-    <div class="logo"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M3 16V9M8 16V4M13 16v-5M18 16v-9"/></svg></div>
-    <div class="rail-nav" id="rail">
-      <button class="ricon" data-view="dash" aria-current="page" title="대시보드" aria-label="대시보드"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8.4 10 3l7 5.4V16a1 1 0 0 1-1 1h-4v-5H8v5H4a1 1 0 0 1-1-1V8.4Z"/></svg></button>
-      <button class="ricon" data-view="myteam" title="담당팀 전략" aria-label="담당팀 전략"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7.4" cy="6.8" r="2.7"/><path d="M2.8 16.4c0-2.8 2-4.7 4.6-4.7s4.6 1.9 4.6 4.7"/><circle cx="14.5" cy="7.8" r="2"/><path d="M13.9 11.9c2.1.2 3.6 1.9 3.6 4.5"/></svg></button>
-      <button class="ricon" data-view="list" title="과제 목록" aria-label="과제 목록"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 5h10M7 10h10M7 15h6M3.5 5h.01M3.5 10h.01M3.5 15h.01"/></svg></button>
-      <button class="ricon" data-view="teams" title="사업장·팀 현황" aria-label="사업장·팀 현황"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 17V7.5L9 4l6 3.5V17"/><path d="M7.6 17v-4.4h3.8V17"/><path d="M1.6 17h16.8"/></svg></button>
-      <button class="ricon" data-view="new" id="railNew" hidden title="전략 등록" aria-label="전략 등록"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></button>
+    <div class="brand">
+      <div class="logo"><svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M3 16V9M8 16V4M13 16v-5M18 16v-9"/></svg></div>
+      <div class="bt"><b>ESG 중장기전략</b><span>진척관리</span></div>
     </div>
-    <button class="ricon" id="setMe" hidden title="작성자 설정" aria-label="작성자 설정"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="2.4"/><path d="M10 2.6v2M10 15.4v2M2.6 10h2M15.4 10h2M4.8 4.8l1.4 1.4M13.8 13.8l1.4 1.4M15.2 4.8l-1.4 1.4M6.2 13.8l-1.4 1.4"/></svg></button>
+    <nav class="rail-nav" id="rail" aria-label="주 메뉴"></nav>
+    <div class="rail-me" id="railMe"></div>
   </aside>
 
   <div class="stage">
     <div class="topbar">
-      <div class="subtabs" id="subtabs"></div>
+      <nav class="crumbs" id="crumbs" aria-label="현재 위치"></nav>
       <div class="spacer"></div>
-      <button class="iconbtn" id="topSearch" title="과제 검색" aria-label="과제 검색"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.8" cy="8.8" r="5.4"/><path d="M12.9 12.9 17 17"/></svg></button>
-      <button class="pillbtn dark" id="topNew" hidden><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M10 4.5v11M4.5 10h11"/></svg>전략 등록</button>
-      <button class="pillbtn" id="topCsv"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 3v9M6.5 8.5 10 12l3.5-3.5M4 15.5h12"/></svg>CSV</button>
+      <button type="button" class="iconbtn" id="topSearch" title="과제 검색" aria-label="과제 검색"><svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8.8" cy="8.8" r="5.4"/><path d="M12.9 12.9 17 17"/></svg></button>
+      <button type="button" class="iconbtn" id="setMe" hidden title="작성자 설정" aria-label="작성자 설정"><svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="2.4"/><path d="M10 2.6v2M10 15.4v2M2.6 10h2M15.4 10h2M4.8 4.8l1.4 1.4M13.8 13.8l1.4 1.4M15.2 4.8l-1.4 1.4M6.2 13.8l-1.4 1.4"/></svg></button>
+      <button type="button" class="pillbtn dark" id="topNew" hidden><svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M10 4.5v11M4.5 10h11"/></svg>전략 등록</button>
+      <button type="button" class="pillbtn" id="topCsv"><svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 3v9M6.5 8.5 10 12l3.5-3.5M4 15.5h12"/></svg>CSV</button>
     </div>
     <div id="main"><div class="panel"><div class="skeleton">불러오는 중…</div></div></div>
   </div>
@@ -609,6 +881,10 @@ dialog::backdrop{background:rgba(24,30,38,.5);backdrop-filter:blur(4px)}
 
 <dialog id="dlg"><form method="dialog" id="dlgForm"></form></dialog>
 <div id="printRoot"></div>
+
+<!-- 모션 (D-050). 배포 빌드가 vendor/ 경로로 바꿔 심는다 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <script>
 /* ============================ helpers ============================ */
@@ -618,6 +894,20 @@ const nl2 = s => esc(s).replace(/\n/g, "<br>");
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 const ESG = { E: "환경 (Environmental)", S: "사회 (Social)", G: "지배구조 (Governance)" };
 const ESG_SHORT = { E: "환경", S: "사회", G: "지배구조" };
+/* 대분류 (D-046) — 팀을 가로지르는 주제 축. ESG 영역(E·S·G)과 별개로 함께 단다.
+   목록은 중대성 평가로 바뀔 수 있으므로 여기 한 곳에서만 고친다. */
+/* 색은 MongoDB 카테고리 악센트 5종. 분류 표시 밖에서는 쓰지 않는다 */
+const CATS = [
+  ["E-CLM", "환경·기후", "var(--cat-1)"],
+  ["S-HRT", "인권·노동", "var(--cat-2)"],
+  ["S-SFT", "안전보건", "var(--cat-3)"],
+  ["G-SCM", "공급망", "var(--cat-4)"],
+  ["G-DIS", "공시·규제 대응", "var(--cat-5)"],
+];
+const CAT_NAME = Object.fromEntries(CATS.map(c => [c[0], c[1]]));
+const CAT_COLOR = Object.fromEntries(CATS.map(c => [c[0], c[2]]));
+const catOf = s => (s && CAT_NAME[s.category]) ? s.category : "";
+const catLabel = s => catOf(s) ? CAT_NAME[catOf(s)] : "분류 미지정";
 const ST = { todo: "미착수", doing: "진행중", done: "완료" };
 const ST_ORDER = ["todo", "doing", "done"];
 const ST_WEIGHT = { todo: 0, doing: 0.5, done: 1 };
@@ -629,17 +919,17 @@ const isClosed = x => x && (x.lifecycle === "done" || x.lifecycle === "stopped")
 const isOpen = x => !isClosed(x);
 const carryCount = x => (x && Array.isArray(x.carries)) ? x.carries.length : 0;
 const ESG_ICON = {
-  E: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 17c0-5 2.6-8.4 6.6-9.4C16.6 12.4 14 16 10 17Z"/><path d="M10 17C6 16 3.4 12.4 3.4 7.6 7.4 8.6 10 12 10 17Z"/></svg>',
-  S: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="6.4" r="2.6"/><path d="M4.4 16.4c0-3.1 2.5-5.2 5.6-5.2s5.6 2.1 5.6 5.2"/></svg>',
-  G: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 3l6.4 3.1v4.3c0 3.4-2.6 6.2-6.4 7.2-3.8-1-6.4-3.8-6.4-7.2V6.1L10 3Z"/><path d="M7.6 10.2l1.8 1.8 3.2-3.4"/></svg>'
+  E: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 17c0-5 2.6-8.4 6.6-9.4C16.6 12.4 14 16 10 17Z"/><path d="M10 17C6 16 3.4 12.4 3.4 7.6 7.4 8.6 10 12 10 17Z"/></svg>',
+  S: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="6.4" r="2.6"/><path d="M4.4 16.4c0-3.1 2.5-5.2 5.6-5.2s5.6 2.1 5.6 5.2"/></svg>',
+  G: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 3l6.4 3.1v4.3c0 3.4-2.6 6.2-6.4 7.2-3.8-1-6.4-3.8-6.4-7.2V6.1L10 3Z"/><path d="M7.6 10.2l1.8 1.8 3.2-3.4"/></svg>'
 };
 const ICO = {
-  road: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 5.5h9M3 10h14M3 14.5h6"/><rect x="13.4" y="3.6" width="3.6" height="3.6" rx="1"/><rect x="7.4" y="12.6" width="3.6" height="3.6" rx="1"/></svg>',
-  all: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.6" y="2.6" width="6.2" height="7.1" rx="1.4"/><rect x="11.2" y="2.6" width="6.2" height="4.1" rx="1.4"/><rect x="11.2" y="9.1" width="6.2" height="8.3" rx="1.4"/><rect x="2.6" y="12.1" width="6.2" height="5.3" rx="1.4"/></svg>',
-  attn: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 3.4 17.6 16.6H2.4L10 3.4Z"/><path d="M10 8v3.4M10 13.6h.01"/></svg>',
-  team: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="7.2" cy="7" r="2.7"/><path d="M2.6 16.4c0-2.8 2-4.6 4.6-4.6s4.6 1.8 4.6 4.6"/><circle cx="14.4" cy="7.9" r="2.1"/></svg>',
-  cal: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4.6" width="14" height="12.4" rx="2.2"/><path d="M3 8.4h14M7 3v3M13 3v3"/></svg>',
-  site: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17V7.5L9 4l6 3.5V17"/><path d="M7.6 17v-4.4h3.8V17"/><path d="M1.6 17h16.8"/></svg>'
+  road: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 5.5h9M3 10h14M3 14.5h6"/><rect x="13.4" y="3.6" width="3.6" height="3.6" rx="1"/><rect x="7.4" y="12.6" width="3.6" height="3.6" rx="1"/></svg>',
+  all: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.6" y="2.6" width="6.2" height="7.1" rx="1.4"/><rect x="11.2" y="2.6" width="6.2" height="4.1" rx="1.4"/><rect x="11.2" y="9.1" width="6.2" height="8.3" rx="1.4"/><rect x="2.6" y="12.1" width="6.2" height="5.3" rx="1.4"/></svg>',
+  attn: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 3.4 17.6 16.6H2.4L10 3.4Z"/><path d="M10 8v3.4M10 13.6h.01"/></svg>',
+  team: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="7.2" cy="7" r="2.7"/><path d="M2.6 16.4c0-2.8 2-4.6 4.6-4.6s4.6 1.8 4.6 4.6"/><circle cx="14.4" cy="7.9" r="2.1"/></svg>',
+  cal: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4.6" width="14" height="12.4" rx="2.2"/><path d="M3 8.4h14M7 3v3M13 3v3"/></svg>',
+  site: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17V7.5L9 4l6 3.5V17"/><path d="M7.6 17v-4.4h3.8V17"/><path d="M1.6 17h16.8"/></svg>'
 };
 
 /* --- 기간 --- */
@@ -681,9 +971,10 @@ function toast(msg) {
 }
 const normName = s => String(s || "").replace(/[\s\-_·.()]/g, "").toLowerCase();
 const HUES = [212, 152, 28, 268, 340, 188, 48, 96];
-function hueColor(name, l = 48) {
+/* 아바타 원 위에는 흰 글씨가 얹힌다. 명도를 낮게 잡아야 읽힌다 (기본 36%) */
+function hueColor(name, l = 30) {
   let h = 0; for (const c of String(name)) h = (h * 31 + c.charCodeAt(0)) % 9973;
-  return "hsl(" + HUES[h % HUES.length] + " 62% " + l + "%)";
+  return "hsl(" + HUES[h % HUES.length] + " 58% " + l + "%)";
 }
 /* --- 추진기간: 연·월 (D-027). 예전 데이터는 월이 없으므로 1월~12월로 본다 --- */
 const pad2 = n => String(n).padStart(2, "0");
@@ -700,20 +991,37 @@ function yearWindow(s, year) {
 const initials = n => String(n || "?").replace(/(팀|부|실|공장|본사)$/, "").slice(0, 2) || String(n || "?").slice(0, 2);
 
 /* ============================ state ============================ */
+/* 왼쪽 메뉴 구성 (D-051) — 구역 이름이 조직의 층을 말한다.
+   그룹 → 조직(계열사 · 사업장) → 팀. 각 항목의 하위 갈래는 SUBS 에서 온다. */
+const NAV_ICON = {
+  group: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2.4" y="7.6" width="6" height="9.4" rx="1.3"/><rect x="11.6" y="3" width="6" height="14" rx="1.3"/><path d="M4.6 10.4h1.6M4.6 13.2h1.6M13.8 5.8h1.6M13.8 8.6h1.6M13.8 11.4h1.6"/><path d="M1.4 17h17.2"/></svg>',
+  myco: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7.4" cy="6.8" r="2.7"/><path d="M2.8 16.4c0-2.8 2-4.7 4.6-4.7s4.6 1.9 4.6 4.7"/><circle cx="14.5" cy="7.8" r="2"/><path d="M13.9 11.9c2.1.2 3.6 1.9 3.6 4.5"/></svg>',
+  list: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 5h10M7 10h10M7 15h6M3.5 5h.01M3.5 10h.01M3.5 15h.01"/></svg>',
+  teams: '<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 17V7.5L9 4l6 3.5V17"/><path d="M7.6 17v-4.4h3.8V17"/><path d="M1.6 17h16.8"/></svg>'
+};
+const NAV = [
+  ["그룹", [["group", () => "그룹사 전체"]]],
+  ["조직", [["myco", () => coNameOf(myCoId()) || "소속 계열사"], ["teams", () => "조직 현황"]]],
+  ["과제", [["list", () => "과제 목록"]]]
+];
 const SUBS = {
-  dash: [["all", "전체화면", "all"], ["road", "중장기전략 로드맵", "road"], ["attn", "조치 필요", "attn"], ["team", "팀별 달성률", "team"]],
-  myteam: [["all", "우리 팀 과제", "all"], ["todo", "이번 분기 할 일", "attn"], ["done", "종결", null]],
+  group: [["all", "전체 요약", "all"], ["co", "계열사별", "site"], ["road", "중장기전략 로드맵", "road"], ["attn", "조치 필요", "attn"]],
+  myco: [["mine", "우리 팀", "team"], ["site", "사업장별", "site"], ["team", "팀 전체", "all"]],
   list: [["all", "전체", "all"], ["E", "환경", null], ["S", "사회", null], ["G", "지배구조", null]],
-  teams: [["site", "사업장별", "site"], ["all", "팀 전체", "team"]]
+  teams: [["co", "계열사별", "site"], ["site", "사업장별", null], ["all", "팀 전체", "team"]]
 };
 const state = {
   db: null, ready: false, dbFailed: false, canEdit: false, probed: false,
-  sites: [], teams: [], strategies: [], progress: [], deadlines: [],
-  view: "dash", sub: { dash: "all", myteam: "all", list: "all", teams: "site" },
+  companies: [], sites: [], teams: [], strategies: [], progress: [], deadlines: [],
+  view: "group", sub: { group: "all", myco: "mine", list: "all", teams: "co" },
   selected: null, tlScroll: null,
-  /* backTo — 상세에서 '돌아가기'가 어디로 갈지. 담당팀 전략에서 들어왔으면 그리로 돌아간다 */
+  /* backTo — 상세에서 '돌아가기'가 어디로 갈지. 들어온 화면으로 돌아간다 */
   backTo: "list", landed: false,
-  filters: { q: "", site: "", team: "", esg: "", status: "" },
+  /* drillTeam — 소속 계열사 화면에서 특정 팀을 눌러 들어갔을 때 그 팀 (D-045) */
+  drillTeam: null, teamSub: "all",
+  /* 계열사 아코디언 펼침 상태. null 이면 첫 렌더에서 내 계열사만 편다 */
+  openCos: null, pickCo: "", fcar: 0,
+  filters: { q: "", company: "", site: "", team: "", esg: "", cat: "", status: "" },
   /* teamId가 이 사람의 신원이다. 로그인이 없으므로 브라우저에만 남는다 (D-039) */
   me: { team: "", teamId: "", name: "" }
 };
@@ -754,8 +1062,40 @@ function parseYM(v) {
 /* ---- derived ---- */
 const teamRec = id => state.teams.find(x => x.id === id);
 const siteRec = id => state.sites.find(x => x.id === id);
+const coRec = id => state.companies.find(x => x.id === id);
 const teamNameOf = id => { const t = teamRec(id); return t ? t.name : ""; };
 const siteNameOf = id => { const s = siteRec(id); return s ? s.name : ""; };
+const coNameOf = id => { const c = coRec(id); return c ? c.name : ""; };
+const sortedCos = () => state.companies.slice().sort((a, b) => (a.order || 99) - (b.order || 99) || (a.name || "").localeCompare(b.name || "", "ko"));
+
+/** 계열사 (D-044). 등록 시 굳힌 값이 먼저다 — 팀이 나중에 다른 계열사로 옮겨도
+    과거 과제가 새 계열사로 소급 이동하지 않게 하기 위함이다. siteIdOf 와 같은 원칙.
+    중간 층(사업장·본부)이 없는 계열사는 팀이 계열사에 바로 달린다. */
+function coIdOf(s) {
+  if (s.companyId) return s.companyId;
+  const t = teamRec(s.teamId);
+  if (t) {
+    if (t.companyId) return t.companyId;
+    const st = siteRec(t.siteId);
+    if (st && st.companyId) return st.companyId;
+  }
+  const st2 = siteRec(s.siteId);
+  return (st2 && st2.companyId) || "";
+}
+const coOf = s => coNameOf(coIdOf(s)) || "계열사 미지정";
+/** 팀이 속한 계열사 — 사업장을 거치거나 계열사에 직접 달리거나 */
+function coIdOfTeam(t) {
+  if (!t) return "";
+  if (t.companyId) return t.companyId;
+  const st = siteRec(t.siteId);
+  return (st && st.companyId) || "";
+}
+const teamsOfCo = id => state.teams.filter(t => coIdOfTeam(t) === id)
+  .sort((a, b) => (a.name || "").localeCompare(b.name || "", "ko"));
+const sitesOfCo = id => sortedSites().filter(st => (st.companyId || "") === id);
+/** 계열사에 직접 달린 팀 (사업장 없음) */
+const looseTeamsOfCo = id => teamsOfCo(id).filter(t => !t.siteId);
+const coMatch = (s, f) => !f ? true : (f === "__none" ? !coIdOf(s) : coIdOf(s) === f);
 function teamOf(s) { return teamNameOf(s.teamId) || s.team || "미지정"; }
 /** 과제의 사업장. 등록·수정 시 굳힌 값을 먼저 쓴다 — 팀이 나중에 다른 사업장으로 옮겨도
     과거 과제와 과거 분기 실적이 새 사업장으로 소급 이동하지 않게 하기 위함이다. */
@@ -914,21 +1254,45 @@ function siteRollup() {
   if (orphan.length) out.push({ ...rollup(orphan, "사업장 미지정", ""), siteId: "", kind: "orphan" });
   return out;
 }
+/** 계열사 롤업 (D-044) — 등록된 계열사는 과제가 0건이어도 행을 남긴다 */
+function coRollup() {
+  const out = sortedCos().map(c => {
+    const list = state.strategies.filter(s => coIdOf(s) === c.id);
+    return { ...rollup(list, c.name, c.id), companyId: c.id };
+  });
+  const orphan = state.strategies.filter(s => !coIdOf(s));
+  if (orphan.length) out.push({ ...rollup(orphan, "계열사 미지정", ""), companyId: "" });
+  return out;
+}
+/** 대분류 롤업 (D-046). 분류가 없는 과제는 '미지정'으로 따로 센다 — 숨기면 영영 안 채워진다 */
+function catRollup(list) {
+  const src = list || state.strategies;
+  const out = CATS.map(([code, name, color]) => ({
+    code, name, color, n: src.filter(s => catOf(s) === code).length,
+  }));
+  const none = src.filter(s => !catOf(s)).length;
+  if (none) out.push({ code: "", name: "분류 미지정", color: "var(--line-2)", n: none });
+  return out.filter(x => x.n > 0);
+}
+
 /** 과제가 한 건도 없는 팀 — 분기 초 독촉 대상 */
 function teamsWithoutStrategy() {
   const used = new Set(state.strategies.map(x => x.teamId).filter(Boolean));
   return state.teams.filter(t => !used.has(t.id))
-    .map(t => ({ team: t, siteName: siteNameOf(t.siteId) || "사업장 미지정" }))
-    .sort((a, b) => a.siteName.localeCompare(b.siteName, "ko") || a.team.name.localeCompare(b.team.name, "ko"));
+    .map(t => ({ team: t, coName: coNameOf(coIdOfTeam(t)) || "계열사 미지정", siteName: siteNameOf(t.siteId) || "" }))
+    .sort((a, b) => a.coName.localeCompare(b.coName, "ko") || a.siteName.localeCompare(b.siteName, "ko")
+      || a.team.name.localeCompare(b.team.name, "ko"));
 }
 function filtered() {
   const f = state.filters, q = f.q.trim().toLowerCase();
   const esgSub = ["E", "S", "G"].includes(state.sub.list) ? state.sub.list : "";
   return state.strategies.filter(s => {
     if (esgSub && s.esg !== esgSub) return false;
+    if (f.company && !coMatch(s, f.company)) return false;
     if (f.site && !siteMatch(s, f.site)) return false;
     if (f.team && teamKeyOf(s) !== f.team) return false;
     if (f.esg && s.esg !== f.esg) return false;
+    if (f.cat && catOf(s) !== (f.cat === "__none" ? "" : f.cat)) return false;
     if (f.status && statusOf(s).key !== f.status) return false;
     if (q) {
       const hay = [s.title, siteOf(s), teamOf(s), s.owner, s.purpose, plansOf(s).map(p => p.text).join(" "), s.kpiName].join(" ").toLowerCase();
@@ -966,6 +1330,7 @@ const attnList = () => state.strategies
     state[key] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     state.ready = true; render();
   }, onErr);
+  sub("companies", "companies");
   sub("sites", "sites"); sub("teams", "teams"); sub("strategies", "strategies"); sub("progress", "progress");
   sub("deadlines", "deadlines");
   setTimeout(() => { if (!state.ready) { state.ready = true; render(); } }, 4000);
@@ -996,60 +1361,185 @@ function render() {
       if (old) { state.me.teamId = old.id; try { localStorage.setItem("esg.me", JSON.stringify(state.me)); } catch (e) { } }
     }
     if (!state.me.teamId) state.view = "pick";
-    else if (state.me.teamId !== "__all") state.view = "myteam";
+    else if (state.me.teamId !== "__all") state.view = "myco";
   }
 
   const ed = state.canEdit;
-  $("#railNew").hidden = !ed; $("#topNew").hidden = !ed; $("#setMe").hidden = !ed;
+  $("#topNew").hidden = !ed; $("#setMe").hidden = !ed;
   $("#topNew").disabled = !state.db;
-  document.querySelectorAll("#rail .ricon[data-view]").forEach(b =>
-    b.dataset.view === state.view && state.view !== "detail"
-      ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"));
-  renderSubtabs();
+  renderNav(); renderRailMe(); renderCrumbs();
 
 
   const m = $("#main");
   if (state.view === "detail" && state.selected) m.innerHTML = viewDetail(state.selected);
   else if (state.view === "list") m.innerHTML = viewList();
-  else if (state.view === "myteam") m.innerHTML = viewMyTeam();
+  else if (state.view === "myco") m.innerHTML = viewMyCo();
   else if (state.view === "pick") m.innerHTML = viewPickTeam();
   else if (state.view === "teams") m.innerHTML = viewTeams();
   else if (state.view === "new") { state.view = "list"; render(); openStrategyForm(null); return; }
-  else m.innerHTML = viewDash();
+  else m.innerHTML = viewGroup();
   bind(m);
   restoreTimelineScroll();
+  initMotion(m);
 }
 
-/** 상단 = 왼쪽 레일에서 고른 화면의 하위 탭 */
-function renderSubtabs() {
-  const box = $("#subtabs");
-  if (state.view === "detail") {
-    const s = state.strategies.find(x => x.id === state.selected);
-    box.innerHTML = `<div class="crumbtab">
-      <button class="backbtn" data-goback="1"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10H4.5M9 4.5 3.5 10 9 15.5"/></svg>${state.backTo === "myteam" ? "담당팀 전략으로 돌아가기" : "목록으로 돌아가기"}</button>
-      <span class="t">${esc(s ? s.title : "과제 상세")}</span></div>`;
+/* ============================ 모션 (D-050) ============================
+   GSAP 이 없거나 사용자가 모션을 줄이도록 설정했으면 조용히 정적 상태로 둔다. */
+/* var 로 둔다 — boot 의 첫 render() 가 이 줄보다 먼저 돌아서 let 은 TDZ 에 걸린다 */
+var MOTION = [];
+function initMotion(root) {
+  if (!MOTION) MOTION = [];
+  MOTION.forEach(t => { try { t.kill(); } catch (e) { } });
+  MOTION = [];
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ok = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined" && !reduce;
+  if (!ok) {
+    root.querySelectorAll(".reveal").forEach(e => { e.style.opacity = 1; e.style.transform = "none"; });
+    root.querySelectorAll(".lede span").forEach(e => e.style.opacity = 1);
     return;
   }
-  const defs = SUBS[state.view] || [];
-  const cur = subOf();
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* 진입 시 올라오며 나타나기 */
+  root.querySelectorAll(".reveal").forEach(el => {
+    gsap.set(el, { opacity: 0, y: 26 });
+    const t = gsap.to(el, {
+      opacity: 1, y: 0, duration: .9, ease: "power3.out",
+      scrollTrigger: { trigger: el, start: "top 88%", once: true },
+    });
+    if (t.scrollTrigger) MOTION.push(t.scrollTrigger);
+  });
+
+  /* 문장이 스크롤을 따라 또렷해진다 */
+  const words = root.querySelectorAll(".hero .lede span");
+  if (words.length) {
+    const tl = gsap.to(words, {
+      opacity: 1, stagger: .08, ease: "none",
+      scrollTrigger: { trigger: ".hero .lede", start: "top 82%", end: "bottom 55%", scrub: .6 },
+    });
+    MOTION.push(tl.scrollTrigger);
+  }
+
+  /* 왼쪽 설명을 붙잡아 두고 오른쪽만 흐른다 */
+  const pin = root.querySelector("#coPin");
+  if (pin && window.innerWidth > 1020) {
+    const st = ScrollTrigger.create({
+      trigger: pin, start: "top 96px", end: "bottom bottom",
+      pin: pin.querySelector(".pinsplit-l"), pinSpacing: false,
+    });
+    MOTION.push(st);
+  }
+  ScrollTrigger.refresh();
+}
+
+/* ============ 왼쪽 메뉴 (D-051) ============
+   화면 전환과 그 안의 갈래를 모두 여기서 고른다. 상단바는 위치와 고정 기능만 맡는다. */
+
+/** 지금 어느 1층 항목이 켜져 있는가. 상세·팀 고르기는 들어온 층을 그대로 켠다 */
+function navCurrent() {
+  if (state.view === "detail") return state.backTo || "list";
+  if (state.view === "pick") return "myco";
+  if (state.view === "new") return "list";
+  return state.view;
+}
+function renderNav() {
+  const box = $("#rail"); if (!box) return;
+  const cur = navCurrent();
   const counts = subCounts();
-  box.innerHTML = defs.map(([key, label, ico]) => {
-    const n = counts[state.view + ":" + key];
-    return `<button class="stab" data-sub="${key}" aria-current="${cur === key}">
-      ${ico && ICO[ico] ? ICO[ico] : ""}${esc(label)}${n != null ? `<span class="n">${n}</span>` : ""}</button>`;
+  box.innerHTML = NAV.map(([sec, items]) => `<div class="navsec">${esc(sec)}</div>` + items.map(([id, label]) => {
+    const on = cur === id;
+    return `<button type="button" class="nav1" data-view="${id}" ${on ? 'aria-current="page"' : ""}>
+      ${NAV_ICON[id]}<span class="t">${esc(label())}</span></button>`
+      + (on && state.view !== "pick" ? navSubs(id, counts) : "");
+  }).join("")).join("");
+}
+/** 2층(갈래) + 3층(지금 열어 둔 팀) */
+function navSubs(view, counts) {
+  const defs = SUBS[view] || [], cur = state.sub[view] || "all";
+  const drilled = view === "myco" && state.drillTeam;
+  let h = defs.map(([key, label]) => {
+    const n = counts[view + ":" + key];
+    const on = !drilled && cur === key;
+    return `<button type="button" class="nav2" data-sub="${key}" aria-current="${on}">
+      <span class="t">${esc(label)}</span>${n != null ? `<span class="n">${n}</span>` : ""}</button>`;
+  }).join("");
+  if (view === "myco") {
+    const t = teamRec(drilled ? state.drillTeam : (cur === "mine" ? state.me.teamId : ""));
+    if (t) h += `<button type="button" class="nav2 lv3" aria-current="true"><span class="t">${esc(t.name)}</span></button>`;
+  }
+  return `<div class="nav2wrap">${h}</div>`;
+}
+/** 레일 맨 아래 — 내 소속을 계열사 › 사업장 › 팀 으로 밝힌다 */
+function renderRailMe() {
+  const box = $("#railMe"); if (!box) return;
+  const t = teamRec(state.me.teamId);
+  if (!t) {
+    box.innerHTML = `<b>소속 팀 미지정</b><span>${state.me.teamId === "__all" ? "전체 보기로 접속했습니다" : "팀을 고르면 우리 팀 화면이 열립니다"}</span>
+      <button type="button" class="ghost" data-act="pickteam">팀 고르기</button>`;
+    return;
+  }
+  const st = t.siteId ? siteNameOf(t.siteId) : "";
+  box.innerHTML = `<b>${esc(t.name)}</b><span>${esc(coNameOf(coIdOfTeam(t)) || "계열사 미지정")}${st ? " › " + esc(st) : ""}</span>
+    <button type="button" class="ghost" data-act="pickteam">팀 바꾸기</button>`;
+}
+
+/* ============ 상단바 : 현재 위치 (D-051) ============
+   그룹 › 계열사 › 사업장 › 팀 순. 마지막 칸이 지금 보는 화면이고, 앞 칸은 눌러서 올라간다. */
+function crumbTrail() {
+  const label = (v, k) => { const d = (SUBS[v] || []).find(x => x[0] === k); return d ? d[1] : ""; };
+  const T = [{ t: "그룹사 전체", view: "group", sub: "all" }];
+  const v = state.view, k = subOf();
+  const teamCrumbs = id => {
+    const t = teamRec(id); if (!t) return;
+    const st = t.siteId ? siteNameOf(t.siteId) : "";
+    if (st) T.push({ t: st });
+    T.push({ t: t.name });
+  };
+  if (v === "group") { if (k !== "all") T.push({ t: label("group", k) }); }
+  else if (v === "myco" || v === "pick") {
+    T.push({ t: coNameOf(myCoId()) || "소속 계열사", view: "myco", sub: "site" });
+    if (v === "pick") T.push({ t: "팀 고르기" });
+    else if (state.drillTeam) teamCrumbs(state.drillTeam);
+    else if (k === "mine") { if (teamRec(state.me.teamId)) teamCrumbs(state.me.teamId); else T.push({ t: "우리 팀" }); }
+    else T.push({ t: label("myco", k) });
+  }
+  else if (v === "teams") { T.push({ t: "조직 현황", view: "teams", sub: "co" }); T.push({ t: label("teams", k) }); }
+  else if (v === "list") { T.push({ t: "과제 목록", view: "list", sub: "all" }); if (k !== "all") T.push({ t: ESG_SHORT[k] || "" }); }
+  else if (v === "detail") {
+    const back = state.backTo || "list";
+    const bt = back === "myco" ? (coNameOf(myCoId()) || "소속 계열사")
+      : back === "teams" ? "조직 현황" : back === "group" ? "그룹사 전체" : "과제 목록";
+    if (bt !== "그룹사 전체") T.push({ t: bt, view: back, sub: state.sub[back], back: true });
+    else T[0].back = true;
+    const s = state.strategies.find(x => x.id === state.selected);
+    T.push({ t: s ? s.title : "과제 상세" });
+  }
+  return T.filter(x => x.t);
+}
+function renderCrumbs() {
+  const box = $("#crumbs"); if (!box) return;
+  const T = crumbTrail();
+  box.innerHTML = T.map((c, i) => {
+    const last = i === T.length - 1;
+    const cls = last ? "crumb cur" : (c.back ? "crumb back" : "crumb");
+    const nav = !last && c.view ? ` data-nav="${c.view}:${c.sub || ""}"` : "";
+    return (i ? '<span class="sep">›</span>' : "")
+      + `<button type="button" class="${cls}"${nav} ${last || !c.view ? "disabled" : ""}>${c.back ? "‹ " : ""}${esc(c.t)}</button>`;
   }).join("");
 }
 function subCounts() {
   const all = state.strategies, c = {};
-  c["dash:attn"] = attnList().length;
-  c["dash:team"] = teamRollup().length;
-  c["dash:road"] = all.length;
+  c["group:attn"] = attnList().length;
+  c["group:co"] = coRollup().length;
+  c["group:road"] = all.length;
   const mine = myStrategies(), mineOpen = mine.filter(isOpen);
-  c["myteam:all"] = mineOpen.length;
-  c["myteam:todo"] = mineOpen.filter(s => !submittedThisQuarter(s.id) || ["risk", "warn"].includes(statusOf(s).key)).length;
-  c["myteam:done"] = mine.length - mineOpen.length;
+  c["myco:mine"] = mineOpen.length;
+  const myCo = myCoId();
+  c["myco:site"] = myCo ? sitesOfCo(myCo).length : 0;
+  c["myco:team"] = myCo ? teamsOfCo(myCo).length : 0;
   c["list:all"] = all.length;
   ["E", "S", "G"].forEach(k => c["list:" + k] = all.filter(s => s.esg === k).length);
+  c["teams:co"] = coRollup().length;
   c["teams:site"] = siteRollup().length;
   c["teams:all"] = teamRollup().length;
   return c;
@@ -1066,12 +1556,40 @@ function emptyState() {
   return `<div class="empty">
     <h3>${state.canEdit ? "첫 번째 중장기전략을 등록해 주세요" : "등록된 과제가 없습니다"}</h3>
     <p>사업장과 팀, 추진기간, 계획(목표) 세부 항목을 등록하면 항목 체크만으로 달성률이 집계되고 로드맵에 표시됩니다.</p>
-    ${state.canEdit ? '<button class="btn btn-primary" data-act="new">＋ 전략 등록</button>' : ""}
+    ${state.canEdit ? '<button type="button" class="btn btn-primary" data-act="new">＋ 전략 등록</button>' : ""}
   </div>`;
 }
+/** [제목, 값(HTML), 강조클래스?, 아래 설명?] */
 function statBoxes(items) {
   return `<div class="stat-strip">${items.map(i =>
-    `<div class="sbox ${i[2] || ""}"><div class="k">${esc(i[0])}</div><div class="v num">${i[1]}</div></div>`).join("")}</div>`;
+    `<div class="sbox ${i[2] || ""}"><div class="k">${esc(i[0])}</div><div class="v num">${i[1]}</div>${
+      i[3] ? `<div class="c">${esc(i[3])}</div>` : ""}</div>`).join("")}</div>`;
+}
+
+/** 도넛 — 대분류별 과제 분포 (D-046). 조각이 하나뿐이어도 원으로 보이게 둔다 */
+function donutSvg(slices, big, small) {
+  const total = slices.reduce((a, x) => a + x.n, 0) || 1;
+  const R = 52, C = 2 * Math.PI * R;
+  let off = 0;
+  const arcs = slices.map(x => {
+    const len = x.n / total * C;
+    const el = `<circle cx="68" cy="68" r="${R}" fill="none" stroke="${x.color}" stroke-width="21"
+      stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}"
+      transform="rotate(-90 68 68)"></circle>`;
+    off += len;
+    return el;
+  }).join("");
+  return `<svg viewBox="0 0 136 136" role="img" aria-label="대분류별 과제 분포">${arcs}
+    <text class="mid" x="68" y="70">${esc(String(big))}</text>
+    <text class="midk" x="68" y="84">${esc(String(small))}</text></svg>`;
+}
+
+/** 계열사 선택 드롭다운 */
+function coSelect(id, cur) {
+  const rolls = coRollup();
+  return `<select class="ghost" id="${id}">
+    <option value="">전체 계열사 (${state.strategies.length})</option>
+    ${rolls.map(r => `<option value="${esc(r.companyId)}" ${cur === r.companyId ? "selected" : ""}>${esc(r.name)} (${r.n})</option>`).join("")}</select>`;
 }
 
 /* ============================ 로드맵 ============================ */
@@ -1104,7 +1622,7 @@ function timelineHtml(rows, opts) {
     const lq = lastQuarterlyOf(s.id);
     return `<div class="tl-row${isClosed(s) ? " lc-closed" : ""}">
       <div class="tl-name" style="width:${nameW}px">
-        <button class="card-name" data-open="${esc(s.id)}">
+        <button type="button" class="card-name" data-open="${esc(s.id)}">
           <span class="ic" style="background:${hueColor(siteOf(s))}">${ESG_ICON[s.esg]}</span>
           <span class="tx">
             <span class="t1">${esc(s.title)}</span>
@@ -1115,7 +1633,7 @@ function timelineHtml(rows, opts) {
       </div>
       <div class="tl-track" style="width:${trackW}px">
         <div class="cellrow">${bgCells}</div>
-        <button class="blk esg-${s.esg}${showChip ? " has-chip" : ""}" data-open="${esc(s.id)}" style="left:${left}px;width:${w}px"
+        <button type="button" class="blk esg-${s.esg}${showChip ? " has-chip" : ""}" data-open="${esc(s.id)}" style="left:${left}px;width:${w}px"
           title="${esc(s.title)} · ${spanLabel(s)} · 달성 ${p}% (기대 ${expectedPct(s)}%) · ${st.label}">
           <span class="bmid">${showIcon ? `<span class="bic">${ESG_ICON[s.esg]}</span>` : ""}<span class="bt">${esc(s.title)}</span></span>
           <span class="bar"><i style="width:${p}%"></i></span>
@@ -1138,7 +1656,7 @@ function timelineHtml(rows, opts) {
     <span class="li"><span class="sw" style="background:var(--s)"></span>사회</span>
     <span class="li"><span class="sw" style="background:var(--g)"></span>지배구조</span>
     <span class="li"><span class="sw hatch"></span>경과된 분기</span>
-    <span class="li"><span class="sw" style="background:var(--today);width:3px;border-radius:2px"></span>현재 분기</span>
+    <span class="li"><span class="sw" style="background:var(--today-fill);width:3px;border-radius:2px"></span>현재 분기</span>
     <span class="li">막대 안 흰 선 = 현재 달성률</span>
   </div>`;
 }
@@ -1160,91 +1678,253 @@ function restoreTimelineScroll() {
 const byStatus = (a, b) => STATUS_ORDER[statusOf(a).key] - STATUS_ORDER[statusOf(b).key] || siteOf(a).localeCompare(siteOf(b), "ko");
 
 /* ============================ 대시보드 ============================ */
-function viewDash() {
+/* ============================ 탭1 · 그룹사 전체 (D-043) ============================ */
+function viewGroup() {
   const all = state.strategies;
-  if (!all.length) return banners() + `<div class="panel"><div class="ph"><div><h2>중장기전략 로드맵</h2></div></div>${emptyState()}</div>`;
+  if (!all.length) return banners() + `<div class="panel"><div class="ph"><div><h2>그룹사 전체</h2></div></div>${emptyState()}</div>`;
   const sub = subOf();
   if (sub === "road") return banners() + dashRoad();
   if (sub === "attn") return banners() + dashAttn();
-  if (sub === "team") return banners() + dashTeam();
-  return banners() + dashAll();
+  if (sub === "co") return banners() + groupCo();
+  return banners() + groupSummary();
 }
 
-function dashAll() {
-  const all = state.strategies, cq = curQuarter(), f = state.filters;
-  const scoped = f.site ? all.filter(x => siteMatch(x, f.site)) : all;
-  const scopeName = !f.site ? "전사" : (f.site === "__none" ? "사업장 미지정" : (siteNameOf(f.site) || "선택 사업장"));
-  const openScoped = scoped.filter(isOpen);
-  const nClosed = scoped.length - openScoped.length;
-  const overall = avg(openScoped.map(pctOf)), expAvg = avg(openScoped.map(expectedPct));
-  const submitted = openScoped.filter(s => submittedThisQuarter(s.id)).length;
-  const rate = openScoped.length ? Math.round(submitted / openScoped.length * 100) : 0;
-  const stc = countStatus(scoped), attn = stc.warn + stc.risk;
-  const rows = scoped.slice().sort(byStatus);
-  const at = attnList().filter(x => siteMatch(x, f.site));
-  const rolls = teamRollup(scoped);
-  const feed = [...state.progress].sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""))[0];
-  const dl = deadlineChip(cq);
-  const noTeams = teamsWithoutStrategy().filter(x => !f.site || x.team.siteId === f.site);
-
-  return `<section class="panel">
-    <div class="ph">
-      <div><h2>중장기전략 로드맵</h2>
-        <div class="sub">${esc(scopeName)} · ${rows.length}건 · 위험·지연 과제가 위로 정렬됩니다</div></div>
-      <div class="r">
-        ${siteSelect("dSite")}
-        <span class="ghost flat ${dl.cls}" title="${dl.isDefault ? "이 분기 마감일이 지정되지 않았습니다" : "제출 마감 " + dl.date + (dl.setBy ? " · 설정 " + dl.setBy : "")}">
-          ${ICO.cal}${cq.replace("-", " ")} ${dl.isDefault ? "마감일 미지정" : dl.md + " · " + dl.txt}</span>
-        ${state.canEdit ? '<button class="ghost" data-act="deadline">마감일 설정</button>' : ""}
-        <button class="ghost" data-sub="road">자세히 보기</button>
+/** 그룹사 한 장 요약 — 계열사끼리 나란히 놓고 보는 화면 */
+/* ── 히어로 : Editorial Split. 제목은 두 줄을 넘기지 않는다 ── */
+function groupHero(cos, avgP, avgE) {
+  const lede = "분기마다 PPT로 취합하던 " + cos.length + "개 계열사의 실행과제를 한곳에 모았습니다. 팀이 진행도를 입력하면 계열사 평균과 그룹사 전체 달성률이 그 자리에서 다시 계산됩니다.";
+  return `<section class="hero">
+    <div class="hero-l">
+      <h1 class="reveal">${cos.length}개 계열사의 ESG 중장기전략을<span class="inline-pill"></span>한 화면에서 본다</h1>
+      <p class="lede">${lede.split(" ").map(w => `<span>${esc(w)}</span>`).join(" ")}</p>
+      <div class="hero-cta reveal">
+        <button type="button" class="btn btn-primary" data-act="goteam">우리 팀 전략 열기</button>
+        <button type="button" class="btn" data-sub="co">계열사별 현황 보기</button>
       </div>
     </div>
-    ${rows.length ? timelineHtml(rows, { maxH: "44vh" }) + (rows.length > 6 ? `<div class="tl-more">${rows.length}건 — 목록 안에서 위아래로 스크롤됩니다</div>` : "")
-      : '<div class="empty"><h3>이 사업장에 등록된 과제가 없습니다</h3><p>상단에서 다른 사업장을 고르거나 전체 사업장으로 돌아가 보세요.</p></div>'}
-  </section>
+    <div class="hero-plate reveal">
+      <img src="https://picsum.photos/seed/steelworks-esg/1200/1500" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="veil"></div>
+    </div>
+  </section>`;
+}
 
-  <div class="grid3">
-    <section class="panel">
-      <div class="ph"><div><h3>조치 필요</h3><div class="sub">기대치 미달 폭이 큰 순 · 맨 위가 가장 시급합니다</div></div>
-        <div class="r"><button class="ghost" data-sub="attn">전체 ${attnList().length}건</button></div></div>
-      ${at.length ? `<div class="acards">${at.slice(0, 3).map((x, i) => attnCard(x, i === 0, false)).join("")}</div>`
-      : '<p style="color:var(--ok);font-size:13px">조치가 필요한 과제가 없습니다.</p>'}
-      ${noTeams.length ? `<div style="margin-top:var(--s3)">
-        <div class="help" style="margin-bottom:var(--s1)"><b>과제 미등록 팀 ${noTeams.length}개</b> — 아직 한 건도 올리지 않았습니다</div>
-        ${noTeams.slice(0, 5).map(x => `<div class="miss-row"><div>${esc(x.team.name)}<div class="sname">${esc(x.siteName)}</div></div>
-          <span class="pill s-none">미등록</span></div>`).join("")}
-        ${noTeams.length > 5 ? `<div class="help" style="margin-top:var(--s1)">그 외 ${noTeams.length - 5}개 팀</div>` : ""}</div>` : ""}
+/* ── Gapless Bento — 4열, 행별 합이 정확히 4다 ── */
+function groupBento(all, open, cos, slices, avgP, avgE, attn, unsub, noCat, cq) {
+  return `<div class="bento">
+    <section class="bx bx-2">
+      <div class="bk">계열사별 달성률</div>
+      ${cos.length ? `<div class="barlist" style="margin-top:6px">${cos.map(c => `
+        <div class="barrow">
+          <span class="nm" title="${esc(c.name)}">${esc(c.name)}</span>
+          <span class="track"><i style="width:${barW(c)}%;background:${c.pct >= c.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(c) ? `<b style="left:${c.exp}%"></b>` : ""}</span>
+          <span class="pv">${pctText(c)}</span>
+        </div>`).join("")}</div>` : '<p class="help">등록된 계열사가 없습니다.</p>'}
+      <div class="bc">막대의 세로선은 기간경과 기대치입니다.</div>
     </section>
 
-    <section class="panel">
-      <div class="ph"><div><h3>팀별 달성률</h3><div class="sub">${esc(scopeName)} · ${rolls.length}개 팀</div></div>
-        <div class="r"><button class="ghost" data-sub="team">사업장별로 보기</button></div></div>
-      ${rolls.length ? `<div class="tcards">${rolls.slice(0, 4).map(teamCard).join("")}</div>
-        ${rolls.length > 4 ? `<div class="help" style="margin-top:var(--s2)">그 외 ${rolls.length - 4}개 팀 — 사업장별 화면에서 전체 확인</div>` : ""}`
-      : '<p class="help">표시할 팀이 없습니다.</p>'}
+    <section class="bx bx-2">
+      <div class="bk">대분류별 과제 분포</div>
+      ${slices.length ? `<div class="donut" style="margin-top:6px">${donutSvg(slices, slices.filter(x => x.code).length, "분류")}
+        <div class="legend">${slices.map(x => `<div class="li">
+          <span class="sw" style="background:${x.color}"></span>
+          <span class="nm">${esc(x.name)}</span>
+          <span class="pv">${Math.round(x.n / all.length * 100)}%</span></div>`).join("")}</div></div>`
+      : '<p class="help">표시할 과제가 없습니다.</p>'}
+      <div class="bc">팀을 가로지르는 주제 축입니다.</div>
     </section>
 
-    <section class="panel orb-panel">
-      <div class="orb"><div class="on"><span class="v num">${overall}<span style="font-size:20px">%</span></span><span class="k">${esc(scopeName)} 평균</span></div></div>
-      <h3>${overall >= expAvg ? "계획대로 진행 중입니다" : "기대치에 미달합니다"}</h3>
-      <p class="od">연차별 목표 기준 기대치 <b>${expAvg}%</b> 대비
-        <b style="color:${overall >= expAvg ? "var(--ok)" : "var(--risk)"}">${overall - expAvg >= 0 ? "+" : ""}${overall - expAvg}%p</b>.
-        ${attn ? `지연·위험 <b>${attn}건</b>이 조치를 기다립니다.` : "조치가 필요한 과제는 없습니다."}</p>
-      <div class="ostats">
-        <div class="ostat"><div class="k">진행 과제</div><div class="v num">${openScoped.length}<small>건</small></div>${nClosed ? `<div class="k" style="margin-top:2px">종료·중단 ${nClosed}</div>` : ""}</div>
-        <div class="ostat"><div class="k">${cq.replace("-", " ")} 제출률</div><div class="v num">${rate}<small>%</small></div></div>
-        <div class="ostat ${attn ? "risk" : ""}"><div class="k">조치 필요</div><div class="v num">${attn}<small>건</small></div></div>
-      </div>
-      <div class="oacts">
-        ${state.canEdit ? '<button class="ghost" data-act="new">＋ 전략 등록</button>' : ""}
-        <button class="ghost" data-act="printSummary">요약 인쇄</button>
-        <button class="ghost" data-act="printForms">과제별 인쇄</button>
-        <button class="ghost" data-act="export">CSV</button>
-        ${state.canEdit ? '<button class="ghost" data-act="manageOrg">사업장·팀 관리</button>' : ""}
-      </div>
-      ${feed ? `<div class="help" style="margin-top:var(--s3)">최근 실적 · ${esc(feed.author || "익명")}(${esc(feed.team || "")}) ${pLabel(feed.period)} · ${relTime(feed.updatedAt)}</div>` : ""}
+    <section class="bx"><div class="bk">전체 과제</div>
+      <div class="bv num">${all.length}<small>건</small></div>
+      <div class="bc">${cos.length}개 계열사 합계</div></section>
+
+    <section class="bx tone-${avgP >= avgE ? "ok" : "warn"}"><div class="bk">평균 달성률</div>
+      <div class="bv num">${avgP}<small>%</small></div>
+      <div class="bc">기대치 ${avgE}% 대비 ${avgP - avgE >= 0 ? "+" : ""}${avgP - avgE}%p</div></section>
+
+    <section class="bx${attn ? " tone-risk" : ""}"><div class="bk">조치 필요</div>
+      <div class="bv num">${attn}<small>건</small></div>
+      <div class="bc">지연 · 위험 · 미제출</div></section>
+
+    <section class="bx${unsub ? " tone-warn" : " tone-ok"}"><div class="bk">${cq.replace("-", " ")} 미제출</div>
+      <div class="bv num">${unsub}<small>건</small></div>
+      <div class="bc">진행 과제 ${open.length}건 중</div></section>
+
+    <section class="bx bx-4 bx-cta${noCat ? " accent" : ""}">
+      <div><div class="bk">대분류 미지정</div>
+        <div class="bv num">${noCat}<small>건</small></div></div>
+      <div class="bc" style="margin:0;flex:1;min-width:220px">${noCat
+        ? "분류가 비어 있으면 주제별 집계에서 빠집니다. 과제 수정에서 대분류를 골라 주세요."
+        : "전 과제에 대분류가 지정되어 있습니다."}</div>
+      ${noCat ? '<button type="button" class="btn" data-act="gonocat">미지정 과제 보기</button>' : ""}
     </section>
   </div>`;
+}
+
+/* ── 최근 입력 캐러셀 ── */
+function recentFeed() {
+  return [...state.progress]
+    .sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""))
+    .filter(p => (p.achievement || "").trim())
+    .slice(0, 6);
+}
+function groupCarousel() {
+  const feed = recentFeed();
+  if (!feed.length) return "";
+  const i = ((state.fcar % feed.length) + feed.length) % feed.length;
+  const cur = feed[i];
+  const s = state.strategies.find(x => x.id === cur.strategyId);
+  return `<div class="fcar">
+    <div class="fcar-faces">${feed.slice(0, 3).map(f =>
+      `<span class="tav" style="background:${hueColor(f.author || "익명")}">${esc(initials(f.author || "?"))}</span>`).join("")}</div>
+    <div>
+      <p class="fcar-q">${esc((cur.achievement || "").slice(0, 150))}${(cur.achievement || "").length > 150 ? "…" : ""}</p>
+      <div class="fcar-m">
+        <b style="color:var(--ink-2)">${esc(cur.author || "익명")}</b>
+        <span>${esc(cur.team || "")}</span><span class="sep">·</span>
+        <span>${esc(s ? s.title : "")}</span><span class="sep">·</span>
+        <span class="num">${pLabel(cur.period)} · ${cur.progress}%</span>
+      </div>
+      <div class="fcar-nav">
+        <button type="button" data-act="fprev" aria-label="이전 입력"><svg aria-hidden="true" viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5 6.5 10 12 15.5"/></svg></button>
+        <button type="button" data-act="fnext" aria-label="다음 입력"><svg aria-hidden="true" viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4.5 13.5 10 8 15.5"/></svg></button>
+        <span class="help" style="align-self:center;margin-left:6px">${i + 1} / ${feed.length}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function groupSummary() {
+  const all = state.strategies, open = all.filter(isOpen);
+  const cq = curQuarter(), dl = deadlineChip(cq);
+  const cos = coRollup();
+  const attn = attnList().length;
+  const unsub = open.filter(s => !submittedThisQuarter(s.id)).length;
+  const noCat = all.filter(s => !catOf(s)).length;
+  const avgP = avg(open.map(pctOf)), avgE = avg(open.map(expectedPct));
+  const slices = catRollup();
+  const noTeams = teamsWithoutStrategy();
+  const at = attnList().slice(0, 3);
+
+  return groupHero(cos, avgP, avgE) + `
+
+  <div class="chapter reveal">
+    <div class="chapter-h">
+      <h2>지금 그룹사는 어디쯤인가</h2>
+      <p>${cq.replace("-", " ")} 기준 · 마감 ${dl.isDefault ? "미지정" : dl.md + " · " + dl.txt}</p>
+    </div>
+    ${groupBento(all, open, cos, slices, avgP, avgE, attn, unsub, noCat, cq)}
+  </div>
+
+  <div class="chapter pinsplit" id="coPin">
+    <div class="pinsplit-l chapter-h">
+      <h2>계열사별로 내려가 본다</h2>
+      <p>행을 누르면 그 계열사의 팀 단위 화면으로 들어갑니다. 달성률 막대의 세로선이 기간경과 기대치입니다.</p>
+      <div class="hero-cta" style="margin-top:24px"><button type="button" class="btn" data-sub="co">계열사별 현황 열기</button></div>
+    </div>
+    <div class="pinsplit-r">
+      <section class="panel">${coTable(cos, "계열사 " + cos.length + "곳")}</section>
+      ${at.length ? `<section class="panel" style="margin-top:var(--s3)">
+        <div class="ph"><div><h3>가장 시급한 과제</h3><div class="sub">기대치 미달 폭이 큰 순</div></div>
+        <div class="r"><button type="button" class="ghost" data-sub="attn">전체 ${attn}건</button></div></div>
+        <div class="acards">${at.map((x, k) => attnCard(x, k === 0, false)).join("")}</div>
+      </section>` : ""}
+    </div>
+  </div>
+
+  ${recentFeed().length ? `<div class="chapter reveal">
+    <div class="chapter-h"><h2>가장 최근에 들어온 실적</h2>
+      <p>담당자가 분기마다 직접 남긴 기록입니다.</p></div>
+    <section class="panel">${groupCarousel()}</section>
+  </div>` : ""}
+
+  <div class="chapter reveal">
+    <section class="ctaband">
+      <div>
+        <h2>${attn ? attn + "건이 조치를 기다립니다" : "조치가 필요한 과제가 없습니다"}</h2>
+        <p>${noTeams.length
+          ? "아직 한 건도 올리지 않은 팀이 " + noTeams.length + "곳 있습니다. 분기 마감 전에 독촉 대상을 확인하세요."
+          : "모든 팀이 과제를 등록했습니다. 이번 분기 제출 현황을 확인하세요."}</p>
+      </div>
+      <div class="r">
+        <button type="button" class="btn btn-primary" data-sub="attn">조치 필요 보기</button>
+        <button type="button" class="btn" data-act="printSummary" style="background:transparent;color:#fff;border-color:#1C2D38">요약 인쇄</button>
+      </div>
+    </section>
+    <div class="foot">
+      <span>ESG 사무국 · 계열사 ${cos.length} · 팀 ${state.teams.length} · 과제 ${all.length}건</span>
+      <span class="sp"></span>
+      <button type="button" class="ghost" data-act="export">CSV 내려받기</button>
+      <button type="button" class="ghost" data-act="printForms">과제별 인쇄</button>
+      ${state.canEdit ? '<button type="button" class="ghost" data-act="manageOrg">조직 관리</button>' : ""}
+    </div>
+  </div>`;
+}
+
+/** 계열사 표. 행을 누르면 그 계열사의 소속 화면으로 들어간다 */
+function coTable(cos, title) {
+  const cq = curQuarter();
+  return `<div class="ph" style="margin:var(--s5) 0 var(--s2)">
+      <div><h3 style="font-size:14.5px">${esc(title)}</h3></div>
+      <div class="r"><span class="help">행을 누르면 팀 단위로 들어갑니다 ›</span></div></div>
+    <div class="cotable">
+      <div class="corow h"><span>계열사</span><span class="n">과제</span><span class="n">진행</span><span>달성 / 기대</span><span class="n">제출</span></div>
+      ${cos.map(c => `<button type="button" class="corow" data-co="${esc(c.companyId)}">
+        <span class="nm">${esc(c.name)}<small>${teamsOfCo(c.companyId).length}개 팀${c.nClosed ? " · 종결 " + c.nClosed : ""}</small></span>
+        <span class="n">${c.n}</span>
+        <span class="n">${c.nOpen}</span>
+        <span><span class="track"><i style="width:${barW(c)}%;background:${c.pct >= c.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(c) ? `<b style="left:${c.exp}%"></b>` : ""}</span></span>
+        <span class="n">${c.sub}/${c.nOpen}</span>
+      </button>`).join("")}
+    </div>
+    <div class="help" style="margin-top:var(--s2)">제출 = ${cq.replace("-", " ")} 실적을 낸 진행 과제 수. 달성률 막대의 세로선은 기간경과 기대치입니다.</div>`;
+}
+
+/* 계열사 아코디언 — 처음엔 내 계열사만 펴 두고, 나머지는 눌러서 편다 */
+const CHEV = '<svg aria-hidden="true" class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4.5 13 10l-5.5 5.5"/></svg>';
+function coOpen(id) {
+  if (state.openCos === null) { state.openCos = {}; const m = myCoId(); if (m) state.openCos[m] = true; }
+  return !!state.openCos[id];
+}
+/** 계열사 한 칸. inner 는 펼쳤을 때 보일 내용을 만드는 함수 (접혀 있으면 부르지 않는다) */
+function coGroup(c, meta, inner) {
+  const open = coOpen(c.companyId);
+  return `<div class="sgroup">
+    <button type="button" class="sgh" data-toggleco="${esc(c.companyId)}" aria-expanded="${open}">
+      <div class="nm">${CHEV}${esc(c.name)}</div>
+      <div class="mt">${meta}</div>
+      <div class="pills">${statusPills(c.stc)}</div>
+      <div class="rr">
+        <div style="flex:1"><div class="track"><i style="width:${barW(c)}%;background:${c.pct >= c.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(c) ? `<b style="left:${c.exp}%"></b>` : ""}</div></div>
+        <span class="pv">${pctText(c)}</span>
+      </div>
+    </button>
+    ${open ? `<div class="sgb">${inner()}</div>` : ""}
+  </div>`;
+}
+
+/** 계열사별 상세 — 계열사를 누르면 그 팀이 쫙 나온다 */
+function groupCo() {
+  const cos = coRollup();
+  const nOpen = cos.filter(c => coOpen(c.companyId)).length;
+  return `<section class="panel">
+    <div class="ph"><div><h2>계열사별 현황</h2>
+      <div class="sub">${cos.length}개 계열사 · 계열사를 누르면 소속 팀이 펼쳐집니다</div></div>
+      <div class="r"><button type="button" class="ghost" data-act="${nOpen === cos.length ? "collapseco" : "expandco"}">${nOpen === cos.length ? "모두 접기" : "모두 펼치기"}</button></div></div>
+    ${cos.map(c => {
+      const teams = teamRollup(c.list);
+      return coGroup(c,
+        `팀 ${teams.length}개 · 진행 ${c.nOpen}건${c.nClosed ? " · 종결 " + c.nClosed : ""} · 제출 ${c.sub}/${c.nOpen}`,
+        () => teams.length ? teams.map(t => `
+          <button type="button" class="corow" data-drill="${esc(t.key)}">
+            <span class="nm">${esc(t.name)}<small>${esc(siteOf(t.list[0]))}</small></span>
+            <span class="n">${t.n}</span>
+            <span class="n">${t.nOpen}</span>
+            <span><span class="track"><i style="width:${barW(t)}%;background:${t.pct >= t.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(t) ? `<b style="left:${t.exp}%"></b>` : ""}</span></span>
+            <span class="n">${t.sub}/${t.nOpen}</span>
+          </button>`).join("") : '<p class="help">이 계열사에 등록된 과제가 없습니다.</p>');
+    }).join("")}
+  </section>`;
 }
 
 /** 사업장 선택 드롭다운 — 본사·각 공장별로 골라 본다 */
@@ -1262,7 +1942,7 @@ function siteSelect(id) {
 /* --- 로드맵 상세 --- */
 function dashRoad() {
   const f = state.filters;
-  let rows = state.strategies.filter(x => siteMatch(x, f.site) && (!f.esg || x.esg === f.esg));
+  let rows = state.strategies.filter(x => coMatch(x, f.company) && siteMatch(x, f.site) && (!f.esg || x.esg === f.esg));
   rows = rows.slice().sort(byStatus);
   const stc = countStatus(rows);
   const spanMin = rows.length ? Math.min(...rows.map(s => s.startYear)) : "—";
@@ -1273,9 +1953,10 @@ function dashRoad() {
       <div><h2>중장기전략 로드맵</h2>
         <div class="sub">추진기간 ${spanMin}–${spanMax} · ${rows.length}건 표시 · 위험·지연 과제가 위로 정렬됩니다</div></div>
       <div class="r">
+        ${coSelect("rCo", f.company)}
         ${siteSelect("rSite")}
         <select class="ghost" id="rEsg"><option value="">전체 영역</option>${["E", "S", "G"].map(k => `<option value="${k}" ${f.esg === k ? "selected" : ""}>${ESG_SHORT[k]}</option>`).join("")}</select>
-        ${(f.site || f.esg) ? '<button class="ghost" data-act="clearf">필터 해제</button>' : ""}
+        ${(f.company || f.site || f.esg) ? '<button type="button" class="ghost" data-act="clearf">필터 해제</button>' : ""}
       </div>
     </div>
     ${statBoxes([
@@ -1289,13 +1970,15 @@ function dashRoad() {
       ["미착수", stc.none + "<small>건</small>"]
     ])}
     ${rows.length ? timelineHtml(rows, { detail: true, maxH: "58vh" })
-      : '<div class="empty"><h3>조건에 맞는 과제가 없습니다</h3><p>필터를 해제해 보세요.</p><button class="btn" data-act="clearf">필터 해제</button></div>'}
+      : '<div class="empty"><h3>조건에 맞는 과제가 없습니다</h3><p>필터를 해제해 보세요.</p><button type="button" class="btn" data-act="clearf">필터 해제</button></div>'}
   </section>`;
 }
 
 /* --- 조치 필요 상세 --- */
 function dashAttn() {
   const list = attnList(), cq = curQuarter();
+  /* 미등록 팀도 조치 대상이다 — 전체 요약에서 이리로 옮겼다 (D-052) */
+  const noTeams = teamsWithoutStrategy();
   const risk = list.filter(s => statusOf(s).key === "risk").length;
   const warn = list.filter(s => statusOf(s).key === "warn").length;
   const over = state.strategies.filter(s => !submittedThisQuarter(s.id)).length;
@@ -1311,6 +1994,10 @@ function dashAttn() {
     ])}
     ${list.length ? `<div class="acards">${list.map((s, i) => attnCard(s, i === 0, true)).join("")}</div>`
       : '<div class="empty"><h3>조치가 필요한 과제가 없습니다</h3><p>전 과제가 기간경과 기대치 이상이고, 이번 분기 실적도 모두 제출되었습니다.</p></div>'}
+    ${noTeams.length ? `<div style="margin-top:var(--s5)">
+      <div class="help" style="margin-bottom:var(--s2)"><b>과제 미등록 팀 ${noTeams.length}개</b> — 아직 한 건도 올리지 않았습니다. 사무국이 독촉할 대상입니다.</div>
+      ${noTeams.map(x => `<div class="miss-row"><div>${esc(x.team.name)}<div class="sname">${esc(x.coName || "")}${x.coName && x.siteName ? " › " : ""}${esc(x.siteName)}</div></div>
+        <span class="pill s-none">미등록</span></div>`).join("")}</div>` : ""}
   </section>`;
 }
 
@@ -1322,13 +2009,13 @@ function attnCard(s, hot, detail) {
   const why = gap < 0
     ? `가장 시급 — 기대치보다 ${-gap}%p 뒤처져 있습니다`
     : (over ? "가장 시급 — 이번 분기 실적이 아직 제출되지 않았습니다" : "가장 시급 — 목록 맨 위 과제입니다");
-  return `<button class="acard ${hot ? "hot" : ""}" data-open="${esc(s.id)}">
+  return `<button type="button" class="acard ${hot ? "hot" : ""}" data-open="${esc(s.id)}">
     ${hot ? `<div class="whyhot">${why}</div>` : ""}
     <div class="ah"><div class="at">${esc(s.title)}</div>
       <div class="ab" style="color:${STATUS_VAR[st.key]}"><span style="width:5px;height:5px;border-radius:99px;background:${STATUS_VAR[st.key]}"></span>${st.label}</div></div>
-    <div class="ad">${esc(siteOf(s))} · ${esc(teamOf(s))} · ${esc(s.owner || "담당자 미지정")}${detail ? ` · 추진 ${spanLabel(s)}` : ""}</div>
+    <div class="ad">${esc(coOf(s))} › ${esc(siteOf(s))} · ${esc(teamOf(s))} · ${esc(s.owner || "담당자 미지정")}${detail ? ` · 추진 ${spanLabel(s)}` : ""}</div>
     <div class="achips">
-      <span class="mini"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 2"/></svg>달성 <b>${p}%</b> · 기대 <b>${e}%</b> · <b style="color:${gap < 0 ? "var(--risk)" : "var(--ok)"}">${gap >= 0 ? "+" : ""}${gap}%p</b></span>
+      <span class="mini"><svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 2"/></svg>달성 <b>${p}%</b> · 기대 <b>${e}%</b> · <b style="color:${gap < 0 ? "var(--risk)" : "var(--ok)"}">${gap >= 0 ? "+" : ""}${gap}%p</b></span>
       ${detail ? `<span class="mini">계획 <b>${c.done}/${c.total}</b> 완료${c.doing ? " · 진행중 " + c.doing : ""}</span>` : ""}
       <span class="mini" ${over ? 'style="color:var(--risk)"' : ""}>${over ? "분기실적 미제출" : pLabel(lq.period) + " 제출"}</span>
     </div>
@@ -1337,61 +2024,10 @@ function attnCard(s, hot, detail) {
     ${detail && (!lq || !lq.delayReason) ? `<div class="anote" style="color:var(--risk)"><b>지연 사유 미기재</b>기대치에 못 미치는데 사유가 없습니다. 담당자에게 요청해 주세요.</div>` : ""}
   </button>`;
 }
-
-/* --- 팀별 달성률 상세 (사업장 → 팀) --- */
-function dashTeam() {
-  const sites = siteRollup(), cq = curQuarter();
-  return `<section class="panel">
-    <div class="ph"><div><h2>팀별 달성률</h2>
-      <div class="sub">사업장 안에서 팀별로 묶었습니다 · 막대의 세로선은 기간경과 기대치</div></div></div>
-    ${statBoxes([
-      ["사업장", sites.length + "<small>곳</small>"],
-      ["팀", teamRollup().length + "<small>개</small>"],
-      ["전사 평균 달성률", avg(state.strategies.map(pctOf)) + "<small>%</small>"],
-      [cq.replace("-", " ") + " 제출률", (state.strategies.length ? Math.round(state.strategies.filter(s => submittedThisQuarter(s.id)).length / state.strategies.length * 100) : 0) + "<small>%</small>"]
-    ])}
-    ${sites.map(site => {
-      const teams = teamRollup(site.list);
-      return `<div class="sgroup">
-        <div class="sgh">
-          <div class="nm"><span class="tav" style="background:${hueColor(site.name)}">${esc(initials(site.name))}</span>${esc(site.name)}</div>
-          <div class="mt">팀 ${teams.length}개 · 진행 ${site.nOpen}건${site.nClosed ? " · 종료 " + site.nClosed : ""} · 제출 ${site.sub}/${site.nOpen}</div>
-          <div class="rr">
-            <div style="flex:1"><div class="track"><i style="width:${barW(site)}%;background:${site.pct >= site.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(site) ? `<b style="left:${site.exp}%"></b>` : ""}</div></div>
-            <span class="pv">${pctText(site)}</span>
-          </div>
-        </div>
-        <div class="sgb">${teams.map(t => `
-          <div class="trow2">
-            <div class="nm"><span class="tav" style="background:${hueColor(t.name, 44)}">${esc(initials(t.name))}</span>
-              <div style="min-width:0"><div class="t1">${esc(t.name)}</div>
-              <div class="t2">진행 ${t.nOpen}건${t.nClosed ? " · 종료 " + t.nClosed : ""} · ${t.owners.length ? esc(t.owners.slice(0, 2).join(", ")) + (t.owners.length > 2 ? " 외" : "") : "담당자 미지정"} · 갱신 ${relTime(t.last && t.last.updatedAt)}</div></div>
-            </div>
-            <div class="pills">${statusPills(t.stc)}</div>
-            <div>
-              <div class="pl"><span>달성 / 기대</span><b>${pctText(t)}${hasOpen(t) ? " / " + t.exp + "%" : ""}</b></div>
-              <div class="track"><i style="width:${barW(t)}%;background:${t.pct >= t.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(t) ? `<b style="left:${t.exp}%"></b>` : ""}</div>
-            </div>
-            <div class="upd">${cq.replace("-", " ")}<br>제출 ${t.sub}/${t.nOpen}</div>
-          </div>`).join("")}</div>
-      </div>`;
-    }).join("")}
-  </section>`;
-}
 function statusPills(stc) {
   return [["risk", "위험"], ["warn", "지연"], ["none", "미착수"], ["ok", "정상"], ["done", "완료"], ["closed", "종료"], ["stopped", "중단"]]
     .filter(([k]) => stc[k]).map(([k, l]) => `<span class="pill s-${k}">${l} ${stc[k]}</span>`).join("");
 }
-function teamCard(t) {
-  return `<div class="tcard">
-    <div class="tav" style="background:${hueColor(t.name, 44)}">${esc(initials(t.name))}</div>
-    <div class="tn" title="${esc(t.name)}">${esc(t.name)}</div>
-    <div class="tm">진행 ${t.nOpen}건${t.nClosed ? " · 종료 " + t.nClosed : ""} · 제출 ${t.sub}/${t.nOpen}</div>
-    <div class="tp"><span class="num">${pctText(t)}</span>${hasOpen(t) ? `<span style="color:${t.pct >= t.exp ? "var(--ok)" : "var(--risk)"};font-size:10.5px">${t.pct - t.exp >= 0 ? "+" : ""}${t.pct - t.exp}%p</span>` : ""}</div>
-    <div class="ttrack"><div class="track"><i style="width:${barW(t)}%;background:${t.pct >= t.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(t) ? `<b style="left:${t.exp}%"></b>` : ""}</div></div>
-  </div>`;
-}
-
 /* ============================ 과제 목록 ============================ */
 function viewList() {
   const rows = filtered(), f = state.filters;
@@ -1402,27 +2038,29 @@ function viewList() {
       <div class="sub">${state.strategies.length}건 등록 · ${rows.length}건 표시</div></div></div>
   <div class="toolbar">
     <div class="search">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="8.8" cy="8.8" r="5.4"/><path d="M12.9 12.9 17 17"/></svg>
+      <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="8.8" cy="8.8" r="5.4"/><path d="M12.9 12.9 17 17"/></svg>
       <input type="search" id="fq" placeholder="과제명 · 사업장 · 팀 · 담당자 · KPI 검색" value="${esc(f.q)}">
     </div>
+    ${coSelect("fco", f.company)}
     <select class="ghost" id="fsite"><option value="">전체 사업장</option>${sites.map(x => `<option value="${esc(x.siteId)}" ${f.site === x.siteId ? "selected" : ""}>${esc(x.name)} (${x.n})</option>`).join("")}</select>
+    <select class="ghost" id="fcat"><option value="">전체 분류</option>${CATS.map(([code, name]) => `<option value="${code}" ${f.cat === code ? "selected" : ""}>${esc(name)}</option>`).join("")}<option value="__none" ${f.cat === "__none" ? "selected" : ""}>분류 미지정</option></select>
     <select class="ghost" id="fteam"><option value="">${f.site ? "사업장 내 전체 팀" : "전체 팀"}</option>${teamOpts.map(t => `<option value="${esc(t.key)}" ${f.team === t.key ? "selected" : ""}>${esc(t.name)}</option>`).join("")}</select>
     <select class="ghost" id="fstatus"><option value="">전체 상태</option>${[["ok", "정상"], ["warn", "지연"], ["risk", "위험"], ["done", "완료"], ["none", "미착수"]].map(([v, l]) => `<option value="${v}" ${f.status === v ? "selected" : ""}>${l}</option>`).join("")}</select>
-    ${(f.q || f.site || f.team || f.status) ? '<button class="ghost" data-act="clearf">필터 해제</button>' : ""}
+    ${(f.q || f.company || f.site || f.team || f.cat || f.status) ? '<button type="button" class="ghost" data-act="clearf">필터 해제</button>' : ""}
   </div>
   ${rows.length ? `<div class="list">${rows.map(itemRow).join("")}</div>`
-      : (state.strategies.length ? '<div class="empty"><h3>조건에 맞는 과제가 없습니다</h3><p>필터를 해제하거나 검색어를 바꿔 보세요.</p><button class="btn" data-act="clearf">필터 해제</button></div>' : emptyState())}
+      : (state.strategies.length ? '<div class="empty"><h3>조건에 맞는 과제가 없습니다</h3><p>필터를 해제하거나 검색어를 바꿔 보세요.</p><button type="button" class="btn" data-act="clearf">필터 해제</button></div>' : emptyState())}
   </section>`;
 }
 function itemRow(s) {
   const st = statusOf(s), p = pctOf(s), e = expectedPct(s), c = planCounts(s);
   const lq = lastQuarterlyOf(s.id), overdue = !submittedThisQuarter(s.id);
-  return `<button class="item" data-open="${esc(s.id)}">
+  return `<button type="button" class="item" data-open="${esc(s.id)}">
     <div>
       <div class="ttl">${esc(s.title)}</div>
       <div class="meta">
         <span class="tag"><span class="dot dot-${s.esg}"></span>${ESG_SHORT[s.esg]}</span>
-        <span>${esc(siteOf(s))}</span><span class="sep">›</span><span>${esc(teamOf(s))}</span>
+        <span>${esc(coOf(s))}</span><span class="sep">›</span><span>${esc(siteOf(s))}</span><span class="sep">›</span><span>${esc(teamOf(s))}</span>
         <span class="sep">·</span><span>${esc(s.owner || "담당자 미지정")}</span>
         <span class="sep">·</span><span class="num">${spanLabel(s)}</span>
         <span class="sep">·</span><span>계획 ${c.done}/${c.total} 완료${c.doing ? " · 진행중 " + c.doing : ""}</span>
@@ -1438,11 +2076,54 @@ function itemRow(s) {
 }
 
 /* ============================ 사업장·팀 현황 ============================ */
+/** 조직 한 곳의 팀 한 줄. 누르면 그 팀 과제로 들어간다 (D-045) */
+function orgTeamRow(t) {
+  return `<button type="button" class="corow" data-drill="${esc(t.key)}">
+    <span class="nm">${esc(t.name)}${t.key === state.me.teamId ? ' <span class="pill s-carry">우리 팀</span>' : ""}<small>담당 ${t.owners.length ? esc(t.owners.slice(0, 2).join(", ")) + (t.owners.length > 2 ? " 외" : "") : "미지정"} · 갱신 ${relTime(t.last && t.last.updatedAt)}</small></span>
+    <span class="n">${t.n}</span>
+    <span class="n">${t.nOpen}</span>
+    <span><span class="track"><i style="width:${barW(t)}%;background:${t.pct >= t.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(t) ? `<b style="left:${t.exp}%"></b>` : ""}</span></span>
+    <span class="n">${t.sub}/${t.nOpen}</span>
+  </button>`;
+}
+/** 사업장 한 칸 — 그 아래 팀들 */
+function orgSiteBlock(name, teams) {
+  const rows = teams.map(t => rollup(strategiesOfTeam(t.id), t.name, t.id)).sort((a, b) => b.pct - a.pct);
+  const agg = rollup(teams.flatMap(t => strategiesOfTeam(t.id)), name, name);
+  return `<div class="orgsite">
+    <div class="orgsite-h">${esc(name)}<span>팀 ${teams.length}개 · 진행 ${agg.nOpen}건${agg.nClosed ? " · 종결 " + agg.nClosed : ""}</span>
+      <span class="pv">${pctText(agg)}</span></div>
+    ${rows.length ? rows.map(orgTeamRow).join("") : '<p class="help">이 사업장에 등록된 팀이 없습니다.</p>'}
+  </div>`;
+}
+/** 계열사 › 사업장·본부 › 팀 조직도 (D-044) */
+function teamsCo(manage) {
+  const cos = coRollup();
+  if (!cos.length) return `<section class="panel">
+    <div class="ph"><div><h2>조직 현황</h2><div class="sub">아직 계열사가 없습니다.</div></div><div class="r">${manage}</div></div>
+    <div class="empty"><h3>계열사를 먼저 등록해 주세요</h3>
+      <p>조직 관리에서 계열사를 만들고, 그 아래에 사업장·본부와 팀을 넣습니다. 중간 층이 없으면 팀을 계열사 직속으로 둘 수 있습니다.</p></div></section>`;
+  return `<section class="panel">
+    <div class="ph"><div><h2>조직 현황</h2>
+      <div class="sub">${cos.length}개 계열사 · 계열사를 누르면 사업장·본부와 팀이 펼쳐집니다</div></div>
+      <div class="r"><button type="button" class="ghost" data-act="${cos.every(c => coOpen(c.companyId)) ? "collapseco" : "expandco"}">${cos.every(c => coOpen(c.companyId)) ? "모두 접기" : "모두 펼치기"}</button>${manage}</div></div>
+    ${cos.map(c => {
+      const sites = sitesOfCo(c.companyId), loose = looseTeamsOfCo(c.companyId);
+      const blocks = sites.map(st => orgSiteBlock(st.name, state.teams.filter(t => t.siteId === st.id)))
+        .concat(loose.length ? [orgSiteBlock("계열사 직속 (사업장 없음)", loose)] : []);
+      return coGroup(c,
+        `사업장 ${sites.length}개${loose.length ? " + 직속 " + loose.length + "팀" : ""} · 팀 ${teamsOfCo(c.companyId).length}개 · 진행 ${c.nOpen}건${c.nClosed ? " · 종결 " + c.nClosed : ""}`,
+        () => blocks.join("") || '<p class="help">이 계열사에 사업장·팀이 없습니다.</p>');
+    }).join("")}
+  </section>`;
+}
+
 function viewTeams() {
-  const manage = state.canEdit ? '<button class="ghost" data-act="manageOrg">사업장·팀 관리</button>' : "";
-  if (!state.strategies.length) {
-    return banners() + `<section class="panel"><div class="ph"><div><h2>사업장·팀 현황</h2><div class="sub">등록된 과제가 없습니다.</div></div><div class="r">${manage}</div></div>${emptyState()}</section>`;
+  const manage = state.canEdit ? '<button type="button" class="ghost" data-act="manageOrg">조직 관리</button>' : "";
+  if (!state.strategies.length && !state.companies.length) {
+    return banners() + `<section class="panel"><div class="ph"><div><h2>조직 현황</h2><div class="sub">등록된 과제가 없습니다.</div></div><div class="r">${manage}</div></div>${emptyState()}</section>`;
   }
+  if (state.sub.teams === "co") return banners() + teamsCo(manage);
   if (state.sub.teams === "all") {
     const rows = teamRollup(), cq = curQuarter();
     return banners() + `<section class="panel">
@@ -1451,7 +2132,7 @@ function viewTeams() {
       <div class="list">${rows.map(r => `
         <div class="item" style="grid-template-columns:minmax(0,1fr) 140px 156px 104px;cursor:default">
           <div class="nm" style="display:flex;align-items:center;gap:11px;min-width:0">
-            <span class="tav" style="background:${hueColor(r.name, 44)};width:38px;height:38px;font-size:12px">${esc(initials(r.name))}</span>
+            <span class="tav" style="background:${hueColor(r.name, 30)};width:38px;height:38px;font-size:12px">${esc(initials(r.name))}</span>
             <div style="min-width:0">
               <div class="ttl">${esc(r.name)}</div>
               <div class="meta"><span>${esc(siteOf(r.list[0]))}</span><span class="sep">·</span><span>진행 ${r.nOpen}건${r.nClosed ? " · 종료 " + r.nClosed : ""}</span>
@@ -1486,7 +2167,7 @@ function viewTeams() {
         </div>
         <div class="sgb">${teams.map(t => `
           <div class="trow2">
-            <div class="nm"><span class="tav" style="background:${hueColor(t.name, 44)}">${esc(initials(t.name))}</span>
+            <div class="nm"><span class="tav" style="background:${hueColor(t.name, 30)}">${esc(initials(t.name))}</span>
               <div style="min-width:0"><div class="t1">${esc(t.name)}</div>
               <div class="t2">진행 ${t.nOpen}건${t.nClosed ? " · 종료 " + t.nClosed : ""} · 제출 ${t.sub}/${t.nOpen} · 갱신 ${relTime(t.last && t.last.updatedAt)}</div></div></div>
             <div class="pills">${statusPills(t.stc)}</div>
@@ -1517,17 +2198,18 @@ function viewDetail(id) {
         <span class="pill ${st.cls}">${st.label}</span>
         ${carryCount(s) ? `<span class="pill s-carry">이월 ${carryCount(s)}회</span>` : ""}
         ${s.scope === "company" ? '<span class="tag">전사 공통</span>' : ""}
+        ${catOf(s) ? `<span class="tag"><span class="dot" style="background:${CAT_COLOR[catOf(s)]}"></span>${esc(CAT_NAME[catOf(s)])}</span>` : ""}
         ${s.priority ? `<span class="tag">우선순위 ${esc(s.priority)}</span>` : ""}
       </div>
       <h2>${esc(s.title)}</h2>
-      <div class="sub">${esc(siteOf(s))} › ${esc(teamOf(s))} · ${esc(s.owner || "담당자 미지정")} · 추진기간 ${spanLabel(s)}</div>
+      <div class="sub">${esc(coOf(s))} › ${esc(siteOf(s))} › ${esc(teamOf(s))} · ${esc(s.owner || "담당자 미지정")} · 추진기간 ${spanLabel(s)}</div>
     </div>
     ${ed ? `<div class="r">
       ${isClosed(s)
-        ? `<button class="btn" data-act="reopen" data-id="${esc(s.id)}">다시 진행으로</button>`
-        : `<button class="btn" data-act="close" data-id="${esc(s.id)}">과제 종결</button>
-           <button class="btn" data-act="edit" data-id="${esc(s.id)}">과제 수정</button>
-           <button class="btn btn-primary" data-act="report" data-id="${esc(s.id)}">실적 입력</button>`}
+        ? `<button type="button" class="btn" data-act="reopen" data-id="${esc(s.id)}">다시 진행으로</button>`
+        : `<button type="button" class="btn" data-act="close" data-id="${esc(s.id)}">과제 종결</button>
+           <button type="button" class="btn" data-act="edit" data-id="${esc(s.id)}">과제 수정</button>
+           <button type="button" class="btn btn-primary" data-act="report" data-id="${esc(s.id)}">실적 입력</button>`}
     </div>` : ""}
   </div>
   <div class="kpi-grid">
@@ -1571,7 +2253,7 @@ function viewDetail(id) {
           <div class="blk-h">계획(목표)<span class="r">${p}% · 완료 ${c.done} 진행중 ${c.doing} 미착수 ${c.todo}</span></div>
           ${plans.length ? `<ul class="plans">${plans.map((x, i) => `
             <li data-st="${x.status}">
-              ${ed ? `<button class="pchip" data-st="${x.status}" data-toggle="${i}" title="클릭하면 미착수 → 진행중 → 완료 순으로 바뀝니다">${ST[x.status]}</button>`
+              ${ed ? `<button type="button" class="pchip" data-st="${x.status}" data-toggle="${i}" title="클릭하면 미착수 → 진행중 → 완료 순으로 바뀝니다">${ST[x.status]}</button>`
         : `<span class="pchip" data-st="${x.status}">${ST[x.status]}</span>`}
               <span class="ptext">${esc(x.text)}${x.updatedBy ? `<span class="pmeta">${esc(x.updatedBy)} · ${relTime(x.updatedAt)}</span>` : ""}</span></li>`).join("")}</ul>
             ${ed ? '<div class="help" style="margin-top:var(--s3)">상태를 누르면 바로 저장되고 달성률이 다시 계산됩니다.</div>' : ""}`
@@ -1607,7 +2289,7 @@ function viewDetail(id) {
     </div>
   </div>
   ${ed ? `<div style="display:flex;justify-content:flex-end;margin-top:var(--s4)">
-    <button class="btn btn-danger" data-act="delete" data-id="${esc(s.id)}">과제 삭제</button></div>` : ""}
+    <button type="button" class="btn btn-danger" data-act="delete" data-id="${esc(s.id)}">과제 삭제</button></div>` : ""}
   </section>`;
 }
 
@@ -1615,16 +2297,31 @@ function viewDetail(id) {
 /* 담당자가 들어오면 가장 먼저 보는 화면. 우리 팀 과제만 모아 보고, 여기서 추가하고 종결한다.
    로그인이 없으므로 '우리 팀'은 브라우저에 기억시킨 teamId 하나로 정해진다. */
 
-/** 우리 팀 과제. 등록 시점 teamId가 기준이고, 그것이 없는 옛 기록만 팀 이름으로 맞춘다. */
+/** 한 팀의 과제. 등록 시점 teamId가 기준이고, 그것이 없는 옛 기록만 팀 이름으로 맞춘다. */
+function strategiesOfTeam(id) {
+  if (!id || id === "__all") return [];
+  const nm = teamNameOf(id) || "";
+  return state.strategies.filter(s => s.teamId ? s.teamId === id : (nm && s.team === nm));
+}
+/** 우리 팀 과제 */
 function myStrategies() {
   const id = state.me.teamId;
   if (!id || id === "__all") return [];
   const nm = teamNameOf(id) || state.me.team || "";
   return state.strategies.filter(s => s.teamId ? s.teamId === id : (nm && s.team === nm));
 }
+/** 지금 보고 있는 계열사. 사무국은 위 드롭다운으로 바꿔 본다. */
+function myCoId() {
+  if (state.filters.company) return state.filters.company;
+  const c = coIdOfTeam(teamRec(state.me.teamId));
+  if (c) return c;
+  const first = sortedCos()[0];
+  return first ? first.id : "";
+}
 
 /** 팀 선택을 이 브라우저에 기억시킨다 (D-039) */
 function pickTeam(id) {
+  state.pickCo = "";
   if (id === "__all") state.me = { ...state.me, teamId: "__all" };
   else {
     const t = teamRec(id);
@@ -1632,42 +2329,184 @@ function pickTeam(id) {
     state.me = { ...state.me, teamId: t.id, team: t.name };
   }
   try { localStorage.setItem("esg.me", JSON.stringify(state.me)); } catch (e) { }
-  state.view = id === "__all" ? "dash" : "myteam";
+  state.view = id === "__all" ? "group" : "myco";
   state.landed = true;
   render(); window.scrollTo(0, 0);
 }
 
-/* ---------------- 팀 고르기 ---------------- */
+/* ---------------- 팀 고르기 — 계열사 먼저, 그다음 팀 (D-047) ---------------- */
 function viewPickTeam() {
+  const skip = `<div class="mt-skip"><button type="button" class="ghost" data-pick="__all">팀 없이 전체 보기 — 사무국·열람용</button></div>`;
+
+  if (!state.companies.length) return banners() + `<section class="panel mt-pick">
+    <div class="ph"><div><h2>어느 팀이신가요?</h2></div></div>
+    <div class="empty"><h3>등록된 계열사가 없습니다</h3>
+      <p>조직 현황 화면의 <b>조직 관리</b>에서 계열사와 팀을 먼저 등록해 주세요.</p></div>${skip}</section>`;
+
+  /* 1단계 — 계열사 */
+  if (!state.pickCo) {
+    const cos = sortedCos();
+    return banners() + `<section class="panel mt-pick">
+      <div class="ph"><div><h2>어느 계열사이신가요?</h2>
+        <div class="sub">계열사를 고르면 그 안의 팀이 나옵니다. 고른 값은 이 브라우저에만 저장되고 언제든 바꿀 수 있습니다.</div></div></div>
+      <div class="mt-cos">${cos.map(c => {
+        const nt = teamsOfCo(c.id).length;
+        const ns = state.strategies.filter(s => coIdOf(s) === c.id && isOpen(s)).length;
+        return `<button type="button" data-pickco="${esc(c.id)}">${esc(c.name)}<span class="c">팀 ${nt}개 · 진행 과제 ${ns}건</span></button>`;
+      }).join("")}</div>${skip}</section>`;
+  }
+
+  /* 2단계 — 그 계열사의 팀 */
+  const co = coRec(state.pickCo);
+  if (!co) { state.pickCo = ""; return viewPickTeam(); }
   const nOpen = id => state.strategies.filter(s => s.teamId === id && isOpen(s)).length;
-  const btn = t => `<button data-pick="${esc(t.id)}">${esc(t.name)}<span class="c">진행 과제 ${nOpen(t.id)}건</span></button>`;
+  const btn = t => `<button type="button" data-pick="${esc(t.id)}">${esc(t.name)}<span class="c">진행 과제 ${nOpen(t.id)}건</span></button>`;
   const grp = (title, list) => list.length
     ? `<div class="mt-pickg"><h3>${esc(title)}</h3><div class="mt-teams">${list.slice()
       .sort((a, b) => (a.name || "").localeCompare(b.name || "", "ko")).map(btn).join("")}</div></div>`
     : "";
-  const blocks = sortedSites().map(st => grp(st.name, state.teams.filter(t => t.siteId === st.id))).join("")
-    + grp("사업장 미지정", state.teams.filter(t => !t.siteId));
+  const blocks = sitesOfCo(co.id).map(st => grp(st.name, state.teams.filter(t => t.siteId === st.id))).join("")
+    + grp(sitesOfCo(co.id).length ? "계열사 직속" : "소속 팀", looseTeamsOfCo(co.id));
 
   return banners() + `<section class="panel mt-pick">
-    <div class="ph"><div><h2>어느 팀이신가요?</h2>
-      <div class="sub">고르면 다음부터 우리 팀 과제 화면이 먼저 열립니다. 이 브라우저에만 저장되고, 언제든 바꿀 수 있습니다.</div></div></div>
-    ${state.teams.length ? blocks : `<div class="empty"><h3>등록된 팀이 없습니다</h3>
-      <p>사업장·팀 현황 화면의 <b>사업장·팀 관리</b>에서 팀을 먼저 등록해 주세요.</p></div>`}
-    <div class="mt-skip"><button class="ghost" data-pick="__all">팀 없이 전체 보기 — 사무국·열람용</button></div>
+    <div class="ph"><div><h2>${esc(co.name)} — 어느 팀이신가요?</h2>
+      <div class="sub">고르면 다음부터 우리 팀 과제 화면이 먼저 열립니다.</div></div>
+      <div class="r"><button type="button" class="ghost" data-act="backco">‹ 계열사 다시 고르기</button></div></div>
+    ${teamsOfCo(co.id).length ? blocks : `<div class="empty"><h3>이 계열사에 등록된 팀이 없습니다</h3>
+      <p>조직 현황 화면의 <b>조직 관리</b>에서 팀을 먼저 등록해 주세요.</p>
+      <button type="button" class="btn" data-act="backco">다른 계열사 고르기</button></div>`}
+    ${skip}
   </section>`;
 }
 
 /* ---------------- 담당팀 전략 ---------------- */
-function viewMyTeam() {
-  const t = teamRec(state.me.teamId);
-  if (!t) return viewPickTeam();
+/* ============================ 탭2 · 소속 계열사 (D-044 · D-045) ============================ */
+function viewMyCo() {
+  const co = coRec(myCoId());
+  if (!co) return banners() + `<section class="panel">
+    <div class="ph"><div><h2>소속 계열사</h2><div class="sub">아직 계열사가 등록되지 않았습니다.</div></div></div>
+    <div class="empty"><h3>계열사를 먼저 등록해 주세요</h3>
+      <p>조직 현황 화면의 <b>조직 관리</b>에서 계열사를 만들고, 그 아래에 사업장과 팀을 넣습니다.</p>
+      ${state.canEdit ? '<button type="button" class="btn btn-primary" data-act="manageOrg">조직 관리 열기</button>' : ""}</div></section>`;
 
-  const all = myStrategies(), open = all.filter(isOpen), closed = all.filter(isClosed);
+  const head = coHead(co);
+
+  /* 팀 하나를 눌러 들어온 상태 (D-045) */
+  if (state.drillTeam) {
+    const t = teamRec(state.drillTeam);
+    if (t) return banners() + head
+      + `<div class="drillback"><button type="button" class="ghost" data-act="undrill">‹ ${esc(co.name)} 전체로 돌아가기</button></div>`
+      + teamPanel(t.id, t.id === state.me.teamId);
+    state.drillTeam = null;
+  }
+
+  const sub = subOf();
+  if (sub === "site") return banners() + head + coSites(co);
+  if (sub === "team") return banners() + head + coTeams(co);
+
+  const mine = teamRec(state.me.teamId);
+  if (!mine) return banners() + head + `<section class="panel">
+    <div class="empty"><h3>소속 팀이 정해지지 않았습니다</h3>
+      <p>어느 팀인지 고르면 이 자리에 우리 팀 과제와 이번 분기 할 일이 표시됩니다.
+        사무국이라면 위 탭의 <b>사업장별</b>·<b>팀 전체</b>로 계열사 현황을 보실 수 있습니다.</p>
+      <button type="button" class="btn btn-primary" data-act="pickteam">팀 고르기</button></div></section>`;
+  if (coIdOfTeam(mine) !== co.id) return banners() + head + coTeams(co);
+  return banners() + head + teamPanel(mine.id, true);
+}
+
+/** 계열사 머리 — 어느 계열사를 보는지, 그 계열사가 지금 어떤 상태인지 */
+function coHead(co) {
+  const all = state.strategies.filter(s => coIdOf(s) === co.id);
+  const open = all.filter(isOpen);
+  const r = rollup(all, co.name, co.id);
+  const cq = curQuarter(), dl = deadlineChip(cq);
+  const unsub = open.filter(s => !submittedThisQuarter(s.id)).length;
+  const gap = hasOpen(r) ? r.pct - r.exp : 0;
+  const attn = all.filter(isOpen).filter(s => ["risk", "warn"].includes(statusOf(s).key)).length;
+  const cos = coRollup();
+
+  return `<section class="panel" style="padding-bottom:var(--s4)">
+    <div class="mt-head">
+      <div>
+        <div class="nm">${esc(co.name)}</div>
+        <div class="st">팀 ${teamsOfCo(co.id).length}개 · 진행 ${r.nOpen}건${r.nClosed ? " · 종결 " + r.nClosed + "건" : ""}</div>
+      </div>
+      <div class="sp"></div>
+      ${cos.length > 1 ? `<select class="ghost" id="mCo" aria-label="계열사 선택">${cos.filter(x => x.companyId).map(x =>
+        `<option value="${esc(x.companyId)}" ${x.companyId === co.id ? "selected" : ""}>${esc(x.name)}</option>`).join("")}</select>` : ""}
+      ${state.canEdit ? `<button type="button" class="pillbtn dark" data-act="new"><svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M10 4.4v11.2M4.4 10h11.2"/></svg>과제 추가</button>` : ""}
+    </div>
+    ${statBoxes([
+      ["이번 분기 제출", r.nOpen ? (r.nOpen - unsub) + "<small>/" + r.nOpen + "건</small>" : "—", unsub ? (dl.n < 0 ? "risk" : "warn") : "ok",
+        dl.isDefault ? "마감일 미지정" : pLabel(cq) + " " + dl.txt],
+      ["계열사 평균", pctText(r).replace("%", "<small>%</small>"), "", hasOpen(r) ? "기대치 " + r.exp + "%" : ""],
+      ["목표 대비", hasOpen(r) ? (gap >= 0 ? "+" : "") + gap + "<small>%p</small>" : "—", !hasOpen(r) ? "" : (gap >= 0 ? "ok" : (gap < -20 ? "risk" : "warn"))],
+      ["조치 필요", attn + "<small>건</small>", attn ? "risk" : "", "지연 · 위험"]
+    ])}
+  </section>`;
+}
+
+/** 계열사 안 사업장 → 팀. 팀 행을 누르면 그 팀으로 들어간다 */
+function coSites(co) {
+  const sites = sitesOfCo(co.id), loose = looseTeamsOfCo(co.id);
+  const blocks = sites.map(st => coBlock(st.name, state.teams.filter(t => t.siteId === st.id)))
+    .concat(loose.length ? [coBlock("계열사 직속 (사업장 없음)", loose)] : []);
+  return `<section class="panel">
+    <div class="ph"><div><h3>사업장별 현황</h3>
+      <div class="sub">${sites.length}개 사업장${loose.length ? " + 직속 " + loose.length + "개 팀" : ""} · 팀을 누르면 그 팀 과제로 들어갑니다</div></div></div>
+    ${blocks.join("") || '<div class="empty"><h3>이 계열사에 사업장·팀이 없습니다</h3><p>조직 관리에서 먼저 등록해 주세요.</p></div>'}
+  </section>`;
+}
+function coBlock(name, teams) {
+  if (!teams.length) return "";
+  const rows = teams.map(t => rollup(strategiesOfTeam(t.id), t.name, t.id)).sort((a, b) => b.pct - a.pct);
+  const agg = rollup(teams.flatMap(t => strategiesOfTeam(t.id)), name, name);
+  return `<div class="sgroup">
+    <div class="sgh">
+      <div class="nm">${esc(name)}</div>
+      <div class="mt">팀 ${teams.length}개 · 진행 ${agg.nOpen}건${agg.nClosed ? " · 종결 " + agg.nClosed : ""}</div>
+      <div class="rr">
+        <div style="flex:1"><div class="track"><i style="width:${barW(agg)}%;background:${agg.pct >= agg.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(agg) ? `<b style="left:${agg.exp}%"></b>` : ""}</div></div>
+        <span class="pv">${pctText(agg)}</span>
+      </div>
+    </div>
+    <div class="sgb">${rows.map(teamDrillRow).join("")}</div>
+  </div>`;
+}
+/** 계열사 안 팀을 한 줄로 */
+function coTeams(co) {
+  const rows = teamsOfCo(co.id).map(t => rollup(strategiesOfTeam(t.id), t.name, t.id)).sort((a, b) => b.pct - a.pct);
+  return `<section class="panel">
+    <div class="ph"><div><h3>팀 전체</h3>
+      <div class="sub">${rows.length}개 팀 · 달성률 높은 순 · 팀을 누르면 그 팀 과제로 들어갑니다</div></div></div>
+    ${rows.length ? `<div class="cotable">
+      <div class="corow h"><span>팀</span><span class="n">과제</span><span class="n">진행</span><span>달성 / 기대</span><span class="n">제출</span></div>
+      ${rows.map(teamDrillRow).join("")}</div>`
+      : '<div class="empty"><h3>이 계열사에 등록된 팀이 없습니다</h3><p>조직 관리에서 먼저 등록해 주세요.</p></div>'}
+  </section>`;
+}
+function teamDrillRow(t) {
+  const mine = t.key === state.me.teamId;
+  const site = t.list.length ? siteOf(t.list[0]) : (siteNameOf((teamRec(t.key) || {}).siteId) || "사업장 없음");
+  return `<button type="button" class="corow" data-drill="${esc(t.key)}">
+    <span class="nm">${esc(t.name)}${mine ? ' <span class="pill s-carry">우리 팀</span>' : ""}<small>${esc(site)}</small></span>
+    <span class="n">${t.n}</span>
+    <span class="n">${t.nOpen}</span>
+    <span><span class="track"><i style="width:${barW(t)}%;background:${t.pct >= t.exp ? "var(--ok)" : "var(--warn)"}"></i>${hasOpen(t) ? `<b style="left:${t.exp}%"></b>` : ""}</span></span>
+    <span class="n">${t.sub}/${t.nOpen}</span>
+  </button>`;
+}
+
+/** 팀 한 곳의 과제 카드 화면. 우리 팀이든 남의 팀이든 같은 렌더러를 쓴다 (D-045) */
+function teamPanel(teamId, isMine) {
+  const t = teamRec(teamId);
+  if (!t) return "";
+  const all = strategiesOfTeam(teamId), open = all.filter(isOpen), closed = all.filter(isClosed);
   const cq = curQuarter(), dl = deadlineChip(cq);
   const unsub = open.filter(s => !submittedThisQuarter(s.id));
   const r = rollup(all, t.name, t.id);
   const gap = hasOpen(r) ? r.pct - r.exp : 0;
-  const sub = state.sub.myteam || "all";
+  const sub = state.teamSub || "all";
 
   let rows;
   if (sub === "done") rows = closed.slice().sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
@@ -1680,25 +2519,27 @@ function viewMyTeam() {
     rows.sort((a, b) => urg(a) - urg(b));
   }
 
+  const nTodo = open.filter(s => !submittedThisQuarter(s.id) || ["risk", "warn"].includes(statusOf(s).key)).length;
+  const chip = (k, label, n) => `<button type="button" class="ghost${sub === k ? " warn" : ""}" data-act="teamsub" data-id="${k}">${label}${n != null ? " " + n : ""}</button>`;
+
   const subCls = !open.length ? "" : (unsub.length ? (dl.n < 0 ? "risk" : "warn") : "ok");
   const gapCls = !hasOpen(r) ? "" : (gap >= 0 ? "ok" : (gap < -20 ? "risk" : "warn"));
 
-  return banners() + `<section class="panel">
+  return `<section class="panel">
     <div class="mt-head">
       <div>
-        <div class="nm">${esc(t.name)}</div>
+        <div class="nm">${esc(t.name)}${isMine ? ' <span class="pill s-carry">우리 팀</span>' : ""}</div>
         <div class="st">${t.siteId ? esc(siteNameOf(t.siteId)) + " · " : ""}진행 ${open.length}건${closed.length ? " · 종결 " + closed.length + "건" : ""}</div>
       </div>
       <div class="sp"></div>
-      <button class="ghost" data-act="pickteam">팀 바꾸기</button>
-      ${state.canEdit ? `<button class="pillbtn dark" data-act="new"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M10 4.4v11.2M4.4 10h11.2"/></svg>과제 추가</button>` : ""}
+      ${chip("all", "전체", open.length)}${chip("todo", "이번 분기 할 일", nTodo)}${chip("done", "종결", closed.length)}
     </div>
     ${statBoxes([
-    ["이번 분기 제출", open.length ? (open.length - unsub.length) + "<small>/" + open.length + "건</small>" : "—", subCls],
-    [pLabel(cq) + " 마감", dl.isDefault ? "미지정" : dl.txt.replace("마감 ", "") + "<small> · " + dl.md + "</small>", dl.cls],
-    ["팀 평균 달성률", pctText(r).replace("%", "<small>%</small>")],
-    ["목표 대비", hasOpen(r) ? (gap >= 0 ? "+" : "") + gap + "<small>%p</small>" : "—", gapCls]
-  ])}
+      ["이번 분기 제출", open.length ? (open.length - unsub.length) + "<small>/" + open.length + "건</small>" : "—", subCls],
+      [pLabel(cq) + " 마감", dl.isDefault ? "미지정" : dl.txt.replace("마감 ", "") + "<small> · " + dl.md + "</small>", dl.cls],
+      ["팀 평균 달성률", pctText(r).replace("%", "<small>%</small>")],
+      ["목표 대비", hasOpen(r) ? (gap >= 0 ? "+" : "") + gap + "<small>%p</small>" : "—", gapCls]
+    ])}
     ${rows.length ? `<div class="mtcards">${rows.map(myCard).join("")}</div>` : myEmpty(sub, all.length)}
   </section>`;
 }
@@ -1712,7 +2553,7 @@ function myEmpty(sub, total) {
     <p>지난 과제는 <b>종결</b> 탭에서 볼 수 있습니다.</p></div>`;
   return `<div class="empty"><h3>아직 등록한 과제가 없습니다</h3>
     <p>우리 팀의 ESG 중장기 실행과제를 등록해 주세요. 한 번 등록하면 다음부터는 분기마다 진행도만 입력하면 됩니다.</p>
-    ${state.canEdit ? `<button class="btn btn-primary" data-act="new">첫 과제 등록하기</button>` : ""}</div>`;
+    ${state.canEdit ? `<button type="button" class="btn btn-primary" data-act="new">첫 과제 등록하기</button>` : ""}</div>`;
 }
 
 /** 과제 한 건 — 네 가지를 한 카드에 담는다: 제출 여부 · 진행 상태 · 목표 대비 · 계획 체크 */
@@ -1724,20 +2565,21 @@ function myCard(s) {
   const qTxt = closed ? (s.lifecycle === "stopped" ? "중단됨" : "종료됨")
     : (done ? pLabel(lq ? lq.period : cq) + " 제출" : "아직 미제출");
   const acts = !state.canEdit ? "" : (closed
-    ? `<div class="mtc-a"><button class="ghost" data-act="reopen" data-id="${esc(s.id)}">진행으로 되돌리기</button></div>`
+    ? `<div class="mtc-a"><button type="button" class="ghost" data-act="reopen" data-id="${esc(s.id)}">진행으로 되돌리기</button></div>`
     : `<div class="mtc-a">
-        <button class="ghost" data-act="report" data-id="${esc(s.id)}">${done ? "실적 수정" : "실적 입력"}</button>
-        <button class="ghost" data-act="edit" data-id="${esc(s.id)}">과제 수정</button>
-        <button class="ghost" data-act="close" data-id="${esc(s.id)}">과제 종결</button>
+        <button type="button" class="ghost" data-act="report" data-id="${esc(s.id)}">${done ? "실적 수정" : "실적 입력"}</button>
+        <button type="button" class="ghost" data-act="edit" data-id="${esc(s.id)}">과제 수정</button>
+        <button type="button" class="ghost" data-act="close" data-id="${esc(s.id)}">과제 종결</button>
       </div>`);
 
   return `<article class="mtc ${closed ? "closed" : (done ? "" : "overdue")}">
     <div class="mtc-t">
-      <button class="ttl" data-open="${esc(s.id)}">${esc(s.title)}</button>
+      <button type="button" class="ttl" data-open="${esc(s.id)}">${esc(s.title)}</button>
       <span class="pill ${st.cls}">${st.label}</span>
     </div>
     <div class="mtc-m">
       <span class="tag"><span class="dot dot-${s.esg}"></span>${ESG_SHORT[s.esg]}</span>
+      ${catOf(s) ? `<span class="tag"><span class="dot" style="background:${CAT_COLOR[catOf(s)]}"></span>${esc(CAT_NAME[catOf(s)])}</span>` : ""}
       <span>${esc(s.owner || "담당자 미지정")}</span>
       <span class="sep">·</span><span class="num">${spanLabel(s)}</span>
       ${carryCount(s) ? `<span class="pill s-carry">이월 ${carryCount(s)}회</span>` : ""}
@@ -1764,6 +2606,33 @@ function bind(root) {
     state.selected = el.dataset.open; state.view = "detail"; render(); window.scrollTo(0, 0);
   });
   root.querySelectorAll("[data-pick]").forEach(el => el.onclick = () => pickTeam(el.dataset.pick));
+  root.querySelectorAll("[data-pickco]").forEach(el => el.onclick = () => {
+    state.pickCo = el.dataset.pickco; render(); window.scrollTo(0, 0);
+  });
+  /* 계열사 아코디언 여닫기 */
+  root.querySelectorAll("[data-toggleco]").forEach(el => el.onclick = () => {
+    const id = el.dataset.toggleco;
+    coOpen(id);                       /* openCos 초기화를 보장한다 */
+    state.openCos[id] = !state.openCos[id];
+    render();
+  });
+  /* 계열사 행 → 그 계열사의 소속 화면으로 (D-044) */
+  root.querySelectorAll("[data-co]").forEach(el => el.onclick = () => {
+    state.filters.company = el.dataset.co; state.filters.site = ""; state.filters.team = "";
+    state.drillTeam = null; state.view = "myco"; state.sub.myco = "site";
+    render(); window.scrollTo(0, 0);
+  });
+  /* 팀 행 → 그 팀 과제로 (D-045) */
+  root.querySelectorAll("[data-drill]").forEach(el => el.onclick = () => {
+    const id = el.dataset.drill;
+    if (!teamRec(id)) { toast("이 팀은 조직에 등록돼 있지 않아 열 수 없습니다."); return; }
+    state.drillTeam = id; state.teamSub = "all"; state.view = "myco";
+    render(); window.scrollTo(0, 0);
+  });
+  const mco = root.querySelector("#mCo");
+  if (mco) mco.onchange = () => {
+    state.filters.company = mco.value; state.drillTeam = null; render(); window.scrollTo(0, 0);
+  };
   root.querySelectorAll("[data-toggle]").forEach(el => el.onclick = () => togglePlan(state.selected, +el.dataset.toggle));
   root.querySelectorAll("[data-sub]").forEach(el => el.onclick = () => setSub(el.dataset.sub));
   root.querySelectorAll("[data-act]").forEach(el => el.onclick = () => {
@@ -1780,30 +2649,51 @@ function bind(root) {
     if (a === "printSummary") printSummary();
     if (a === "printForms") printForms();
     if (a === "pickteam") { state.view = "pick"; render(); window.scrollTo(0, 0); }
-    if (a === "clearf") { state.filters = { q: "", site: "", team: "", esg: "", status: "" }; render(); }
+    if (a === "undrill") { state.drillTeam = null; state.sub.myco = "site"; render(); window.scrollTo(0, 0); }
+    if (a === "backco") { state.pickCo = ""; render(); window.scrollTo(0, 0); }
+    if (a === "goteam") { state.view = "myco"; state.sub.myco = "mine"; state.drillTeam = null; render(); window.scrollTo(0, 0); }
+    if (a === "gonocat") { state.view = "list"; state.filters = { ...state.filters, cat: "__none" }; render(); window.scrollTo(0, 0); }
+    if (a === "fprev") { state.fcar--; render(); }
+    if (a === "fnext") { state.fcar++; render(); }
+    if (a === "expandco") { state.openCos = {}; state.companies.forEach(c => state.openCos[c.id] = true); state.openCos[""] = true; render(); }
+    if (a === "collapseco") { state.openCos = {}; render(); }
+    if (a === "teamsub") { state.teamSub = id; render(); }
+    if (a === "clearf") { state.filters = { q: "", company: "", site: "", team: "", esg: "", cat: "", status: "" }; render(); }
   });
   const fq = root.querySelector("#fq");
   if (fq) fq.oninput = () => {
     state.filters.q = fq.value; const p = fq.selectionStart; render();
     const n = $("#fq"); if (n) { n.focus(); n.setSelectionRange(p, p); }
   };
-  [["fsite", "site"], ["fteam", "team"], ["fstatus", "status"], ["rSite", "site"], ["rEsg", "esg"], ["dSite", "site"]].forEach(([sel, key]) => {
+  [["fsite", "site"], ["fteam", "team"], ["fstatus", "status"], ["fco", "company"], ["fcat", "cat"],
+   ["rSite", "site"], ["rEsg", "esg"], ["rCo", "company"], ["dSite", "site"], ["dCo", "company"]].forEach(([sel, key]) => {
     const el = root.querySelector("#" + sel);
     if (el) el.onchange = () => {
       state.filters[key] = el.value;
       if (key === "site") { state.filters.team = ""; state.tlScroll = null; }
+      if (key === "company") { state.filters.site = ""; state.filters.team = ""; state.tlScroll = null; }
       render();
     };
   });
 }
 function setSub(k) { state.sub[state.view] = k; state.tlScroll = null; render(); window.scrollTo(0, 0); }
-document.querySelectorAll("#rail .ricon[data-view]").forEach(b => b.onclick = () => {
-  state.view = b.dataset.view; state.selected = null; state.tlScroll = null; render(); window.scrollTo(0, 0);
-});
-$("#subtabs").onclick = e => {
-  const t = e.target.closest("[data-sub],[data-goback]"); if (!t) return;
-  if (t.dataset.goback) { state.view = state.backTo || "list"; state.selected = null; render(); return; }
-  setSub(t.dataset.sub);
+/* 왼쪽 메뉴 — 다시 그려지므로 위임으로 받는다 */
+$("#rail").onclick = e => {
+  const t = e.target.closest("[data-view],[data-sub],[data-act]"); if (!t) return;
+  state.selected = null; state.tlScroll = null; state.drillTeam = null;
+  if (t.dataset.act === "pickteam") { state.view = "pick"; }
+  else if (t.dataset.view) { state.view = t.dataset.view; }
+  else if (t.dataset.sub) { const v = navCurrent(); state.view = v; state.sub[v] = t.dataset.sub; }
+  render(); window.scrollTo(0, 0);
+};
+/* 상단 위치 표시 — 앞 칸을 누르면 그 층으로 올라간다 */
+$("#crumbs").onclick = e => {
+  const t = e.target.closest("[data-nav]"); if (!t) return;
+  const [v, k] = t.dataset.nav.split(":");
+  state.selected = null; state.tlScroll = null;
+  if (v !== "myco") state.drillTeam = null;
+  state.view = v; if (k) state.sub[v] = k;
+  render(); window.scrollTo(0, 0);
 };
 $("#setMe").onclick = () => openMeForm();
 $("#topNew").onclick = () => openStrategyForm(null);
@@ -1882,24 +2772,45 @@ function openMeForm(after) {
 /* ---------------- 사업장 · 팀 관리 ---------------- */
 function openOrgForm() {
   if (!state.canEdit) { toast("보기 전용 권한으로는 관리할 수 없습니다."); return; }
-  const tCount = {}, sCount = {};
+  const tCount = {}, sCount = {}, cCount = {};
   state.strategies.forEach(s => {
     if (s.teamId) tCount[s.teamId] = (tCount[s.teamId] || 0) + 1;
     const sid = siteIdOf(s); if (sid) sCount[sid] = (sCount[sid] || 0) + 1;
+    const cid = coIdOf(s); if (cid) cCount[cid] = (cCount[cid] || 0) + 1;
   });
   const sites = sortedSites();
   const orphanTeams = state.teams.filter(t => !t.siteId);
 
   const form = openDialog(`
-    <div class="dlg-h"><div><h2>사업장 · 팀 관리</h2><p>사업장을 먼저 만들고 그 안에 팀을 넣습니다. 여기 등록된 팀만 과제 등록 화면에 나타납니다.</p></div>
+    <div class="dlg-h"><div><h2>조직 관리</h2><p>계열사 → 사업장·본부 → 팀 순서로 만듭니다. 중간 층이 없는 계열사는 사업장을 비우면 팀이 계열사에 바로 달립니다. 여기 등록된 팀만 과제 등록 화면에 나타납니다.</p></div>
     <button class="x" data-close type="button" aria-label="닫기">×</button></div>
     <div class="dlg-b">
       ${orphanTeams.length ? `<div class="simwarn">사업장이 지정되지 않은 팀이 있습니다: ${orphanTeams.map(t => esc(t.name)).join(", ")}. 아래에서 사업장을 골라 주세요.</div>` : ""}
 
-      <fieldset class="fieldset"><legend>사업장</legend>
+      <fieldset class="fieldset"><legend>계열사</legend>
+        ${state.companies.length ? sortedCos().map(c => `
+          <div class="mrow">
+            <div><input type="text" maxlength="40" data-cname="${esc(c.id)}" value="${esc(c.name)}" aria-label="계열사 이름"></div>
+            <div class="tc">사업장 ${sitesOfCo(c.id).length} · 팀 ${teamsOfCo(c.id).length} · 과제 ${cCount[c.id] || 0}</div>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="btn btn-sm" data-crename="${esc(c.id)}">저장</button>
+              <button type="button" class="btn btn-sm btn-danger" data-cdel="${esc(c.id)}" ${(sitesOfCo(c.id).length || teamsOfCo(c.id).length) ? "disabled title='소속 사업장·팀이 있어 삭제할 수 없습니다'" : ""}>삭제</button>
+            </div>
+          </div>`).join("") : '<p class="help">등록된 계열사가 없습니다. 먼저 하나 만들어 주세요.</p>'}
+        <div class="row2" style="align-items:end">
+          <div class="field"><label for="cNew">계열사 추가</label>
+            <input type="text" id="cNew" maxlength="40" placeholder="예: 세아제강"></div>
+          <div><button type="button" class="btn btn-primary" id="cAdd">계열사 추가</button></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset"><legend>사업장 · 본부</legend>
         ${sites.length ? sites.map(st => `
           <div class="mrow">
-            <div><input type="text" maxlength="30" data-sname="${esc(st.id)}" value="${esc(st.name)}" aria-label="사업장 이름"></div>
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:6px">
+              <input type="text" maxlength="30" data-sname="${esc(st.id)}" value="${esc(st.name)}" aria-label="사업장 이름">
+              <select data-sco="${esc(st.id)}" aria-label="계열사"><option value="">계열사 미지정</option>${sortedCos().map(c => `<option value="${esc(c.id)}" ${c.id === st.companyId ? "selected" : ""}>${esc(c.name)}</option>`).join("")}</select>
+            </div>
             <div class="tc">팀 ${teamsOfSite(st.id).length} · 과제 ${sCount[st.id] || 0}</div>
             <div style="display:flex;gap:6px">
               <button type="button" class="btn btn-sm" data-srename="${esc(st.id)}">저장</button>
@@ -1909,7 +2820,9 @@ function openOrgForm() {
         <div class="row2" style="align-items:end">
           <div class="field"><label for="sNew">사업장 추가</label>
             <input type="text" id="sNew" maxlength="30" placeholder="예: 포항공장"></div>
-          <div><button type="button" class="btn btn-primary" id="sAdd">사업장 추가</button></div>
+          <div class="field"><label for="sNewCo">소속 계열사<span class="req">*</span></label>
+            <select id="sNewCo"><option value="">선택하세요</option>${sortedCos().map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("")}</select></div>
+          <div><button type="button" class="btn btn-primary" id="sAdd" ${state.companies.length ? "" : "disabled title='계열사를 먼저 등록해 주세요'"}>사업장 추가</button></div>
         </div>
       </fieldset>
 
@@ -1934,8 +2847,9 @@ function openOrgForm() {
         <div class="row2" style="align-items:end">
           <div class="field"><label for="tNew">팀 추가</label>
             <input type="text" id="tNew" maxlength="40" placeholder="예: 품질경영팀"></div>
-          <div class="field"><label for="tNewSite">소속 사업장<span class="req">*</span></label>
-            <select id="tNewSite"><option value="">선택하세요</option>${sites.map(x => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join("")}</select></div>
+          <div class="field"><label for="tNewSite">소속<span class="req">*</span></label>
+            <select id="tNewSite"><option value="">선택하세요</option>${sites.map(x => `<option value="${esc(x.id)}">${esc(coNameOf(x.companyId) ? coNameOf(x.companyId) + " › " : "")}${esc(x.name)}</option>`).join("")}${sortedCos().map(c => `<option value="co:${esc(c.id)}">${esc(c.name)} 직속 (사업장 없음)</option>`).join("")}</select>
+            <span class="help">중간 층이 없는 계열사는 <b>직속</b>을 고릅니다.</span></div>
         </div>
         <div id="tSim"></div>
         <div><button type="button" class="btn btn-primary" id="tAdd" ${sites.length ? "" : "disabled title='사업장을 먼저 등록해 주세요'"}>팀 추가</button></div>
@@ -1949,37 +2863,72 @@ function openOrgForm() {
   const show = m => { err.hidden = false; err.textContent = m; };
   const reopen = msg => { dlg.close(); toast(msg); openOrgForm(); };
 
+  $("#tNewSite").onchange = () => $("#tNew").oninput();
   $("#tNew").oninput = () => {
     const n = normName($("#tNew").value);
-    const hit = n ? state.teams.filter(t => normName(t.name) === n || (n.length > 2 && (normName(t.name).includes(n) || n.includes(normName(t.name))))) : [];
-    sim.innerHTML = hit.length ? `<div class="simwarn">비슷한 팀이 이미 있습니다: <b>${hit.map(t => esc(t.name) + (t.siteId ? " (" + esc(siteNameOf(t.siteId)) + ")" : "")).join(", ")}</b>. 같은 팀이라면 추가하지 마세요.</div>` : "";
+    /* 같은 계열사 안에서만 본다 — 계열사가 다르면 같은 이름이 정상이다 */
+    const pickV = $("#tNewSite").value;
+    const co = pickV.startsWith("co:") ? pickV.slice(3) : ((siteRec(pickV) || {}).companyId || "");
+    const hit = (n && co) ? state.teams.filter(t => coIdOfTeam(t) === co && (normName(t.name) === normName(n) || (n.length > 2 && (normName(t.name).includes(n) || n.includes(normName(t.name)))))) : [];
+    sim.innerHTML = hit.length ? `<div class="simwarn">이 계열사에 비슷한 팀이 있습니다: <b>${hit.map(t => esc(t.name) + (t.siteId ? " (" + esc(siteNameOf(t.siteId)) + ")" : "")).join(", ")}</b>. 같은 팀이라면 추가하지 마세요.</div>` : "";
+  };
+  $("#cAdd").onclick = async () => {
+    const name = $("#cNew").value.trim();
+    if (!name) return show("계열사 이름을 입력해 주세요.");
+    if (state.companies.some(x => normName(x.name) === normName(name))) return show("이미 같은 계열사가 등록되어 있습니다.");
+    try {
+      await state.db.collection("companies").add({ name, order: state.companies.length + 1, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      reopen("'" + name + "' 계열사를 추가했습니다.");
+    } catch (e) { fail(e); }
   };
   $("#sAdd").onclick = async () => {
-    const name = $("#sNew").value.trim();
+    const name = $("#sNew").value.trim(), companyId = $("#sNewCo").value;
     if (!name) return show("사업장 이름을 입력해 주세요.");
+    if (!companyId) return show("소속 계열사를 선택해 주세요.");
     if (state.sites.some(x => normName(x.name) === normName(name))) return show("이미 같은 사업장이 등록되어 있습니다.");
     try {
-      await state.db.collection("sites").add({ name, order: state.sites.length + 1, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      await state.db.collection("sites").add({ name, companyId, order: state.sites.length + 1, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
       reopen("'" + name + "' 사업장을 추가했습니다.");
     } catch (e) { fail(e); }
   };
   $("#tAdd").onclick = async () => {
-    const name = $("#tNew").value.trim(), siteId = $("#tNewSite").value;
+    const name = $("#tNew").value.trim(), pick = $("#tNewSite").value;
     if (!name) return show("팀 이름을 입력해 주세요.");
-    if (!siteId) return show("소속 사업장을 선택해 주세요.");
-    if (state.teams.some(t => normName(t.name) === normName(name))) return show("이미 같은 팀이 등록되어 있습니다.");
+    if (!pick) return show("소속을 선택해 주세요.");
+    /* "co:계열사id" 면 사업장 없이 계열사 직속 */
+    const direct = pick.startsWith("co:");
+    const siteId = direct ? null : pick;
+    const companyId = direct ? pick.slice(3) : ((siteRec(pick) || {}).companyId || null);
+    /* 같은 이름은 계열사 안에서만 막는다 (D-016 수정) — 인사팀은 계열사마다 있다 */
+    if (state.teams.some(t => coIdOfTeam(t) === companyId && normName(t.name) === normName(name)))
+      return show("이 계열사에 이미 '" + name + "'이(가) 있습니다.");
     try {
-      await state.db.collection("teams").add({ name, siteId, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      await state.db.collection("teams").add({ name, siteId, companyId, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
       reopen("'" + name + "' 팀을 추가했습니다.");
     } catch (e) { fail(e); }
   };
+  form.querySelectorAll("[data-crename]").forEach(b => b.onclick = async () => {
+    const c = coRec(b.dataset.crename); if (!c) return;
+    const name = (form.querySelector('[data-cname="' + c.id + '"]').value || "").trim();
+    if (!name) return show("계열사 이름은 비워둘 수 없습니다.");
+    if (name === c.name) return toast("변경된 내용이 없습니다.");
+    if (state.companies.some(x => x.id !== c.id && normName(x.name) === normName(name))) return show("이미 같은 계열사가 있습니다.");
+    try { await save("companies/" + c.id, { name, updatedAt: new Date().toISOString() }, "update"); reopen("계열사 이름을 수정했습니다."); }
+    catch (e) { fail(e); }
+  });
+  form.querySelectorAll("[data-cdel]").forEach(b => b.onclick = async () => {
+    const c = coRec(b.dataset.cdel); if (!c) return;
+    try { await state.db.doc("companies/" + c.id).delete(); reopen("'" + c.name + "' 계열사를 삭제했습니다."); }
+    catch (e) { fail(e); }
+  });
   form.querySelectorAll("[data-srename]").forEach(b => b.onclick = async () => {
     const st = siteRec(b.dataset.srename); if (!st) return;
     const name = (form.querySelector('[data-sname="' + st.id + '"]').value || "").trim();
     if (!name) return show("사업장 이름은 비워둘 수 없습니다.");
     if (name === st.name) return toast("변경된 내용이 없습니다.");
     if (state.sites.some(x => x.id !== st.id && normName(x.name) === normName(name))) return show("이미 같은 사업장이 있습니다.");
-    try { await save("sites/" + st.id, { name, updatedAt: new Date().toISOString() }, "update"); reopen("사업장 이름을 수정했습니다."); }
+    const companyId = (form.querySelector('[data-sco="' + st.id + '"]') || {}).value || null;
+    try { await save("sites/" + st.id, { name, companyId, updatedAt: new Date().toISOString() }, "update"); reopen("사업장 정보를 수정했습니다."); }
     catch (e) { fail(e); }
   });
   form.querySelectorAll("[data-sdel]").forEach(b => b.onclick = async () => {
@@ -1992,9 +2941,12 @@ function openOrgForm() {
     const name = (form.querySelector('[data-tname="' + t.id + '"]').value || "").trim();
     const siteId = form.querySelector('[data-tsite="' + t.id + '"]').value;
     if (!name) return show("팀 이름은 비워둘 수 없습니다.");
-    if (state.teams.some(x => x.id !== t.id && normName(x.name) === normName(name))) return show("이미 같은 팀이 있습니다.");
+    const newCo = (siteRec(siteId) || {}).companyId || t.companyId || null;
+    if (state.teams.some(x => x.id !== t.id && coIdOfTeam(x) === newCo && normName(x.name) === normName(name)))
+      return show("이 계열사에 이미 같은 팀이 있습니다.");
     if (name === t.name && siteId === (t.siteId || "")) return toast("변경된 내용이 없습니다.");
-    try { await save("teams/" + t.id, { name, siteId: siteId || null, updatedAt: new Date().toISOString() }, "update"); reopen("팀 정보를 수정했습니다."); }
+    const companyId = (siteRec(siteId) || {}).companyId || t.companyId || null;
+    try { await save("teams/" + t.id, { name, siteId: siteId || null, companyId, updatedAt: new Date().toISOString() }, "update"); reopen("팀 정보를 수정했습니다."); }
     catch (e) { fail(e); }
   });
   form.querySelectorAll("[data-tdel]").forEach(b => b.onclick = async () => {
@@ -2041,6 +2993,9 @@ function openStrategyForm(s) {
           <div class="field"><label for="fEsg">ESG 영역<span class="req">*</span></label>
             <select id="fEsg" required>${["E", "S", "G"].map(k => `<option value="${k}" ${s && s.esg === k ? "selected" : ""}>${ESG[k]}</option>`).join("")}</select>
             <span class="help">환경=배출·에너지·폐기물·인증 / 사회=안전·노동·공급망·지역사회 / 지배구조=이사회·윤리·준법·공시</span></div>
+          <div class="field"><label for="fCat">대분류</label>
+            <select id="fCat"><option value="">선택하지 않음</option>${CATS.map(([code, name]) => `<option value="${code}" ${s && s.category === code ? "selected" : ""}>${esc(name)}</option>`).join("")}</select>
+            <span class="help">팀을 가로지르는 <b>주제 축</b>입니다. 그룹사 전체 화면의 분포에 쓰이며, 맞는 항목이 없으면 비워 두세요 — <b>분류 미지정</b>으로 따로 집계됩니다.</span></div>
         </div>
         <div class="row3">
           <div class="field"><label for="fOwner">실무 담당자</label>
@@ -2134,8 +3089,10 @@ function openStrategyForm(s) {
         title: form2.fTitle.value.trim(), esg: form2.fEsg.value,
         teamId: form2.fTeam.value, team: teamNameOf(form2.fTeam.value),
         scope: scopeVal,
-        /* 사업장을 과제에 굳혀 둔다 — 팀이 나중에 옮겨가도 과거 집계가 흔들리지 않게 (D-030 부수) */
+        category: form2.fCat ? form2.fCat.value : (s ? s.category || "" : ""),
+        /* 사업장·계열사를 과제에 굳혀 둔다 — 팀이 나중에 옮겨가도 과거 집계가 흔들리지 않게 (D-030 · D-044) */
         siteId: scopeVal === "company" ? null : ((pickedTeam && pickedTeam.siteId) || null),
+        companyId: coIdOfTeam(pickedTeam) || null,
         owner: form2.fOwner.value.trim(),
         startYear: A.y, startMonth: A.m, endYear: B.y, endMonth: B.m,
         priority: form2.fPri.value,
@@ -2516,12 +3473,27 @@ function printSummary() {
     ${prTable(["등록 과제", "정상", "지연", "위험", "완료", "미착수", cq.replace("-", " ") + " 제출"],
       [[[all.length + "건"], [stc.ok], [stc.warn], [stc.risk], [stc.done], [stc.none], [submitted + " / " + all.length]]])}
 
+    <div class="pr-sec">계열사별</div>
+    ${prTable(["계열사", "진행 과제(종료)", "평균 달성률", "기대치", "차이", "조치 필요", "당분기 제출"],
+      coRollup().map(r => [r.name, [r.nOpen + (r.nClosed ? " (+" + r.nClosed + ")" : "")],
+        [pctText(r)], [hasOpen(r) ? r.exp + "%" : "—"],
+        [hasOpen(r) ? ((r.pct - r.exp >= 0 ? "+" : "") + (r.pct - r.exp) + "%p") : "—"],
+        [r.stc.warn + r.stc.risk], [r.sub + " / " + r.nOpen]]))}
+
     <div class="pr-sec">사업장별</div>
     ${prTable(["사업장", "진행 과제(종료)", "평균 달성률", "기대치", "차이", "조치 필요", "당분기 제출"],
       sr.map(r => [r.name, [r.nOpen + (r.nClosed ? " (+" + r.nClosed + ")" : "")],
         [pctText(r)], [hasOpen(r) ? r.exp + "%" : "—"],
         [hasOpen(r) ? ((r.pct - r.exp >= 0 ? "+" : "") + (r.pct - r.exp) + "%p") : "—"],
         [r.stc.warn + r.stc.risk], [r.sub + " / " + r.nOpen]]))}
+
+    <div class="pr-sec">대분류별</div>
+    ${prTable(["대분류", "과제", "평균 달성률", "기대치", "조치 필요"],
+      catRollup().map(x => {
+        const l = all.filter(s => (catOf(s) || "") === x.code);
+        return [x.name, [l.length], [avg(l.map(pctOf)) + "%"], [avg(l.map(expectedPct)) + "%"],
+          [l.filter(s => ["warn", "risk"].includes(statusOf(s).key)).length]];
+      }))}
 
     <div class="pr-sec">ESG 영역별</div>
     ${prTable(["영역", "과제", "평균 달성률", "기대치", "조치 필요"], esgRows)}
@@ -2555,7 +3527,7 @@ function printForms() {
     return `<div class="pr-page">
       <div class="pr-h">
         <div><h1>${esc(x.title)}</h1>
-          <div class="pr-sub">${esc(siteOf(x))} · ${esc(teamOf(x))} · ${esc(x.owner || "담당자 미지정")} · 추진기간 ${spanLabel(x)}</div></div>
+          <div class="pr-sub">${esc(coOf(x))} › ${esc(siteOf(x))} · ${esc(teamOf(x))} · ${esc(x.owner || "담당자 미지정")} · 추진기간 ${spanLabel(x)}${catOf(x) ? " · " + esc(CAT_NAME[catOf(x)]) : ""}</div></div>
         <div class="pr-big">${pctOf(x)}%<span>${st.label} · 기대 ${expectedPct(x)}%</span></div>
       </div>
       <table class="pr-f">
@@ -2584,7 +3556,7 @@ function printForms() {
 
 /* ============================ CSV ============================ */
 async function exportCsv() {
-  const cols = ["사업장", "팀", "적용범위", "진행상태", "ESG영역", "실행과제명", "담당자", "시작(연.월)", "완료(연.월)", "추진개월", "우선순위",
+  const cols = ["계열사", "사업장", "팀", "적용범위", "진행상태", "ESG영역", "대분류", "실행과제명", "담당자", "시작(연.월)", "완료(연.월)", "추진개월", "우선순위",
     "달성률(%)", "기대치(%)", "상태", "계획항목수", "완료", "진행중", "미착수",
     "KPI", "단위", "기준값", "기준연도", "목표값",
     "보고시점", "보고단위", "제출시점달성률(%)", "KPI실적", "실적내용", "지연사유", "CatchUpPlan", "작성자", "갱신일시"];
@@ -2593,9 +3565,9 @@ async function exportCsv() {
   state.strategies.forEach(s => {
     const c = planCounts(s), logs = progressFor(s.id);
     const sp = spanOf(s);
-    const base = [siteOf(s), teamOf(s), s.scope === "company" ? "전사 공통" : "사업장",
+    const base = [coOf(s), siteOf(s), teamOf(s), s.scope === "company" ? "전사 공통" : "사업장",
       (LC[s.lifecycle] || "진행") + (carryCount(s) ? " (이월 " + carryCount(s) + ")" : ""),
-      ESG_SHORT[s.esg], s.title, s.owner,
+      ESG_SHORT[s.esg], catLabel(s), s.title, s.owner,
       sp.sy + "." + pad2(sp.sm), sp.ey + "." + pad2(sp.em), spanMonths(s), s.priority,
       pctOf(s), expectedPct(s), statusOf(s).label, c.total, c.done, c.doing, c.todo,
       s.kpiName, s.kpiUnit, s.kpiBase, s.kpiBaseYear, s.kpiTarget];

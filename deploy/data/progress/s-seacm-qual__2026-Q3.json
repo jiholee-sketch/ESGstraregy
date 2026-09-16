@@ -1,0 +1,16 @@
+{
+  "strategyId": "s-seacm-qual",
+  "period": "2026-Q3",
+  "progress": 30,
+  "achievement": "'26 3분기 추진 실적. 대상 범위 및 기준 정의 / 데이터 수집 체계 구축",
+  "kpiActual": null,
+  "delayReason": "",
+  "catchupPlan": "",
+  "author": "오세진",
+  "team": "품질경영팀",
+  "site": "세아씨엠",
+  "planTotal": 5,
+  "planDone": 1,
+  "planDoing": 1,
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}

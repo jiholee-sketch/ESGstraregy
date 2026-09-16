@@ -1,0 +1,16 @@
+{
+  "strategyId": "s-inoxtech-prod",
+  "period": "2026-Q3",
+  "progress": 30,
+  "achievement": "'26 3분기 추진 실적. 기준선 측정 및 목표 설정 / 설비·공정 개선 투자계획 수립",
+  "kpiActual": null,
+  "delayReason": "",
+  "catchupPlan": "",
+  "author": "Luca Bianchi",
+  "team": "생산팀",
+  "site": "INOX Tech",
+  "planTotal": 5,
+  "planDone": 1,
+  "planDoing": 1,
+  "updatedAt": "2026-09-16T12:00:00.000Z"
+}
